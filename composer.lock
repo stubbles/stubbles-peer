@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ecccfba587615aafc8c39b01f3c904c0",
-    "content-hash": "4905428f625fa8666cca19de358914cf",
+    "hash": "a0fc1eefea197ffe6102004280424798",
+    "content-hash": "a7947fc911f7ba3e7c21d6493300d30b",
     "packages": [],
     "packages-dev": [
         {
@@ -1135,27 +1135,24 @@
             "time": "2015-06-21 13:59:46"
         },
         {
-            "name": "stubbles/core",
+            "name": "stubbles/values",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/stubbles/stubbles-core.git",
-                "reference": "5e5f2e25215ab22d4330ad1855f3446fdc02e50b"
+                "url": "https://github.com/stubbles/stubbles-values.git",
+                "reference": "dd12651e8357c71f031870e67cf0da3c43129844"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-core/zipball/5e5f2e25215ab22d4330ad1855f3446fdc02e50b",
-                "reference": "5e5f2e25215ab22d4330ad1855f3446fdc02e50b",
+                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/dd12651e8357c71f031870e67cf0da3c43129844",
+                "reference": "dd12651e8357c71f031870e67cf0da3c43129844",
                 "shasum": ""
             },
             "require": {
-                "ext-iconv": "*",
-                "php": ">=5.6.0",
-                "stubbles/sequence": "^7.0"
+                "php": ">=5.6.0"
             },
             "require-dev": {
                 "bovigo/assert": "^1.5",
-                "bovigo/callmap": "^2.0",
                 "mikey179/vfsstream": "^1.6",
                 "phpunit/phpunit": "^5.1"
             },
@@ -1167,54 +1164,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "stubbles\\": "src/main/php"
-                },
-                "files": [
-                    "src/main/php/functions.php",
-                    "src/main/php/lang/functions.php",
-                    "src/main/php/lang/reflect/functions.php",
-                    "src/main/php/streams/functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Provides base classes for Stubbles packages.",
-            "homepage": "http://stubbles.net/",
-            "time": "2016-01-03 11:56:11"
-        },
-        {
-            "name": "stubbles/sequence",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/stubbles/stubbles-sequence.git",
-                "reference": "9ab41b568fa0cde46e50bcfeb0b7f83d514e01c8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-sequence/zipball/9ab41b568fa0cde46e50bcfeb0b7f83d514e01c8",
-                "reference": "9ab41b568fa0cde46e50bcfeb0b7f83d514e01c8",
-                "shasum": ""
-            },
-            "require": {
-                "ext-iconv": "*",
-                "php": ">=5.6.0"
-            },
-            "require-dev": {
-                "bovigo/assert": "^1.5",
-                "phpunit/phpunit": "^5.1"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "7.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "stubbles\\sequence\\": "src/main/php"
+                    "stubbles\\values\\": "src/main/php"
                 },
                 "files": [
                     "src/main/php/functions.php"
@@ -1224,9 +1174,9 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "Stream your iterators.",
+            "description": "Useful classes to ease the work with values.",
             "homepage": "http://stubbles.net/",
-            "time": "2016-01-03 10:54:25"
+            "time": "2016-01-03 13:49:03"
         },
         {
             "name": "symfony/yaml",

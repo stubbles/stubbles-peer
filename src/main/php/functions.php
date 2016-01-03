@@ -116,8 +116,8 @@ namespace stubbles\peer\http {
         return new AcceptHeader();
     }
 
-    if (class_exists('stubbles\lang\Parse')) {
-        \stubbles\lang\Parse::addRecognition(
+    if (class_exists('stubbles\values\Parse')) {
+        \stubbles\values\Parse::addRecognition(
                 function($string)
                 {
                     if (substr($string, 0, 4) === Http::SCHEME) {

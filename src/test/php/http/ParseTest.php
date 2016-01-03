@@ -8,7 +8,7 @@
  * @package  stubbles\peer
  */
 namespace stubbles\peer\http;
-use stubbles\lang\Parse;
+use stubbles\values\Parse;
 
 use function bovigo\assert\assert;
 use function bovigo\assert\predicate\equals;

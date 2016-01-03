@@ -12,7 +12,10 @@
         "mikey179/vfsStream": "^1.6",
         "bovigo/assert": "^1.5",
         "bovigo/callmap": "^2.0",
-        "stubbles/core": "^7.0"
+        "stubbles/values": "^7.0"
+    },
+    "suggest": {
+        "stubbles/values": "Will automatically add http uri parsing to stubbles\\values\\Parse"
     },
     "autoload": {
         "psr-4": {

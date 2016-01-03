@@ -211,3 +211,11 @@ parameters; and to rebuild a complete query string from this.
 _Available since release 4.0.0_
 
 Represents an ip address and possible operations on an ip address.
+
+
+Integration with _stubbles/values_
+----------------------------------
+
+In case the package _stubbles/values_ is present a recognition for
+`stubbles\values\Parse` to parse http URIs to instances of
+`stubbles\peer\http\HttpUri` will automatically be added.

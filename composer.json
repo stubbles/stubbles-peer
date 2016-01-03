@@ -23,6 +23,11 @@
         },
         "files": ["src/main/php/functions.php"]
     },
+    "autoload-dev": {
+        "files": [
+            "src/test/php/functions.php"
+        ]
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "7.0.x-dev"

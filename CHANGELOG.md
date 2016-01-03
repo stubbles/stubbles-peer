@@ -14,3 +14,4 @@
   * removed `stubbles\peer\SocketDomain` which was used by `stubbles\peer\BsdSocket` which was already removed in 6.0.0
   * renamed `stubbles\peer\ConnectionException` to `stubbles\peer\ConnectionFailure`
   * renamed `stubbles\peer\MalformedUriException` to `stubbles\peer\MalformedUri`
+  * `stubbles\peer\http\Http::lines()` no longer accepts an array, but an arbitrary amount of strings instead

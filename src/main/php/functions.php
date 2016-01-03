@@ -8,7 +8,6 @@
  * @package  stubbles\peer
  */
 namespace stubbles\peer {
-    use \stubbles\peer\HeaderList;
     use \stubbles\peer\http\HttpUri;
 
     /**
@@ -104,7 +103,6 @@ namespace stubbles\peer {
  * Functions in namespace stubbles\peer\http.
  */
 namespace stubbles\peer\http {
-    use stubbles\peer\http\AcceptHeader;
 
     /**
      * returns an empty accept header representation
@@ -116,5 +114,22 @@ namespace stubbles\peer\http {
     function emptyAcceptHeader()
     {
         return new AcceptHeader();
+    }
+
+    if (class_exists('stubbles\lang\Parse')) {
+        \stubbles\lang\Parse::addRecognition(
+                function($string)
+                {
+                    if (substr($string, 0, 4) === Http::SCHEME) {
+                        try {
+                            return HttpUri::fromString($string);
+                        } catch (\stubbles\peer\MalformedUri $murle) { }
+                    }
+
+                    return;
+
+                },
+                HttpUri::class
+        );
     }
 }

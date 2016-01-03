@@ -11,7 +11,8 @@
         "phpunit/phpunit": "^5.1",
         "mikey179/vfsStream": "^1.6",
         "bovigo/assert": "^1.5",
-        "bovigo/callmap": "^2.0"
+        "bovigo/callmap": "^2.0",
+        "stubbles/core": "^7.0"
     },
     "autoload": {
         "psr-4": {

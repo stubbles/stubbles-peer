@@ -1,0 +1,29 @@
+{
+    "name": "stubbles/peer",
+    "type": "library",
+    "homepage": "http://stubbles.net/",
+    "license": "BSD-3-Clause",
+    "description": "Help with socket operations.",
+    "require": {
+        "php": ">=5.6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.1",
+        "mikey179/vfsStream": "^1.6",
+        "bovigo/assert": "^1.5",
+        "bovigo/callmap": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "stubbles\\peer\\": "src/main/php"
+        },
+        "files": ["src/main/php/functions.php"]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "7.0.x-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

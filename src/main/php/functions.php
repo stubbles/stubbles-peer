@@ -98,6 +98,31 @@ namespace stubbles\peer {
     {
         public static $return = null;
     }
+
+    /**
+     * checks if given value is a valid mail address
+     *
+     * @param   string  $value
+     * @return  bool
+     * @since   7.1.0
+     */
+    function isMailAddress($value)
+    {
+        if (null == $value || strlen($value) == 0) {
+            return false;
+        }
+
+        $url = @parse_url('mailto://' . $value);
+        if (!isset($url['host']) || !preg_match('/^([a-zA-Z0-9-]*)\.([a-zA-Z]{2,4})$/', $url['host'])) {
+            return false;
+        }
+
+        if (!isset($url['user']) || strlen($url['user']) == 0 || !preg_match('/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*$/', $url['user'])) {
+            return false;
+        }
+
+        return true;
+    }
 }
 /**
  * Functions in namespace stubbles\peer\http.

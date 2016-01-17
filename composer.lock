@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "db4321d09d48f97cd4b0a3b2c310e3b2",
-    "content-hash": "a7947fc911f7ba3e7c21d6493300d30b",
+    "hash": "1a55d280724f1774f20bb1258d79c585",
+    "content-hash": "10639fce1e6fd4714514a0bf32c18be2",
     "packages": [],
     "packages-dev": [
         {
@@ -156,16 +156,16 @@
         },
         {
             "name": "mikey179/vfsStream",
-            "version": "v1.6.1",
+            "version": "v1.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikey179/vfsStream.git",
-                "reference": "f4aabeb1976f96343ad1253c8d60ad40307e409a"
+                "reference": "fefd182fa739d4e23d9dc7c80d3344f528d600ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikey179/vfsStream/zipball/f4aabeb1976f96343ad1253c8d60ad40307e409a",
-                "reference": "f4aabeb1976f96343ad1253c8d60ad40307e409a",
+                "url": "https://api.github.com/repos/mikey179/vfsStream/zipball/fefd182fa739d4e23d9dc7c80d3344f528d600ab",
+                "reference": "fefd182fa739d4e23d9dc7c80d3344f528d600ab",
                 "shasum": ""
             },
             "require": {
@@ -198,7 +198,7 @@
             ],
             "description": "Virtual file system to mock the real file system in unit tests.",
             "homepage": "http://vfs.bovigo.org/",
-            "time": "2015-12-04 12:02:33"
+            "time": "2016-01-13 09:41:49"
         },
         {
             "name": "myclabs/deep-copy",

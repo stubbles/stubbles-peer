@@ -45,7 +45,11 @@ class IpAddress
      */
     public static function isValidV4($value)
     {
-        return (bool) preg_match('/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/', $value);
+        return false !== filter_var(
+                $value,
+                FILTER_VALIDATE_IP,
+                ['flags' => FILTER_FLAG_IPV4]
+        );
     }
 
     /**
@@ -57,29 +61,11 @@ class IpAddress
      */
     public static function isValidV6($value)
     {
-        $hexquads = explode(':', $value);
-        // Shortest address is ::1, this results in 3 parts
-        if (sizeof($hexquads) < 3) {
-            return false;
-        }
-
-        if ('' == $hexquads[0]) {
-            array_shift($hexquads);
-        }
-
-        foreach ($hexquads as $hq) {
-            // Catch cases like ::ffaadd00::
-            if (strlen($hq) > 4) {
-                return false;
-            }
-
-            // Not hex
-            if (strspn($hq, '0123456789abcdefABCDEF') < strlen($hq)) {
-                return false;
-            }
-        }
-
-        return true;
+        return false !== filter_var(
+                $value,
+                FILTER_VALIDATE_IP,
+                ['flags' => FILTER_FLAG_IPV6]
+        );
     }
 
     /**

@@ -90,6 +90,14 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function invalidIpV4WithNumberOutOfRangeEvaluatesToFalse()
+    {
+        assertFalse(IpAddress::isValidV4('1.256.3.4'));
+    }
+
+    /**
+     * @test
+     */
     public function greatestIpV4EvaluatesToTrue()
     {
         assertTrue(IpAddress::isValidV4('255.255.255.255'));

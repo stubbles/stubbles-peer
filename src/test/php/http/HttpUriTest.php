@@ -545,4 +545,95 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
         $uri = HttpUri::fromString('http://example.org/foo');
         assert($uri->withPath('/bar'), isNotSameAs($uri));
     }
+
+    /**
+     * @return  array
+     */
+    public function invalidValues()
+    {
+        return [[null],
+                [303],
+                [true],
+                [false],
+                [''],
+                ['invalid'],
+                ['ftp://example.net']
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider  invalidValues
+     */
+    public function invalidValueEvaluatesToFalse($invalid)
+    {
+        assertFalse(HttpUri::isValid($invalid));
+    }
+
+    /**
+     * @return  array
+     */
+    public function validValues()
+    {
+        return [
+            ['http://localhost/'],
+            [HttpUri::fromString('http://localhost/')]
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider  validValues
+     */
+    public function validHttpUrlWithDnsEntryEvaluatesToTrue($value)
+    {
+        assertTrue(HttpUri::isValid($value));
+    }
+
+    /**
+     * @return  array
+     */
+    public function validValuesWithoutDnsEntry()
+    {
+        return [
+            ['http://stubbles.doesNotExist/'],
+            [HttpUri::fromString('http://stubbles.doesNotExist/')]
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider  validValuesWithoutDnsEntry
+     */
+    public function validHttpUrlWithoutDnsEntryEvaluatesToTrue($value)
+    {
+        assertTrue(HttpUri::isValid($value));
+    }
+
+    /**
+     * @test
+     * @dataProvider  invalidValues
+     */
+    public function invalidValueEvaluatesToFalseWhenTestedForExistance($invalid)
+    {
+        assertFalse(HttpUri::exists($invalid));
+    }
+
+    /**
+     * @test
+     * @dataProvider  validValues
+     */
+    public function validHttpUrlWithDnsEntryEvaluatesToTrueWhenTestedForExistance($value)
+    {
+        assertTrue(HttpUri::exists($value));
+    }
+
+    /**
+     * @test
+     */
+    public function validHttpUrlWithoutDnsEntryEvaluatesToFalseWhenTestedForExistance()
+    {
+        CheckdnsrrResult::$value = false;
+        assertFalse(HttpUri::exists('http://stubbles.doesNotExist/'));
+    }
 }

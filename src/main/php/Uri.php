@@ -36,7 +36,7 @@ abstract class Uri
         }
 
         $uri = new ConstructedUri(new ParsedUri($uriString));
-        if ($uri->isValid()) {
+        if ($uri->isSyntacticallyValid()) {
             return $uri;
         }
 
@@ -44,11 +44,11 @@ abstract class Uri
     }
 
     /**
-     * Checks whether URI is a correct URI.
+     * Checks whether URI is a syntactically correct URI.
      *
      * @return  bool
      */
-    protected function isValid()
+    protected function isSyntacticallyValid()
     {
         if (!$this->parsedUri->hasScheme()) {
             return false;

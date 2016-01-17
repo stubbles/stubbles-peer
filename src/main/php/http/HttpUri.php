@@ -108,7 +108,49 @@ abstract class HttpUri extends Uri
             throw new MalformedUri('The URI ' . $this->parsedUri->asString() . ' is not a valid HTTP URI according to ' . Http::RFC_7230 . ': contains userinfo, but this is disallowed');
         }
 
-        return $this->isValid();
+        return $this->isSyntacticallyValid();
+    }
+
+    /**
+     * checks whether given http uri exists, i.e. has a DNS entry
+     *
+     * @param   string  $httpUri
+     * @return  bool
+     * @since   7.1.0
+     */
+    public static function exists($httpUri)
+    {
+        if (empty($httpUri)) {
+            return false;
+        }
+
+        try {
+            return self::fromString($httpUri)->hasDnsRecord();
+        } catch (MalformedUri $murle) {
+            return false;
+        }
+    }
+
+    /**
+     * checks whether given http uri is syntactically valid
+     *
+     * @param   string  $httpUri
+     * @return  bool
+     * @since   7.1.0
+     */
+    public static function isValid($httpUri)
+    {
+        if (empty($httpUri)) {
+            return false;
+        }
+
+        try {
+            self::fromString($httpUri);
+        } catch (MalformedUri $murle) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -116,9 +158,9 @@ abstract class HttpUri extends Uri
      *
      * @return  bool
      */
-    protected function isValid()
+    protected function isSyntacticallyValid()
     {
-        if (!parent::isValid()) {
+        if (!parent::isSyntacticallyValid()) {
             return false;
         }
 

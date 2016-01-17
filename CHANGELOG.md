@@ -3,6 +3,8 @@
 
   * added `stubbles\peer\isMailAddress()`
   * added `stubbles\peer\IpAddress::isValid()`
+  * added `stubbles\peer\http\HttpUri::isValid()`
+  * added `stubbles\peer\http\HttpUri::exists()`
 
 
 7.0.0 (2016-01-11)

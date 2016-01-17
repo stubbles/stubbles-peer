@@ -24,6 +24,51 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
+     * @since  7.1.0
+     */
+    public function stringIsNoIpAndEvaluatesToFalse()
+    {
+        assertFalse(IpAddress::isValid('foo'));
+    }
+
+    /**
+     * @test
+     * @since  7.1.0
+     */
+    public function nullIsNoIpAndEvaluatesToFalse()
+    {
+        assertFalse(IpAddress::isValid(null));
+    }
+
+    /**
+     * @test
+     * @since  7.1.0
+     */
+    public function emptyStringIsNoIpAndEvaluatesToFalse()
+    {
+        assertFalse(IpAddress::isValid(''));
+    }
+
+    /**
+     * @test
+     * @since  7.1.0
+     */
+    public function isValidForIpV4()
+    {
+        assertTrue(IpAddress::isValid('127.0.0.1'));
+    }
+
+    /**
+     * @test
+     * @since  7.1.0
+     */
+    public function isValidForIpV6()
+    {
+        assertTrue(IpAddress::isValid('febc:a574:382b:23c1:aa49:4592:4efe:9982'));
+    }
+
+    /**
+     * @test
      */
     public function stringIsNoIpV4AndEvaluatesToFalse()
     {

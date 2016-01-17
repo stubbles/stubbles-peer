@@ -37,6 +37,18 @@ class IpAddress
     private $type;
 
     /**
+     * checks if given value is either a IPv4 or IPv6 address
+     *
+     * @param   string  $value
+     * @return  bool
+     * @since   7.1.0
+     */
+    public static function isValid($value)
+    {
+        return self::isValidV4($value) || self::isValidV6($value);
+    }
+
+    /**
      * checks if given value is a syntactical correct IPv4 address
      *
      * @param   string  $value

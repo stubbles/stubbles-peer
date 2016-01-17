@@ -2,6 +2,7 @@
 ------------------
 
   * added `stubbles\peer\isMailAddress()`
+  * added `stubbles\peer\IpAddress::isValid()`
 
 
 7.0.0 (2016-01-11)

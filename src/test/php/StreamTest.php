@@ -13,6 +13,7 @@ use org\bovigo\vfs\vfsStream;
 use function bovigo\assert\assert;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 /**
  * Test for stubbles\peer\Stream.
@@ -50,11 +51,12 @@ class StreamTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function createWithInvalidResourceThrowsIllegalArgumentException()
     {
-        new Stream('foo');
+        expect(function() {
+                new Stream('foo');
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**

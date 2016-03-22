@@ -12,6 +12,7 @@ namespace stubbles\peer\http;
 use function bovigo\assert\assert;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isSameAs;
 /**
@@ -33,23 +34,27 @@ class HttpVersionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
-     * @expectedExceptionMessage  Given HTTP version is empty
      * @dataProvider  emptyVersions
      */
     public function parseFromStringThrowsIllegalArgumentExceptionWhenGivenVersionIsEmpty($empty)
     {
-        HttpVersion::fromString($empty);
+        expect(function() use ($empty) {
+                HttpVersion::fromString($empty);
+        })
+        ->throws(\InvalidArgumentException::class)
+        ->withMessage('Given HTTP version is empty');
     }
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
-     * @expectedExceptionMessage  Given HTTP version "invalid" can not be parsed
      */
     public function parseFromStringThrowsIllegalArgumentExceptionWhenParsingFails()
     {
-        HttpVersion::fromString('invalid');
+        expect(function() {
+                HttpVersion::fromString('invalid');
+        })
+        ->throws(\InvalidArgumentException::class)
+        ->withMessage('Given HTTP version "invalid" can not be parsed');
     }
 
     /**
@@ -70,62 +75,74 @@ class HttpVersionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
-     * @expectedExceptionMessage  Given major version "foo" is not an integer
      */
     public function constructWithInvalidMajorArgumentThrowsIllegalArgumentException()
     {
-        new HttpVersion('foo', 1);
+        expect(function() {
+                new HttpVersion('foo', 1);
+        })
+        ->throws(\InvalidArgumentException::class)
+        ->withMessage('Given major version "foo" is not an integer');
     }
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
-     * @expectedExceptionMessage  Given minor version "foo" is not an integer
      */
     public function constructWithInvalidMinorArgumentThrowsIllegalArgumentException()
     {
-        new HttpVersion(1, 'foo');
+        expect(function() {
+                new HttpVersion(1, 'foo');
+        })
+        ->throws(\InvalidArgumentException::class)
+        ->withMessage('Given minor version "foo" is not an integer');
     }
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
-     * @expectedExceptionMessage  Major version can not be negative
      */
     public function constructWithNegativeMajorVersionThrowsIllegalArgumentException()
     {
-        new HttpVersion(-2, 1);
+        expect(function() {
+                new HttpVersion(-2, 1);
+        })
+        ->throws(\InvalidArgumentException::class)
+        ->withMessage('Major version can not be negative');
     }
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
-     * @expectedExceptionMessage  Major version can not be negative
      */
     public function parseFromStringWithNegativeMajorNumberThrowsIllegalArgumentExceptionWhenParsingFails()
     {
-        HttpVersion::fromString('HTTP/-2.1');
+        expect(function() {
+                HttpVersion::fromString('HTTP/-2.1');
+        })
+        ->throws(\InvalidArgumentException::class)
+        ->withMessage('Major version can not be negative');
     }
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
-     * @expectedExceptionMessage  Minor version can not be negative
      */
     public function constructWithNegativeMinorVersionThrowsIllegalArgumentException()
     {
-        new HttpVersion(1, -2);
+        expect(function() {
+                new HttpVersion(1, -2);
+        })
+        ->throws(\InvalidArgumentException::class)
+        ->withMessage('Minor version can not be negative');
     }
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
-     * @expectedExceptionMessage  Minor version can not be negative
      */
     public function parseFromStringWithNegativeMinorNumberThrowsIllegalArgumentExceptionWhenParsingFails()
     {
-        HttpVersion::fromString('HTTP/2.-1');
+        expect(function() {
+                HttpVersion::fromString('HTTP/2.-1');
+        })
+        ->throws(\InvalidArgumentException::class)
+        ->withMessage('Minor version can not be negative');
     }
 
     /**
@@ -142,13 +159,15 @@ class HttpVersionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
-     * @expectedExceptionMessage  Given HTTP version is empty
      * @dataProvider  emptyVersions
      */
     public function castFromEmptyWithoutDefaultThrowsIllegalArgumentException($empty)
     {
-        HttpVersion::castFrom($empty);
+        expect(function() use ($empty) {
+                HttpVersion::castFrom($empty);
+        })
+        ->throws(\InvalidArgumentException::class)
+        ->withMessage('Given HTTP version is empty');
     }
 
     /**

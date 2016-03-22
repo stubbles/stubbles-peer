@@ -14,6 +14,7 @@ use stubbles\peer\Stream;
 use stubbles\peer\http\HttpUri;
 
 use function bovigo\assert\assert;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 /**
  * Test for stubbles\peer\http\HttpRequest.
@@ -122,11 +123,12 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function getWithInvalidHttpVersionThrowsIllegalArgumentException()
     {
-        $this->createHttpRequest()->get(5, 'invalid');
+        expect(function() {
+                $this->createHttpRequest()->get(5, 'invalid');
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**
@@ -186,11 +188,12 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function headWithInvalidHttpVersionThrowsIllegalArgumentException()
     {
-        $this->createHttpRequest()->head(5, 'invalid');
+        expect(function() {
+                $this->createHttpRequest()->head(5, 'invalid');
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**
@@ -316,11 +319,12 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function postWithInvalidHttpVersionThrowsIllegalArgumentException()
     {
-        $this->createHttpRequest()->post('foobar', 5, 'invalid');
+        expect(function() {
+                $this->createHttpRequest()->post('foobar', 5, 'invalid');
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**
@@ -386,11 +390,12 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @since   2.0.0
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function putWithInvalidHttpVersionThrowsIllegalArgumentException()
     {
-        $this->createHttpRequest()->put('foobar', 5, 'invalid');
+        expect(function() {
+                $this->createHttpRequest()->put('foobar', 5, 'invalid');
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**
@@ -450,10 +455,11 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @since   2.0.0
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function deleteWithInvalidHttpVersionThrowsIllegalArgumentException()
     {
-        $this->createHttpRequest()->delete(5, 'invalid');
+        expect(function() {
+                $this->createHttpRequest()->delete(5, 'invalid');
+        })->throws(\InvalidArgumentException::class);
     }
 }

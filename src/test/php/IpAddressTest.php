@@ -11,6 +11,7 @@ namespace stubbles\peer;
 use function bovigo\assert\assert;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isSameAs;
@@ -328,11 +329,12 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @dataProvider  invalidValues
-     * @expectedException  InvalidArgumentException
      */
     public function constructWithInvalidValueThrowsIllegalArgumentException($invalidValue)
     {
-        new IpAddress($invalidValue);
+        expect(function() use ($invalidValue) {
+                new IpAddress($invalidValue);
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**

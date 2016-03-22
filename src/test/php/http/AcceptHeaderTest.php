@@ -14,6 +14,7 @@ use function bovigo\assert\assertEmptyArray;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertNull;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isOfSize;
 /**
@@ -142,20 +143,22 @@ class AcceptHeaderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function addAcceptableWithPriorityLowerThan0ThrowsIllegalArgumentException()
     {
-        $this->acceptHeader->addAcceptable('text/html', -0.1);
+        expect(function() {
+                $this->acceptHeader->addAcceptable('text/html', -0.1);
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function addAcceptableWithPriorityGreaterThan1ThrowsIllegalArgumentException()
     {
-        $this->acceptHeader->addAcceptable('text/html', 1.1);
+        expect(function() {
+                $this->acceptHeader->addAcceptable('text/html', 1.1);
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**

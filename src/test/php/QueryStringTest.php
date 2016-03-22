@@ -13,6 +13,7 @@ use function bovigo\assert\assertEmptyString;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertNull;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 /**
  * Test for stubbles\peer\QueryString.
@@ -47,11 +48,12 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function constructorThrowsIllegalArgumentExceptionIfQueryStringContainsErrors()
     {
-        new QueryString('foo.hm=bar&baz[dummy]=blubb&baz[=more&empty=&set');
+        expect(function() {
+                new QueryString('foo.hm=bar&baz[dummy]=blubb&baz[=more&empty=&set');
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**
@@ -219,11 +221,12 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function addIllegalParamThrowsIllegalArgumentException()
     {
-        $this->emptyQueryString->addParam('some', new \stdClass());
+        expect(function() {
+                $this->emptyQueryString->addParam('some', new \stdClass());
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**

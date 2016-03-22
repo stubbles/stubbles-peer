@@ -14,6 +14,7 @@ use function bovigo\assert\assertEmptyString;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertNull;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isNotSameAs;
 /**
@@ -25,47 +26,52 @@ class UriTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @expectedException  stubbles\peer\MalformedUri
      */
     public function canNotCreateUriWithoutScheme()
     {
-        Uri::fromString('stubbles.net');
+        expect(function() {
+                Uri::fromString('stubbles.net');
+        })->throws(MalformedUri::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\peer\MalformedUri
      */
     public function canNotCreateUriWithInvalidScheme()
     {
-        Uri::fromString('404://stubbles.net');
+        expect(function() {
+                Uri::fromString('404://stubbles.net');
+        })->throws(MalformedUri::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\peer\MalformedUri
      */
     public function canNotCreateUriWithInvalidUser()
     {
-        Uri::fromString('http://mi@ss@stubbles.net');
+        expect(function() {
+                Uri::fromString('http://mi@ss@stubbles.net');
+        })->throws(MalformedUri::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\peer\MalformedUri
      */
     public function canNotCreateUriWithInvalidPassword()
     {
-        Uri::fromString('http://mi:s@s@stubbles.net');
+        expect(function() {
+                Uri::fromString('http://mi:s@s@stubbles.net');
+        })->throws(MalformedUri::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\peer\MalformedUri
      */
     public function canNotCreateUriWithInvalidHost()
     {
-        Uri::fromString('http://_:80');
+        expect(function() {
+                Uri::fromString('http://_:80');
+        })->throws(MalformedUri::class);
     }
 
     /**
@@ -699,11 +705,13 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function wrongParams()
     {
-        Uri::fromString('http://example.org/')->addParam('test', new \stdClass());
+        expect(function() {
+                Uri::fromString('http://example.org/')
+                        ->addParam('test', new \stdClass());
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**
@@ -990,11 +998,12 @@ class UriTest extends \PHPUnit_Framework_TestCase
      * @since  5.0.1
      * @test
      * @group  issue_119
-     * @expectedException  stubbles\peer\MalformedUri
      */
     public function illegalArgumentExceptionFromUnbalancedQueryStringTurnedIntoMalformedUri()
     {
-        Uri::fromString('http://example.org/?foo[bar=300&baz=200');
+        expect(function() {
+                Uri::fromString('http://example.org/?foo[bar=300&baz=200');
+        })->throws(MalformedUri::class);
     }
 
     /**

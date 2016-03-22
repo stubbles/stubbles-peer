@@ -12,6 +12,7 @@ use function bovigo\assert\assert;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertNull;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isOfSize;
 /**
@@ -149,11 +150,12 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
     /**
      * @since  2.0.0
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function appendingInvalidHeaderStructureThrowsIllegalArgumentException()
     {
-        $this->headerList->append(400);
+        expect(function() {
+                $this->headerList->append(400);
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**
@@ -206,29 +208,32 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function putArrayThrowsIllegalArgumentException()
     {
-        $this->headerList->put('Binford', [6100]);
+        expect(function() {
+                $this->headerList->put('Binford', [6100]);
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function putObjectThrowsIllegalArgumentException()
     {
-        $this->headerList->put('Binford', new \stdClass());
+        expect(function() {
+                $this->headerList->put('Binford', new \stdClass());
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function putUnusualKeyThrowsIllegalArgumentException()
     {
-        $this->headerList->put(6100, new \stdClass());
+        expect(function() {
+                $this->headerList->put(6100, new \stdClass());
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**

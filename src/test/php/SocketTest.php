@@ -11,6 +11,7 @@ namespace stubbles\peer;
 use function bovigo\assert\assert;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\isInstanceOf;
 /**
  * Test for stubbles\peer\Socket.
@@ -29,20 +30,22 @@ class SocketTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function createWithEmptyHostThrowsIllegalArgumentException()
     {
-        createSocket('');
+        expect(function() {
+                createSocket('');
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function createWithNegativePortThrowsIllegalArgumentException()
     {
-        createSocket('localhost', -1);
+        expect(function() {
+                createSocket('localhost', -1);
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**
@@ -87,12 +90,13 @@ class SocketTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\peer\ConnectionFailure
      * @since  6.0.0
      */
     public function connectThrowsConnectionFailureOnFailure()
     {
         FsockopenResult::$return = false;
-        createSocket('localhost', 80)->connect();
+        expect(function() {
+                createSocket('localhost', 80)->connect();
+        })->throws(ConnectionFailure::class);
     }
 }

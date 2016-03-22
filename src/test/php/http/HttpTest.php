@@ -10,6 +10,7 @@
 namespace stubbles\peer\http;
 
 use function bovigo\assert\assert;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isNotOfSize;
 /**
@@ -129,11 +130,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
      */
     public function getReasonPhraseForUnknownStatusCodeThrowsIllegalArgumentException()
     {
-        Http::reasonPhraseFor(1);
+        expect(function() {
+                Http::reasonPhraseFor(1);
+        })->throws(\InvalidArgumentException::class);
     }
 
     /**

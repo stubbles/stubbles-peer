@@ -8,11 +8,13 @@
  * @package  stubbles\peer
  */
 namespace stubbles\peer\http;
+use stubbles\peer\MalformedUri;
 
 use function bovigo\assert\assert;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertNull;
 use function bovigo\assert\assertTrue;
+use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isInstanceOf;
 use function bovigo\assert\predicate\isNotSameAs;
@@ -51,30 +53,33 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  stubbles\peer\MalformedUri
      */
     public function canNotCreateHttpUriFromInvalidHost()
     {
-        HttpUri::fromString('http://:');
+        expect(function() {
+                HttpUri::fromString('http://:');
+        })->throws(MalformedUri::class);
     }
 
     /**
      * @since  2.0.0
      * @test
-     * @expectedException  stubbles\peer\MalformedUri
      */
     public function createInstanceForOtherSchemeThrowsMalformedUri()
     {
-        HttpUri::fromString('invalid://example.net/');
+        expect(function() {
+                HttpUri::fromString('invalid://example.net/');
+        })->throws(MalformedUri::class);
     }
 
     /**
      * @test
-     * @expectedException  stubbles\peer\MalformedUri
      */
     public function createInstanceFromInvalidUriThrowsMalformedUri()
     {
-        HttpUri::fromString('invalid');
+        expect(function() {
+                HttpUri::fromString('invalid');
+        })->throws(MalformedUri::class);
     }
 
     /**
@@ -421,21 +426,23 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
     /**
      * @since  4.0.0
      * @test
-     * @expectedException  stubbles\peer\MalformedUri
      */
     public function createInstanceWithUserInfoThrowsMalformedUriForDefaultRfc()
     {
-        HttpUri::fromString('http://user:password@example.net/');
+        expect(function() {
+                HttpUri::fromString('http://user:password@example.net/');
+        })->throws(MalformedUri::class);
     }
 
     /**
      * @since  4.0.0
      * @test
-     * @expectedException  stubbles\peer\MalformedUri
      */
     public function createInstanceWithUserInfoThrowsMalformedUriForRfc7230()
     {
-        HttpUri::fromString('http://user:password@example.net/', Http::RFC_7230);
+        expect(function() {
+                HttpUri::fromString('http://user:password@example.net/', Http::RFC_7230);
+        })->throws(MalformedUri::class);
     }
 
     /**
@@ -473,23 +480,29 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException  InvalidArgumentException
-     * @expectedExceptionMessage  Uri must be a string containing a HTTP URI or an instance of stubbles\peer\http\HttpUri, but was stdClass
      * @since  4.0.0
      */
     public function castFromOtherThrowsIllegalArgumentException()
     {
-        HttpUri::castFrom(new \stdClass());
+        expect(function() {
+                HttpUri::castFrom(new \stdClass());
+        })
+        ->throws(\InvalidArgumentException::class)
+        ->withMessage(
+                'Uri must be a string containing a HTTP URI or an instance of '
+                . HttpUri::class . ', but was stdClass'
+        );
     }
 
     /**
      * @test
-     * @expectedException  stubbles\peer\MalformedUri
      * @since  4.0.0
      */
     public function createFromPartsWithInvalidSchemeThrowsMalformedUri()
     {
-        HttpUri::fromParts('foo', 'localhost');
+        expect(function() {
+                HttpUri::fromParts('foo', 'localhost');
+        })->throws(MalformedUri::class);
     }
 
     /**

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9f882862f6527ffe7bd3cd9a649e26e7",
-    "content-hash": "5c6e358432ad041270dc4a661ec68726",
+    "hash": "14b2fdf0044ec1d3abb0689d0ee4c710",
+    "content-hash": "53c2167ed4f1a67e3573616783a569d1",
     "packages": [],
     "packages-dev": [
         {
@@ -670,16 +670,16 @@
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "3.0.6",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "49bc700750196c04dd6bc2c4c99cb632b893836b"
+                "reference": "7c34c9bdde4131b824086457a3145e27dba10ca1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/49bc700750196c04dd6bc2c4c99cb632b893836b",
-                "reference": "49bc700750196c04dd6bc2c4c99cb632b893836b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/7c34c9bdde4131b824086457a3145e27dba10ca1",
+                "reference": "7c34c9bdde4131b824086457a3145e27dba10ca1",
                 "shasum": ""
             },
             "require": {
@@ -697,7 +697,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0.x-dev"
+                    "dev-master": "3.1.x-dev"
                 }
             },
             "autoload": {
@@ -722,7 +722,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2015-12-08 08:47:06"
+            "time": "2016-03-24 05:58:25"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -1192,16 +1192,16 @@
         },
         {
             "name": "stubbles/values",
-            "version": "v7.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-values.git",
-                "reference": "e6951d0fff1208f4f917ae405aeafcd10c7e5130"
+                "reference": "4d9361bfdfd38528c88377a5905cfe24a6ce2a41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/e6951d0fff1208f4f917ae405aeafcd10c7e5130",
-                "reference": "e6951d0fff1208f4f917ae405aeafcd10c7e5130",
+                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/4d9361bfdfd38528c88377a5905cfe24a6ce2a41",
+                "reference": "4d9361bfdfd38528c88377a5905cfe24a6ce2a41",
                 "shasum": ""
             },
             "require": {
@@ -1217,7 +1217,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.1.x-dev"
+                    "dev-master": "7.2.x-dev"
                 }
             },
             "autoload": {
@@ -1234,7 +1234,7 @@
             ],
             "description": "Useful classes to ease the work with values.",
             "homepage": "http://stubbles.net/",
-            "time": "2016-02-21 15:20:21"
+            "time": "2016-03-23 16:25:04"
         },
         {
             "name": "symfony/yaml",

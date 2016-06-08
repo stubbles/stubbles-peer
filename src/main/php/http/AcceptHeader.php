@@ -124,8 +124,9 @@ class AcceptHeader implements \Countable
      */
     public function findMatchWithGreatestPriority(array $mimeTypes)
     {
-        $sharedAcceptables = array_intersect_key($this->acceptables,
-                                                 array_flip($this->getSharedAcceptables($mimeTypes))
+        $sharedAcceptables = array_intersect_key(
+                $this->acceptables,
+                array_flip($this->getSharedAcceptables($mimeTypes))
         );
         if (count($sharedAcceptables) > 0) {
             return $this->findAcceptableWithGreatestPriorityFromList($sharedAcceptables);

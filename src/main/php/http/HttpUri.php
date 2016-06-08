@@ -105,7 +105,11 @@ abstract class HttpUri extends Uri
     private function isValidForRfc($rfc)
     {
         if ($this->parsedUri->hasUser() && Http::RFC_7230 === $rfc) {
-            throw new MalformedUri('The URI ' . $this->parsedUri->asString() . ' is not a valid HTTP URI according to ' . Http::RFC_7230 . ': contains userinfo, but this is disallowed');
+            throw new MalformedUri(
+                    'The URI ' . $this->parsedUri->asString()
+                    . ' is not a valid HTTP URI according to ' . Http::RFC_7230
+                    . ': contains userinfo, but this is disallowed'
+            );
         }
 
         return $this->isSyntacticallyValid();

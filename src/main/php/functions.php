@@ -62,7 +62,7 @@ namespace stubbles\peer {
      */
     function createSocket($host, $port = 80, $prefix = null)
     {
-        return new \stubbles\peer\Socket($host, $port, $prefix);
+        return new Socket($host, $port, $prefix);
     }
 
     /**

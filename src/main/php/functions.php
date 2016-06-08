@@ -112,12 +112,7 @@ namespace stubbles\peer {
             return false;
         }
 
-        $url = @parse_url('mailto://' . $value);
-        if (!isset($url['host']) || !preg_match('/^([a-zA-Z0-9-]*)\.([a-zA-Z]{2,4})$/', $url['host'])) {
-            return false;
-        }
-
-        if (!isset($url['user']) || strlen($url['user']) == 0 || !preg_match('/^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*$/', $url['user'])) {
+        if (false === filter_var($value, FILTER_VALIDATE_EMAIL)) {
             return false;
         }
 

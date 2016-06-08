@@ -19,7 +19,7 @@ _stubbles/peer_ is distributed as [Composer](https://getcomposer.org/)
 package. To install it as a dependency of your package use the following
 command:
 
-    composer require "stubbles/peer": "^7.0"
+    composer require "stubbles/peer": "^7.1"
 
 
 Requirements
@@ -219,3 +219,11 @@ Integration with _stubbles/values_
 In case the package _stubbles/values_ is present a recognition for
 `stubbles\values\Parse` to parse http URIs to instances of
 `stubbles\peer\http\HttpUri` will automatically be added.
+
+Also, some checks are added to `stubbles\values\Value` (_available since release 7.1.0_):
+- `isMailAddress()`
+- `isIpAddress()`
+- `isIpV4Address()`
+- `isIpV6Address()`
+- `isHttpUri()`
+- `isExistingHttpUri()`

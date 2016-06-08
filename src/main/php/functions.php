@@ -121,6 +121,9 @@ namespace stubbles\peer {
 
     if (class_exists('stubbles\values\Value')) {
         \stubbles\values\Value::defineCheck('isMailAddress', 'stubbles\peer\isMailAddress');
+        \stubbles\values\Value::defineCheck('isIpAddress', [IpAddress::class, 'isValid']);
+        \stubbles\values\Value::defineCheck('isIpV4Address', [IpAddress::class, 'isValidV4']);
+        \stubbles\values\Value::defineCheck('isIpV6Address', [IpAddress::class, 'isValidV6']);
     }
 }
 /**
@@ -160,8 +163,5 @@ namespace stubbles\peer\http {
     if (class_exists('stubbles\values\Value')) {
         \stubbles\values\Value::defineCheck('isHttpUri', [HttpUri::class, 'isValid']);
         \stubbles\values\Value::defineCheck('isExistingHttpUri', [HttpUri::class, 'exists']);
-        \stubbles\values\Value::defineCheck('isIpAddress', [\stubbles\peer\IpAddress::class, 'isValid']);
-        \stubbles\values\Value::defineCheck('isIpV4Address', [\stubbles\peer\IpAddress::class, 'isValidV4']);
-        \stubbles\values\Value::defineCheck('isIpV6Address', [\stubbles\peer\IpAddress::class, 'isValidV6']);
     }
 }

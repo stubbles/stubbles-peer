@@ -191,11 +191,7 @@ class Http
     public static function statusClassFor(int $statusCode): string
     {
         $class = substr((string) $statusCode, 0, 1);
-        if (isset(self::$statusClass[$class])) {
-            return self::$statusClass[$class];
-        }
-
-        return self::STATUS_CLASS_UNKNOWN;
+        return self::$statusClass[$class] ?? self::STATUS_CLASS_UNKNOWN;
     }
 
     /**

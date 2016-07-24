@@ -102,7 +102,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      * creates header with value for key
      *
      * @param   string  $key    name of header
-     * @param   string  $value  value of header
+     * @param   scalar  $value  value of header
      * @return  \stubbles\peer\HeaderList
      * @throws  \InvalidArgumentException
      */
@@ -237,11 +237,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      */
     public function get(string $key, $default = null)
     {
-        if ($this->containsKey($key) == true) {
-            return $this->headers[$key];
-        }
-
-        return $default;
+        return $this->headers[$key] ?? $default;
     }
 
     /**

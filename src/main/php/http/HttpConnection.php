@@ -136,7 +136,7 @@ class HttpConnection
     public function get(string $version = HttpVersion::HTTP_1_1): HttpResponse
     {
         return HttpRequest::create($this->httpUri, $this->headers)
-                          ->get($this->timeout, $version);
+                ->get($this->timeout, $version);
     }
 
     /**
@@ -149,7 +149,7 @@ class HttpConnection
     public function head(string $version = HttpVersion::HTTP_1_1): HttpResponse
     {
         return HttpRequest::create($this->httpUri, $this->headers)
-                          ->head($this->timeout, $version);
+                ->head($this->timeout, $version);
     }
 
     /**
@@ -163,7 +163,7 @@ class HttpConnection
     public function post($body, string $version = HttpVersion::HTTP_1_1): HttpResponse
     {
         return HttpRequest::create($this->httpUri, $this->headers)
-                          ->post($body, $this->timeout, $version);
+                ->post($body, $this->timeout, $version);
     }
 
     /**
@@ -178,7 +178,7 @@ class HttpConnection
     public function put(string $body, string $version = HttpVersion::HTTP_1_1): HttpResponse
     {
         return HttpRequest::create($this->httpUri, $this->headers)
-                          ->put($body, $this->timeout, $version);
+                ->put($body, $this->timeout, $version);
     }
 
     /**
@@ -192,6 +192,6 @@ class HttpConnection
     public function delete(string $version = HttpVersion::HTTP_1_1): HttpResponse
     {
         return HttpRequest::create($this->httpUri, $this->headers)
-                          ->delete($this->timeout, $version);
+                ->delete($this->timeout, $version);
     }
 }

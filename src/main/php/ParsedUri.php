@@ -53,7 +53,7 @@ class ParsedUri
             $this->queryString = $queryString;
         } else {
             try {
-                $this->queryString = new QueryString((isset($this->uri['query'])) ? ($this->uri['query']) : (null));
+                $this->queryString = new QueryString($this->uri['query'] ?? null);
             } catch (\InvalidArgumentException $iae) {
                 throw new MalformedUri($iae->getMessage(), $iae);
             }
@@ -175,11 +175,7 @@ class ParsedUri
      */
     public function scheme()
     {
-        if (isset($this->uri['scheme'])) {
-            return $this->uri['scheme'];
-        }
-
-        return null;
+        return $this->uri['scheme'] ?? null;
     }
 
     /**
@@ -200,11 +196,7 @@ class ParsedUri
      */
     public function user(string $defaultUser = null)
     {
-        if (isset($this->uri['user'])) {
-            return $this->uri['user'];
-        }
-
-        return $defaultUser;
+        return $this->uri['user'] ?? $defaultUser;
     }
 
     /**
@@ -224,11 +216,7 @@ class ParsedUri
      */
     public function password()
     {
-        if (isset($this->uri['pass'])) {
-            return $this->uri['pass'];
-        }
-
-        return null;
+        return $this->uri['pass'] ?? null;
     }
 
     /**
@@ -258,11 +246,7 @@ class ParsedUri
      */
     public function hostname()
     {
-        if (isset($this->uri['host'])) {
-            return $this->uri['host'];
-        }
-
-        return null;
+        return $this->uri['host'] ?? null;
     }
 
     /**
@@ -319,11 +303,7 @@ class ParsedUri
      */
     public function path()
     {
-        if (isset($this->uri['path'])) {
-            return $this->uri['path'];
-        }
-
-        return null;
+        return $this->uri['path'] ?? null;
     }
 
     /**
@@ -353,11 +333,7 @@ class ParsedUri
      */
     public function fragment()
     {
-        if (isset($this->uri['fragment'])) {
-            return $this->uri['fragment'];
-        }
-
-        return null;
+        return $this->uri['fragment'] ?? null;
     }
 
     /**

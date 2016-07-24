@@ -183,7 +183,8 @@ abstract class HttpUri extends Uri
             return false;
         }
 
-        if (!$this->parsedUri->schemeEquals(Http::SCHEME) && !$this->parsedUri->schemeEquals(Http::SCHEME_SSL)) {
+        if (!$this->parsedUri->schemeEquals(Http::SCHEME)
+          && !$this->parsedUri->schemeEquals(Http::SCHEME_SSL)) {
             return false;
         }
 

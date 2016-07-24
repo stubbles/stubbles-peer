@@ -63,8 +63,10 @@ class HttpRequest
      * @param   string|\stubbles\peer\http\HttpVersion  $version  optional  http version, defaults to HTTP/1.1
      * @return  \stubbles\peer\http\HttpResponse
      */
-    public function get(int $timeout = 30, string $version = HttpVersion::HTTP_1_1): HttpResponse
-    {
+    public function get(
+            int $timeout = 30,
+            $version = HttpVersion::HTTP_1_1
+    ): HttpResponse {
         $socket = $this->httpUri->openSocket($timeout);
         $this->processHeader($socket, Http::GET, $version);
         return HttpResponse::create($socket);
@@ -77,8 +79,10 @@ class HttpRequest
      * @param   string|\stubbles\peer\http\HttpVersion  $version  optional  http version, defaults to HTTP/1.1
      * @return  \stubbles\peer\http\HttpResponse
      */
-    public function head(int $timeout = 30, string $version = HttpVersion::HTTP_1_1): HttpResponse
-    {
+    public function head(
+            int $timeout = 30,
+            $version = HttpVersion::HTTP_1_1
+    ): HttpResponse {
         $socket = $this->httpUri->openSocket($timeout);
         $this->headers->put('Connection', 'close');
         $this->processHeader($socket, Http::HEAD, $version);
@@ -98,8 +102,11 @@ class HttpRequest
      * @param   string|\stubbles\peer\http\HttpVersion  $version  optional  http version, defaults to HTTP/1.1
      * @return  \stubbles\peer\http\HttpResponse
      */
-    public function post($body, int $timeout = 30, string $version = HttpVersion::HTTP_1_1): HttpResponse
-    {
+    public function post(
+            $body,
+            int $timeout = 30,
+            $version = HttpVersion::HTTP_1_1
+    ): HttpResponse {
         if (is_array($body)) {
             $body = $this->transformPostValues($body);
             $this->headers->put('Content-Type', 'application/x-www-form-urlencoded');
@@ -121,8 +128,11 @@ class HttpRequest
      * @return  \stubbles\peer\http\HttpResponse
      * @since   2.0.0
      */
-    public function put(string $body, int $timeout = 30, string $version = HttpVersion::HTTP_1_1): HttpResponse
-    {
+    public function put(
+            string $body,
+            int $timeout = 30,
+            $version = HttpVersion::HTTP_1_1
+    ): HttpResponse {
         $this->headers->put('Content-Length', strlen($body));
         $socket = $this->httpUri->openSocket($timeout);
         $this->processHeader($socket, Http::PUT, $version);
@@ -138,8 +148,10 @@ class HttpRequest
      * @return  \stubbles\peer\http\HttpResponse
      * @since   2.0.0
      */
-    public function delete(int $timeout = 30, string $version = HttpVersion::HTTP_1_1): HttpResponse
-    {
+    public function delete(
+            int $timeout = 30,
+            $version = HttpVersion::HTTP_1_1
+    ): HttpResponse {
         $socket = $this->httpUri->openSocket($timeout);
         $this->processHeader($socket, Http::DELETE, $version);
         return HttpResponse::create($socket);

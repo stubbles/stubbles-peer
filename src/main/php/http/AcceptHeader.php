@@ -102,12 +102,8 @@ class AcceptHeader implements \Countable
                 return $this->acceptables['*/*'];
             }
 
-            list($maintype, $subtype) = explode('/', $mimeType);
-            if (isset($this->acceptables[$maintype . '/*'])) {
-                return $this->acceptables[$maintype . '/*'];
-            }
-
-            return 0;
+            list($maintype) = explode('/', $mimeType);
+            return $this->acceptables[$maintype . '/*'] ?? 0;
         }
 
         return $this->acceptables[$mimeType];

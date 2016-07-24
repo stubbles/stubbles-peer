@@ -81,11 +81,11 @@ abstract class HttpUri extends Uri
      *
      * @param   string|\stubbles\peer\http\HttpUri  $value  value to cast to HttpUri
      * @param   string                              $name   optional  name of parameter to cast from
-     * @return  \stubbles\peer\http\HttpUri|null
+     * @return  \stubbles\peer\http\HttpUri
      * @throws  \InvalidArgumentException
      * @since   4.0.0
      */
-    public static function castFrom($value, string $name = 'Uri')
+    public static function castFrom($value, string $name = 'Uri'): self
     {
         if ($value instanceof self) {
             return $value;
@@ -239,9 +239,9 @@ abstract class HttpUri extends Uri
      * returns port of the uri
      *
      * @param   int  $defaultPort  parameter is ignored for http uris
-     * @return  int|null
+     * @return  int
      */
-    public function port(int $defaultPort = null)
+    public function port(int $defaultPort = null): int
     {
 
         if ($this->isHttp()) {

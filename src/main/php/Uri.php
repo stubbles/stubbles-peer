@@ -33,7 +33,7 @@ abstract class Uri
     public static function fromString(string $uriString)
     {
         if (strlen($uriString) === 0) {
-            return null;
+            throw new MalformedUri('Empty string is not a valid URI');
         }
 
         $uri = new ConstructedUri(new ParsedUri($uriString));

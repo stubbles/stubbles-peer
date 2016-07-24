@@ -77,9 +77,10 @@ class UriTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function createFromEmptyStringReturnsNull()
+    public function createFromEmptyStringThrowsMalformedUri()
     {
-        assertNull(Uri::fromString(''));
+        expect(function() { Uri::fromString(''); })
+                ->throws(MalformedUri::class);
     }
 
     /**

@@ -82,10 +82,10 @@ class QueryString
      *
      * @return  string
      */
-    public function build()
+    public function build(): string
     {
         if (count($this->parameters) === 0) {
-            return null;
+            return '';
         }
 
         $queryString = '';

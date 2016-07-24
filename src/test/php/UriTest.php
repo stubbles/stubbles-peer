@@ -939,7 +939,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function queryStringIsEmptyIfNoneGiven()
     {
-        assertNull(
+        assertEmptyString(
                 Uri::fromString('http://example.org/foo')->queryString()
         );
     }

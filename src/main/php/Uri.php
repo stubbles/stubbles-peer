@@ -256,10 +256,10 @@ abstract class Uri
     /**
      * returns query string
      *
-     * @return  string|null
+     * @return  string
      * @since   2.1.2
      */
-    public function queryString()
+    public function queryString(): string
     {
         return $this->parsedUri->queryString()->build();
     }

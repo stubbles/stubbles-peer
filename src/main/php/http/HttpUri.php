@@ -55,13 +55,13 @@ abstract class HttpUri extends Uri
      *
      * @param   string  $uriString  string to create instance from
      * @param   string  $rfc        optional  RFC to base validation on, defaults to Http::RFC_7230
-     * @return  \stubbles\peer\http\HttpUri|null
+     * @return  \stubbles\peer\http\HttpUri
      * @throws  \stubbles\peer\MalformedUri
      */
-    public static function fromString(string $uriString, string $rfc = Http::RFC_7230)
+    public static function fromString(string $uriString, string $rfc = Http::RFC_7230): self
     {
         if (strlen($uriString) === 0) {
-            return null;
+            throw new MalformedUri('Empty string is not a valid HTTP URI');
         }
 
         $uri = new ConstructedHttpUri(new ParsedUri($uriString));

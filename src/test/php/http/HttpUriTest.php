@@ -86,9 +86,10 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function createInstanceFromEmptyStringReturnsNull()
+    public function createInstanceFromEmptyStringThrowsMalformedUri()
     {
-        assertNull(HttpUri::fromString(''));
+        expect(function() { HttpUri::fromString(''); })
+                ->throws(MalformedUri::class);
     }
 
     /**

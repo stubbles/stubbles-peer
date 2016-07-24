@@ -235,9 +235,9 @@ abstract class Uri
     /**
      * returns path of the uri
      *
-     * @return  string|null
+     * @return  string
      */
-    public function path()
+    public function path(): string
     {
         return $this->parsedUri->path();
     }

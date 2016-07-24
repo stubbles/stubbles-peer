@@ -66,7 +66,7 @@ abstract class HttpUri extends Uri
 
         $uri = new ConstructedHttpUri(new ParsedUri($uriString));
         if ($uri->isValidForRfc($rfc)) {
-            if (!$uri->parsedUri->hasPath()) {
+            if (empty($uri->parsedUri->path())) {
                 $uri->parsedUri = $uri->parsedUri->transpose(['path' => '/']);
             }
 

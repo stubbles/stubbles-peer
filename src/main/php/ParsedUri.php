@@ -53,6 +53,10 @@ class ParsedUri
             $this->uri['host'] = strtolower($this->uri['host']);
         }
 
+        if (!isset($this->uri['path'])) {
+            $this->uri['path'] = '';
+        }
+
         if (null !== $queryString) {
             $this->queryString = $queryString;
         } else {
@@ -295,6 +299,7 @@ class ParsedUri
      *
      * @return  bool
      * @since   4.0.0
+     * @deprecated  since 8.0.0, a valid URI always has a path, will be removed with 9.0.0
      */
     public function hasPath(): bool
     {
@@ -304,11 +309,11 @@ class ParsedUri
     /**
      * returns path of the uri
      *
-     * @return  string|null
+     * @return  string
      */
-    public function path()
+    public function path(): string
     {
-        return $this->uri['path'] ?? null;
+        return $this->uri['path'];
     }
 
     /**

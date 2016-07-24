@@ -373,9 +373,9 @@ class UriTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function getPathReturnsNullIfNoPathInGivenUri()
+    public function getPathReturnsEmptyStringIfNoPathInGivenUri()
     {
-        assertNull(Uri::fromString('http://stubbles.net')->path());
+        assertEmptyString(Uri::fromString('http://stubbles.net')->path());
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -22,10 +23,7 @@ use function bovigo\assert\predicate\isNotOfSize;
  */
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @return  array
-     */
-    public function getStatusCodeClassTuples()
+    public function statusCodeClassTuples(): array
     {
         return [[100, Http::STATUS_CLASS_INFO],
                 [101, Http::STATUS_CLASS_INFO],
@@ -89,9 +87,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      * @param  int     $statusCode
      * @param  string  $statusClass
      * @test
-     * @dataProvider  getStatusCodeClassTuples
+     * @dataProvider  statusCodeClassTuples
      */
-    public function detectCorrectStatusClass($statusCode, $statusClass)
+    public function detectCorrectStatusClass(int $statusCode, string $statusClass)
     {
         assert(Http::statusClassFor($statusCode), equals($statusClass));
     }
@@ -104,10 +102,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         assert(Http::statusCodes(), isNotOfSize(0));
     }
 
-    /**
-     * @return  array
-     */
-    public function getStatusCodeReasonPhraseTuples()
+    public function statusCodeReasonPhraseTuples(): array
     {
         $tuples = [];
         foreach (Http::statusCodes() as $statusCode => $reasonPhrase) {
@@ -121,9 +116,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      * @param  int     $statusCode
      * @param  string  $reasonPhrase
      * @test
-     * @dataProvider  getStatusCodeReasonPhraseTuples
+     * @dataProvider  statusCodeReasonPhraseTuples
      */
-    public function returnsCorrectReasonPhrase($statusCode, $reasonPhrase)
+    public function returnsCorrectReasonPhrase(int $statusCode, string $reasonPhrase)
     {
         assert(Http::reasonPhraseFor($statusCode), equals($reasonPhrase));
     }

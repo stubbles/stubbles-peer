@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -559,10 +560,7 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
         assert($uri->withPath('/bar'), isNotSameAs($uri));
     }
 
-    /**
-     * @return  array
-     */
-    public function invalidValues()
+    public function invalidValues(): array
     {
         return [[null],
                 [303],
@@ -583,10 +581,7 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
         assertFalse(HttpUri::isValid($invalid));
     }
 
-    /**
-     * @return  array
-     */
-    public function validValues()
+    public function validValues(): array
     {
         return [
             ['http://localhost/'],
@@ -603,10 +598,7 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
         assertTrue(HttpUri::isValid($value));
     }
 
-    /**
-     * @return  array
-     */
-    public function validValuesWithoutDnsEntry()
+    public function validValuesWithoutDnsEntry(): array
     {
         return [
             ['http://stubbles.doesNotExist/'],

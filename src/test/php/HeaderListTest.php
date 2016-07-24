@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -223,16 +224,6 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
     {
         expect(function() {
                 $this->headerList->put('Binford', new \stdClass());
-        })->throws(\InvalidArgumentException::class);
-    }
-
-    /**
-     * @test
-     */
-    public function putUnusualKeyThrowsIllegalArgumentException()
-    {
-        expect(function() {
-                $this->headerList->put(6100, new \stdClass());
         })->throws(\InvalidArgumentException::class);
     }
 

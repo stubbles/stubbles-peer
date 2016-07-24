@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -52,7 +53,7 @@ class HttpConnection
      * @param   int  $timeout  timeout for connection in seconds
      * @return  \stubbles\peer\http\HttpConnection
      */
-    public function timeout($timeout)
+    public function timeout(int $timeout): self
     {
         $this->timeout = $timeout;
         return $this;
@@ -65,7 +66,7 @@ class HttpConnection
      * @param   string  $userAgent
      * @return  \stubbles\peer\http\HttpConnection
      */
-    public function asUserAgent($userAgent)
+    public function asUserAgent(string $userAgent): self
     {
         $this->headers->putUserAgent($userAgent);
         return $this;
@@ -78,7 +79,7 @@ class HttpConnection
      * @param   string  $referer
      * @return  \stubbles\peer\http\HttpConnection
      */
-    public function referedFrom($referer)
+    public function referedFrom(string $referer): self
     {
         $this->headers->putReferer($referer);
         return $this;
@@ -91,7 +92,7 @@ class HttpConnection
      * @param   array  $cookieValues  list of key-value pairs
      * @return  \stubbles\peer\http\HttpConnection
      */
-    public function withCookie(array $cookieValues)
+    public function withCookie(array $cookieValues): self
     {
         $this->headers->putCookie($cookieValues);
         return $this;
@@ -105,7 +106,7 @@ class HttpConnection
      * @param   string  $password
      * @return  \stubbles\peer\http\HttpConnection
      */
-    public function authorizedAs($user, $password)
+    public function authorizedAs(string $user, string $password): self
     {
         $this->headers->putAuthorization($user, $password);
         return $this;
@@ -119,7 +120,7 @@ class HttpConnection
      * @param   string  $value  value of header
      * @return  \stubbles\peer\http\HttpConnection
      */
-    public function usingHeader($key, $value)
+    public function usingHeader(string $key, $value): self
     {
         $this->headers->put($key, $value);
         return $this;
@@ -132,7 +133,7 @@ class HttpConnection
      * @param   string  $version  optional  http version, defaults to HTTP/1.1
      * @return  \stubbles\peer\http\HttpResponse
      */
-    public function get($version = HttpVersion::HTTP_1_1)
+    public function get(string $version = HttpVersion::HTTP_1_1): HttpResponse
     {
         return HttpRequest::create($this->httpUri, $this->headers)
                           ->get($this->timeout, $version);
@@ -145,7 +146,7 @@ class HttpConnection
      * @param   string  $version  optional  http version, defaults to HTTP/1.1
      * @return  \stubbles\peer\http\HttpResponse
      */
-    public function head($version = HttpVersion::HTTP_1_1)
+    public function head(string $version = HttpVersion::HTTP_1_1): HttpResponse
     {
         return HttpRequest::create($this->httpUri, $this->headers)
                           ->head($this->timeout, $version);
@@ -159,7 +160,7 @@ class HttpConnection
      * @param   string        $version  optional  http version, defaults to HTTP/1.1
      * @return  \stubbles\peer\http\HttpResponse
      */
-    public function post($body, $version = HttpVersion::HTTP_1_1)
+    public function post($body, string $version = HttpVersion::HTTP_1_1): HttpResponse
     {
         return HttpRequest::create($this->httpUri, $this->headers)
                           ->post($body, $this->timeout, $version);
@@ -174,7 +175,7 @@ class HttpConnection
      * @return  \stubbles\peer\http\HttpResponse
      * @since   2.0.0
      */
-    public function put($body, $version = HttpVersion::HTTP_1_1)
+    public function put(string $body, string $version = HttpVersion::HTTP_1_1): HttpResponse
     {
         return HttpRequest::create($this->httpUri, $this->headers)
                           ->put($body, $this->timeout, $version);
@@ -188,7 +189,7 @@ class HttpConnection
      * @return  \stubbles\peer\http\HttpResponse
      * @since   2.0.0
      */
-    public function delete($version = HttpVersion::HTTP_1_1)
+    public function delete(string $version = HttpVersion::HTTP_1_1): HttpResponse
     {
         return HttpRequest::create($this->httpUri, $this->headers)
                           ->delete($this->timeout, $version);

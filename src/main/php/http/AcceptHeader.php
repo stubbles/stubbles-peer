@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -28,7 +29,7 @@ class AcceptHeader implements \Countable
      * @param   string  $headerValue
      * @return  \stubbles\peer\http\AcceptHeader
      */
-    public static function parse($headerValue)
+    public static function parse(string $headerValue): self
     {
         $self = new self();
         foreach (explode(',', $headerValue) as $acceptable) {
@@ -57,7 +58,7 @@ class AcceptHeader implements \Countable
      *
      * @return  int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->acceptables);
     }
@@ -70,7 +71,7 @@ class AcceptHeader implements \Countable
      * @return  \stubbles\peer\http\AcceptHeader
      * @throws  \InvalidArgumentException
      */
-    public function addAcceptable($acceptable, $priority = 1.0)
+    public function addAcceptable(string $acceptable, float $priority = 1.0): self
     {
         if (0 > $priority || 1.0 < $priority) {
             throw new \InvalidArgumentException(
@@ -92,7 +93,7 @@ class AcceptHeader implements \Countable
      * @param   string  $mimeType
      * @return  float
      */
-    public function priorityFor($mimeType)
+    public function priorityFor(string $mimeType): float
     {
         if (!isset($this->acceptables[$mimeType])) {
             if ($this->count() === 0) {
@@ -150,7 +151,7 @@ class AcceptHeader implements \Countable
      * helper method to find the acceptable with the greatest priority from a given list of acceptables
      *
      * @param   array  $acceptables
-     * @return  string
+     * @return  string|null
      */
     protected function findAcceptableWithGreatestPriorityFromList(array $acceptables)
     {
@@ -169,7 +170,7 @@ class AcceptHeader implements \Countable
      *
      * If two acceptables have the same priority the last one added wins.
      *
-     * @return  string
+     * @return  string|null
      */
     public function findAcceptableWithGreatestPriority()
     {
@@ -182,7 +183,7 @@ class AcceptHeader implements \Countable
      * @param   string[]  $acceptables
      * @return  bool
      */
-    public function hasSharedAcceptables(array $acceptables)
+    public function hasSharedAcceptables(array $acceptables): bool
     {
         return (count($this->getSharedAcceptables($acceptables)) > 0);
     }
@@ -193,7 +194,7 @@ class AcceptHeader implements \Countable
      * @param   string[]  $acceptables
      * @return  string[]
      */
-    public function getSharedAcceptables(array $acceptables)
+    public function getSharedAcceptables(array $acceptables): array
     {
         return array_intersect(array_keys($this->acceptables), $acceptables);
     }
@@ -203,7 +204,7 @@ class AcceptHeader implements \Countable
      *
      * @return  string
      */
-    public function asString()
+    public function asString(): string
     {
         $parts = [];
         foreach ($this->acceptables as $acceptable => $priority) {
@@ -223,7 +224,7 @@ class AcceptHeader implements \Countable
      * @XmlIgnore
      * @return  string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->asString();
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -45,10 +46,10 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
      * @param   string  $queryString
      * @return  HttpRequest
      */
-    private function createHttpRequest($queryString = null)
+    private function createHttpRequest(string $queryString = null): HttpRequest
     {
         $socket   = NewInstance::stub(Stream::class)->mapCalls([
-                'write' => function($line) { $this->memory .= $line;}
+                'write' => function(string $line) { $this->memory .= $line; return strlen($line); }
         ]);
 
         $uriCalls = [

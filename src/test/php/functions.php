@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -14,7 +15,7 @@ namespace stubbles\peer\http
         public static $value = null;
     }
 
-    function checkdnsrr($host, $type = 'MX')
+    function checkdnsrr(string $host, string $type = 'MX')
     {
         return CheckdnsrrResult::$value;
     }

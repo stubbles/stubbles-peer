@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -42,7 +43,7 @@ class Socket
      * @param   string  $prefix  prefix for host, e.g. ssl://
      * @throws  \InvalidArgumentException
      */
-    public function __construct($host, $port = 80, $prefix = null)
+    public function __construct(string $host, int $port = 80, string $prefix = null)
     {
         if (empty($host)) {
             throw new \InvalidArgumentException('Host can not be empty');
@@ -64,7 +65,7 @@ class Socket
      * @return  \stubbles\peer\Stream
      * @throws  \stubbles\peer\ConnectionFailure
      */
-    public function connect($connectTimeout = 1.0)
+    public function connect(float $connectTimeout = 1.0): Stream
     {
         $errno  = 0;
         $errstr = '';
@@ -93,7 +94,7 @@ class Socket
      * @return  bool
      * @since   4.0.0
      */
-    public function usesSsl()
+    public function usesSsl(): bool
     {
         return 'ssl://' === $this->prefix || 'tls://' === $this->prefix;
     }

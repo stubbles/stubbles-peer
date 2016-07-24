@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -33,9 +34,8 @@ class SocketTest extends \PHPUnit_Framework_TestCase
      */
     public function createWithEmptyHostThrowsIllegalArgumentException()
     {
-        expect(function() {
-                createSocket('');
-        })->throws(\InvalidArgumentException::class);
+        expect(function() { createSocket(''); })
+                ->throws(\InvalidArgumentException::class);
     }
 
     /**
@@ -43,9 +43,8 @@ class SocketTest extends \PHPUnit_Framework_TestCase
      */
     public function createWithNegativePortThrowsIllegalArgumentException()
     {
-        expect(function() {
-                createSocket('localhost', -1);
-        })->throws(\InvalidArgumentException::class);
+        expect(function() { createSocket('localhost', -1); })
+                ->throws(\InvalidArgumentException::class);
     }
 
     /**
@@ -57,10 +56,7 @@ class SocketTest extends \PHPUnit_Framework_TestCase
         assertFalse($socket->usesSsl());
     }
 
-    /**
-     * @return  array
-     */
-    public function securePrefixes()
+    public function securePrefixes(): array
     {
         return [['ssl://'], ['tls://']];
     }
@@ -69,7 +65,7 @@ class SocketTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider  securePrefixes
      */
-    public function isSecureWhenCorrectPrefixGiven($securePrefix)
+    public function isSecureWhenCorrectPrefixGiven(string $securePrefix)
     {
         $socket = createSocket('example.com', 443, $securePrefix);
         assertTrue($socket->usesSsl());
@@ -95,8 +91,7 @@ class SocketTest extends \PHPUnit_Framework_TestCase
     public function connectThrowsConnectionFailureOnFailure()
     {
         FsockopenResult::$return = false;
-        expect(function() {
-                createSocket('localhost', 80)->connect();
-        })->throws(ConnectionFailure::class);
+        expect(function() { createSocket('localhost', 80)->connect(); })
+                ->throws(ConnectionFailure::class);
     }
 }

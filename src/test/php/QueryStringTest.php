@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -72,10 +73,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
         assertTrue($this->prefilledQueryString->hasParams());
     }
 
-    /**
-     * @return  array
-     */
-    public function parsedParameters()
+    public function parsedParameters(): array
     {
         return [
                 ['foo.hm', 'bar'],
@@ -89,7 +87,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider  parsedParameters
      */
-    public function parsedParametersAreCorrect($paramName, $expectedValue)
+    public function parsedParametersAreCorrect(string $paramName, $expectedValue)
     {
         assert(
                 $this->prefilledQueryString->param($paramName),

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -76,7 +77,7 @@ class HttpResponse
      * @return  \stubbles\peer\http\HttpResponse
      * @since   2.0.0
      */
-    public static function create(Stream $socket)
+    public static function create(Stream $socket): self
     {
         return new self($socket);
     }
@@ -85,7 +86,7 @@ class HttpResponse
      * returns status line of response
      *
      * @api
-     * @return  string
+     * @return  string|null
      * @since   4.0.0
      */
     public function statusLine()
@@ -97,7 +98,7 @@ class HttpResponse
      * returns http version of response
      *
      * @api
-     * @return  \stubbles\peer\http\HttpVersion
+     * @return  \stubbles\peer\http\HttpVersion|null
      * @since   4.0.0
      */
     public function httpVersion()
@@ -109,7 +110,7 @@ class HttpResponse
      * returns status code of response
      *
      * @api
-     * @return  int
+     * @return  int|null
      * @since   4.0.0
      */
     public function statusCode()
@@ -121,7 +122,7 @@ class HttpResponse
      * return status code class of response
      *
      * @api
-     * @return  string
+     * @return  string|null
      * @since   4.0.0
      */
     public function statusCodeClass()
@@ -138,7 +139,7 @@ class HttpResponse
      * returns reason phrase of response
      *
      * @api
-     * @return  string
+     * @return  string|null
      * @since   5.0.0
      */
     public function reasonPhrase()
@@ -152,7 +153,7 @@ class HttpResponse
      * @api
      * @return  \stubbles\peer\HeaderList
      */
-    public function headers()
+    public function headers(): HeaderList
     {
         return $this->readHeader()->headers;
     }
@@ -163,7 +164,7 @@ class HttpResponse
      * @api
      * @return  string
      */
-    public function body()
+    public function body(): string
     {
         return $this->readHeader()->readBody()->body;
     }
@@ -173,7 +174,7 @@ class HttpResponse
      *
      * @return  \stubbles\peer\http\HttpResponse
      */
-    private function readHeader()
+    private function readHeader(): self
     {
         if (null !== $this->statusLine) {
             return $this;
@@ -198,7 +199,7 @@ class HttpResponse
      *
      * @param  string  $statusLine  first line of response
      */
-    private function parseStatusLine($statusLine)
+    private function parseStatusLine(string $statusLine)
     {
         $matches = [];
         if (preg_match("=^(HTTP/\d+\.\d+) (\d{3}) ([^\r]*)=",
@@ -218,7 +219,7 @@ class HttpResponse
      *
      * @return  bool
      */
-    private function requireContinue()
+    private function requireContinue(): bool
     {
         return 100 === $this->statusCode || 102 === $this->statusCode;
     }
@@ -228,7 +229,7 @@ class HttpResponse
      *
      * @return  \stubbles\peer\http\HttpResponse
      */
-    private function readBody()
+    private function readBody(): self
     {
         if (null !== $this->body) {
             return $this;
@@ -237,7 +238,7 @@ class HttpResponse
         if ($this->headers->get('Transfer-Encoding') === 'chunked') {
             $this->body = $this->readChunked();
         } else {
-            $this->body = $this->readDefault($this->headers->get('Content-Length', 4096));
+            $this->body = $this->readDefault((int) $this->headers->get('Content-Length', 4096));
         }
 
         return $this;
@@ -251,7 +252,7 @@ class HttpResponse
      *
      * @return  string
      */
-    private function readChunked()
+    private function readChunked(): string
     {
         $readLength = 0;
         $chunksize  = null;
@@ -276,7 +277,7 @@ class HttpResponse
      * @param   int     $readLength  expected length of response body
      * @return  string
      */
-    private function readDefault($readLength)
+    private function readDefault(int $readLength): string
     {
         $body = $buffer = '';
         $read = 0;

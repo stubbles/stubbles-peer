@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -24,10 +25,7 @@ use function bovigo\assert\predicate\isSameAs;
  */
 class HttpVersionTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @return  array
-     */
-    public function emptyVersions()
+    public function emptyVersions(): array
     {
         return [[''], [null]];
     }
@@ -82,7 +80,7 @@ class HttpVersionTest extends \PHPUnit_Framework_TestCase
                 new HttpVersion('foo', 1);
         })
         ->throws(\InvalidArgumentException::class)
-        ->withMessage('Given major version "foo" is not an integer');
+        ->withMessage('Given major version "foo" is not an integer.');
     }
 
     /**
@@ -94,7 +92,7 @@ class HttpVersionTest extends \PHPUnit_Framework_TestCase
                 new HttpVersion(1, 'foo');
         })
         ->throws(\InvalidArgumentException::class)
-        ->withMessage('Given minor version "foo" is not an integer');
+        ->withMessage('Given minor version "foo" is not an integer.');
     }
 
     /**
@@ -106,7 +104,7 @@ class HttpVersionTest extends \PHPUnit_Framework_TestCase
                 new HttpVersion(-2, 1);
         })
         ->throws(\InvalidArgumentException::class)
-        ->withMessage('Major version can not be negative');
+        ->withMessage('Major version can not be negative.');
     }
 
     /**
@@ -118,7 +116,7 @@ class HttpVersionTest extends \PHPUnit_Framework_TestCase
                 HttpVersion::fromString('HTTP/-2.1');
         })
         ->throws(\InvalidArgumentException::class)
-        ->withMessage('Major version can not be negative');
+        ->withMessage('Major version can not be negative.');
     }
 
     /**
@@ -130,7 +128,7 @@ class HttpVersionTest extends \PHPUnit_Framework_TestCase
                 new HttpVersion(1, -2);
         })
         ->throws(\InvalidArgumentException::class)
-        ->withMessage('Minor version can not be negative');
+        ->withMessage('Minor version can not be negative.');
     }
 
     /**
@@ -142,7 +140,7 @@ class HttpVersionTest extends \PHPUnit_Framework_TestCase
                 HttpVersion::fromString('HTTP/2.-1');
         })
         ->throws(\InvalidArgumentException::class)
-        ->withMessage('Minor version can not be negative');
+        ->withMessage('Minor version can not be negative.');
     }
 
     /**

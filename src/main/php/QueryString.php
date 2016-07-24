@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -31,7 +32,7 @@ class QueryString
      * @param   string  $queryString
      * @throws  \InvalidArgumentException
      */
-    public function __construct($queryString = null)
+    public function __construct(string $queryString = null)
     {
         if (!empty($queryString)) {
             foreach (explode('&', $queryString) as $param) {
@@ -103,15 +104,15 @@ class QueryString
      * @param   string  $postfix  The postfix to use for each variable (defaults to '')
      * @return  string
      */
-    protected function buildQuery($name, $value, $postfix= '')
+    protected function buildQuery(string $name, $value, string $postfix= ''): string
     {
         $query = '';
         if (is_array($value)) {
             foreach ($value as $k => $v) {
                 if (is_int($k)) {
-                    $query .= $this->buildQuery(null, $v, $postfix . $name .'[]');
+                    $query .= $this->buildQuery('', $v, $postfix . $name .'[]');
                 } else {
-                    $query .= $this->buildQuery(null, $v, $postfix . $name . '[' . $k . ']');
+                    $query .= $this->buildQuery('', $v, $postfix . $name . '[' . $k . ']');
                 }
             }
         } elseif (null === $value) {
@@ -132,7 +133,7 @@ class QueryString
      *
      * @return  bool
      */
-    public function hasParams()
+    public function hasParams(): bool
     {
         return (count($this->parameters) > 0);
     }
@@ -145,7 +146,7 @@ class QueryString
      * @return  \stubbles\peer\QueryString
      * @throws  \InvalidArgumentException
      */
-    public function addParam($name, $value)
+    public function addParam(string $name, $value): self
     {
         if (!is_array($value) && !is_scalar($value) && null !== $value) {
             if (is_object($value) && method_exists($value, '__toString')) {
@@ -169,7 +170,7 @@ class QueryString
      * @param   string  $name  name of parameter
      * @return  \stubbles\peer\QueryString
      */
-    public function removeParam($name)
+    public function removeParam(string $name): self
     {
         if (array_key_exists($name, $this->parameters)) {
             unset($this->parameters[$name]);
@@ -184,7 +185,7 @@ class QueryString
      * @param   string  $name
      * @return  bool
      */
-    public function containsParam($name)
+    public function containsParam(string $name): bool
     {
         return array_key_exists($name, $this->parameters);
     }
@@ -196,7 +197,7 @@ class QueryString
      * @param   mixed   $defaultValue  default value to return if param is not set
      * @return  mixed
      */
-    public function param($name, $defaultValue = null)
+    public function param(string $name, $defaultValue = null)
     {
         if (array_key_exists($name, $this->parameters)) {
             return $this->parameters[$name];
@@ -211,7 +212,7 @@ class QueryString
      * @XmlIgnore
      * @return  string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->build();
     }

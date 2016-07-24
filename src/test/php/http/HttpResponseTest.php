@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -29,7 +30,7 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
      * @param   string  $response  content of response
      * @return  HttpResponse
      */
-    private function createResponse($response)
+    private function createResponse(string $response): HttpResponse
     {
         $file = vfsStream::newFile('response')
                 ->withContent($response)

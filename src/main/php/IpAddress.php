@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -43,7 +44,7 @@ class IpAddress
      * @return  bool
      * @since   7.1.0
      */
-    public static function isValid($value)
+    public static function isValid($value): bool
     {
         return self::isValidV4($value) || self::isValidV6($value);
     }
@@ -55,7 +56,7 @@ class IpAddress
      * @return  bool
      * @since   7.0.0
      */
-    public static function isValidV4($value)
+    public static function isValidV4($value): bool
     {
         return false !== filter_var(
                 $value,
@@ -71,7 +72,7 @@ class IpAddress
      * @return  bool
      * @since   7.0.0
      */
-    public static function isValidV6($value)
+    public static function isValidV6($value): bool
     {
         return false !== filter_var(
                 $value,
@@ -94,8 +95,8 @@ class IpAddress
      */
     public function __construct($ip)
     {
-        if (is_int($ip)) {
-            $this->ip = long2ip($ip);
+        if (ctype_digit($ip)) {
+            $this->ip = long2ip((string) $ip);
         } else {
             $this->ip = $ip;
         }
@@ -118,7 +119,7 @@ class IpAddress
      * @param   int|string|\stubbles\peer\IpAddress $ip
      * @return  \stubbles\peer\IpAddress
      */
-    public static function castFrom($ip)
+    public static function castFrom($ip): self
     {
         if ($ip instanceof self) {
             return $ip;
@@ -133,7 +134,7 @@ class IpAddress
      * @return  string
      * @since   7.0.0
      */
-    public function type()
+    public function type(): string
     {
         return $this->type;
     }
@@ -144,7 +145,7 @@ class IpAddress
      * @return  bool
      * @since   7.0.0
      */
-    public function isV4()
+    public function isV4(): bool
     {
         return self::V4 === $this->type;
     }
@@ -155,7 +156,7 @@ class IpAddress
      * @return  bool
      * @since   7.0.0
      */
-    public function isV6()
+    public function isV6(): bool
     {
         return self::V6 === $this->type;
     }
@@ -168,25 +169,36 @@ class IpAddress
      *
      * Please note that this method currently supports IPv4 only.
      *
-     * @param   string  $cidrIpShort
-     * @param   string  $cidrMask
+     * @param   string      $cidrIpShort
+     * @param   int|string  $cidrMask
      * @return  bool
+     * @throws  \InvalidArgumentException  when $cidrMask is not a valid integer
      * @see     http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation
      */
-    public function isInCidrRange($cidrIpShort, $cidrMask)
+    public function isInCidrRange(string $cidrIpShort, $cidrMask): bool
     {
-        list($lower, $upper) = $this->calculateIpRange($this->completeCidrIp($cidrIpShort), $cidrMask);
+        if (is_string($cidrMask) && !ctype_digit($cidrMask)) {
+            throw new \InvalidArgumentException(
+                    'cidrMask must be of type int or a string losslessly'
+                    . ' convertible to int.'
+            );
+        }
+
+        list($lower, $upper) = $this->calculateIpRange(
+                $this->completeCidrIp($cidrIpShort),
+                (int) $cidrMask
+        );
         return $this->asLong() >= $lower &&  $this->asLong() <= $upper;
     }
 
     /**
      * returns lower and upper ip for IP range as long
      *
-     * @param   string  $cidrIpLong
-     * @param   string  $cidrMask
+     * @param   int  $cidrIpLong
+     * @param   int  $cidrMask
      * @return  int[]
      */
-    private function calculateIpRange($cidrIpLong, $cidrMask)
+    private function calculateIpRange(int $cidrIpLong, int $cidrMask): array
     {
         $netWork = $cidrIpLong & $this->netMask($cidrMask);
         $lower   = $netWork + 1; // ignore network ID (eg: 192.168.1.0)
@@ -200,7 +212,7 @@ class IpAddress
      * @param   string  $cidrIpShort
      * @return  int
      */
-    private function completeCidrIp($cidrIpShort)
+    private function completeCidrIp(string $cidrIpShort): int
     {
         return ip2long($cidrIpShort . str_repeat('.0', 3 - substr_count($cidrIpShort, '.')));
     }
@@ -208,10 +220,10 @@ class IpAddress
     /**
      * calculates net mask from cidr mask
      *
-     * @param   string  $cidrMask
+     * @param   int  $cidrMask
      * @return  int
      */
-    private function netMask($cidrMask)
+    private function netMask(int $cidrMask): int
     {
         return bindec(str_repeat('1', $cidrMask) . str_repeat('0', 32 - $cidrMask));
     }
@@ -219,10 +231,10 @@ class IpAddress
     /**
      * calculates inverse net mask from cidr mask
      *
-     * @param   string  $cidrMask
+     * @param   int  $cidrMask
      * @return  int
      */
-    private function inverseNetMask($cidrMask)
+    private function inverseNetMask(int $cidrMask): int
     {
         return bindec(str_repeat('0', $cidrMask) . str_repeat('1',  32 - $cidrMask));
     }
@@ -232,7 +244,7 @@ class IpAddress
      *
      * @return  int
      */
-    public function asLong()
+    public function asLong(): int
     {
         return ip2long($this->ip);
     }
@@ -242,7 +254,7 @@ class IpAddress
      *
      * @return  string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->ip;
     }
@@ -254,7 +266,7 @@ class IpAddress
      * @return  \stubbles\peer\Socket
      * @since   6.0
      */
-    public function createSocket($port)
+    public function createSocket(int $port): Socket
     {
         return new Socket($this->ip, $port, null);
     }
@@ -266,7 +278,7 @@ class IpAddress
      * @param   int  $timeout  connection timeout
      * @return  \stubbles\peer\Stream
      */
-    public function openSocket($port, $timeout = 5)
+    public function openSocket(int $port, int $timeout = 5): Stream
     {
         $socket = new Socket($this->ip, $port, null);
         return $socket->connect()->setTimeout($timeout);
@@ -279,7 +291,7 @@ class IpAddress
      * @return  \stubbles\peer\Socket
      * @since   6.0
      */
-    public function createSecureSocket($port)
+    public function createSecureSocket(int $port): Socket
     {
         return new Socket($this->ip, $port, 'ssl://');
     }
@@ -291,7 +303,7 @@ class IpAddress
      * @param   int  $timeout  connection timeout
      * @return  \stubbles\peer\Stream
      */
-    public function openSecureSocket($port, $timeout = 5)
+    public function openSecureSocket(int $port, int $timeout = 5): Stream
     {
         $socket = new Socket($this->ip, $port, 'ssl://');
         return $socket->connect()->setTimeout($timeout);

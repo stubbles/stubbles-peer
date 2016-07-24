@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -8,6 +9,7 @@
  * @package  stubbles\peer
  */
 namespace stubbles\peer {
+    use \stubbles\peer\http\HttpConnection;
     use \stubbles\peer\http\HttpUri;
 
     /**
@@ -18,10 +20,9 @@ namespace stubbles\peer {
      * @since   3.1.0
      * @api
      */
-    function http($uri, HeaderList $headers = null)
+    function http(string $uri, HeaderList $headers = null): HttpConnection
     {
-        return HttpUri::fromString($uri)
-                      ->connect($headers);
+        return HttpUri::fromString($uri)->connect($headers);
     }
 
     /**
@@ -32,7 +33,7 @@ namespace stubbles\peer {
      * @since   3.1.0
      * @api
      */
-    function headers(array $headers = [])
+    function headers(array $headers = []): HeaderList
     {
         return new HeaderList($headers);
     }
@@ -40,12 +41,12 @@ namespace stubbles\peer {
     /**
      * creates a list of headers from given header string
      *
-     * @param   array  $headers
+     * @param   string  $headers
      * @return  \stubbles\peer\HeaderList
      * @since   3.1.0
      * @api
      */
-    function parseHeaders($headers)
+    function parseHeaders(string $headers): HeaderList
     {
         return HeaderList::fromString($headers);
     }
@@ -60,7 +61,7 @@ namespace stubbles\peer {
      * @since   3.1.0
      * @api
      */
-    function createSocket($host, $port = 80, $prefix = null)
+    function createSocket(string $host, int $port = 80, string $prefix = null): Socket
     {
         return new Socket($host, $port, $prefix);
     }
@@ -76,8 +77,13 @@ namespace stubbles\peer {
      * @return  bool|resource
      * @since   6.0.0
      */
-    function fsockopen($hostname, $port = -1, &$errno = null, &$errstr = null, $timeout = null)
-    {
+    function fsockopen(
+            string $hostname,
+            int $port = -1,
+            int &$errno = null,
+            string &$errstr = null,
+            float $timeout = null
+    ) {
         if (FsockopenResult::$return !== null) {
             return FsockopenResult::$return;
         }
@@ -106,7 +112,7 @@ namespace stubbles\peer {
      * @return  bool
      * @since   7.1.0
      */
-    function isMailAddress($value)
+    function isMailAddress($value): bool
     {
         if (null == $value || strlen($value) == 0) {
             return false;
@@ -138,7 +144,7 @@ namespace stubbles\peer\http {
      * @since   4.0.0
      * @api
      */
-    function emptyAcceptHeader()
+    function emptyAcceptHeader(): AcceptHeader
     {
         return new AcceptHeader();
     }

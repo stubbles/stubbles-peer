@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -12,6 +13,7 @@ use stubbles\peer\HeaderList;
 use stubbles\peer\MalformedUri;
 use stubbles\peer\ParsedUri;
 use stubbles\peer\Socket;
+use stubbles\peer\Stream;
 use stubbles\peer\Uri;
 /**
  * Class for URIs of scheme hypertext transfer protocol.
@@ -31,8 +33,13 @@ abstract class HttpUri extends Uri
      * @return  \stubbles\peer\http\HttpUri
      * @since   4.0.0
      */
-    public static function fromParts($scheme, $host, $port = null, $path = '/', $queryString = null)
-    {
+    public static function fromParts(
+            string $scheme,
+            string $host,
+            int $port = null,
+            string $path = '/',
+            string $queryString = null
+    ): self {
         return self::fromString(
                 $scheme
                 . '://'
@@ -48,10 +55,10 @@ abstract class HttpUri extends Uri
      *
      * @param   string  $uriString  string to create instance from
      * @param   string  $rfc        optional  RFC to base validation on, defaults to Http::RFC_7230
-     * @return  \stubbles\peer\http\HttpUri
+     * @return  \stubbles\peer\http\HttpUri|null
      * @throws  \stubbles\peer\MalformedUri
      */
-    public static function fromString($uriString, $rfc = Http::RFC_7230)
+    public static function fromString(string $uriString, string $rfc = Http::RFC_7230)
     {
         if (strlen($uriString) === 0) {
             return null;
@@ -74,11 +81,11 @@ abstract class HttpUri extends Uri
      *
      * @param   string|\stubbles\peer\http\HttpUri  $value  value to cast to HttpUri
      * @param   string                              $name   optional  name of parameter to cast from
-     * @return  \stubbles\peer\http\HttpUri
+     * @return  \stubbles\peer\http\HttpUri|null
      * @throws  \InvalidArgumentException
      * @since   4.0.0
      */
-    public static function castFrom($value, $name = 'Uri')
+    public static function castFrom($value, string $name = 'Uri')
     {
         if ($value instanceof self) {
             return $value;
@@ -102,7 +109,7 @@ abstract class HttpUri extends Uri
      * @return  bool
      * @throws  \stubbles\peer\MalformedUri
      */
-    private function isValidForRfc($rfc)
+    private function isValidForRfc(string $rfc): bool
     {
         if ($this->parsedUri->hasUser() && Http::RFC_7230 === $rfc) {
             throw new MalformedUri(
@@ -122,9 +129,13 @@ abstract class HttpUri extends Uri
      * @return  bool
      * @since   7.1.0
      */
-    public static function exists($httpUri)
+    public static function exists($httpUri): bool
     {
-        if (empty($httpUri)) {
+        if ($httpUri instanceof self) {
+            return $httpUri->hasDnsRecord();
+        }
+
+        if (empty($httpUri) || !is_string($httpUri)) {
             return false;
         }
 
@@ -138,13 +149,17 @@ abstract class HttpUri extends Uri
     /**
      * checks whether given http uri is syntactically valid
      *
-     * @param   string  $httpUri
+     * @param   mixed  $httpUri
      * @return  bool
      * @since   7.1.0
      */
-    public static function isValid($httpUri)
+    public static function isValid($httpUri): bool
     {
-        if (empty($httpUri)) {
+        if ($httpUri instanceof self) {
+            return true;
+        }
+
+        if (empty($httpUri) || !is_string($httpUri)) {
             return false;
         }
 
@@ -162,7 +177,7 @@ abstract class HttpUri extends Uri
      *
      * @return  bool
      */
-    protected function isSyntacticallyValid()
+    protected function isSyntacticallyValid(): bool
     {
         if (!parent::isSyntacticallyValid()) {
             return false;
@@ -180,7 +195,7 @@ abstract class HttpUri extends Uri
      *
      * @return  bool
      */
-    public function hasDnsRecord()
+    public function hasDnsRecord(): bool
     {
         if (!$this->parsedUri->hasHostname()) {
             return false;
@@ -202,7 +217,7 @@ abstract class HttpUri extends Uri
      *
      * @return  bool
      */
-    public function hasDefaultPort()
+    public function hasDefaultPort(): bool
     {
         if (!$this->parsedUri->hasPort()) {
             return true;
@@ -223,9 +238,9 @@ abstract class HttpUri extends Uri
      * returns port of the uri
      *
      * @param   int  $defaultPort  parameter is ignored for http uris
-     * @return  int
+     * @return  int|null
      */
-    public function port($defaultPort = null)
+    public function port(int $defaultPort = null)
     {
 
         if ($this->isHttp()) {
@@ -242,7 +257,7 @@ abstract class HttpUri extends Uri
      * @return  \stubbles\peer\http\HttpUri
      * @since   5.5.0
      */
-    public function withPath($path)
+    public function withPath(string $path): Uri
     {
         return new ConstructedHttpUri(
                 $this->parsedUri->transpose(['path' => $path])
@@ -255,7 +270,7 @@ abstract class HttpUri extends Uri
      * @return  bool
      * @since   2.0.0
      */
-    public function isHttp()
+    public function isHttp(): bool
     {
         return $this->parsedUri->schemeEquals(Http::SCHEME);
     }
@@ -266,7 +281,7 @@ abstract class HttpUri extends Uri
      * @return  bool
      * @since   2.0.0
      */
-    public function isHttps()
+    public function isHttps(): bool
     {
         return $this->parsedUri->schemeEquals(Http::SCHEME_SSL);
     }
@@ -278,7 +293,7 @@ abstract class HttpUri extends Uri
      * @return  \stubbles\peer\http\HttpUri
      * @since   2.0.0
      */
-    public function toHttp($port = null)
+    public function toHttp(int $port = null): self
     {
         if ($this->isHttp()) {
             if ($this->parsedUri->hasPort() && null !== $port) {
@@ -303,7 +318,7 @@ abstract class HttpUri extends Uri
      * @return  \stubbles\peer\http\HttpUri
      * @since   2.0.0
      */
-    public function toHttps($port = null)
+    public function toHttps(int $port = null): self
     {
         if ($this->isHttps()) {
             if ($this->parsedUri->hasPort() && null !== $port) {
@@ -335,7 +350,7 @@ abstract class HttpUri extends Uri
      * @param   \stubbles\peer\HeaderList  $headers  list of headers to be used
      * @return  \stubbles\peer\http\HttpConnection
      */
-    public function connect(HeaderList $headers = null)
+    public function connect(HeaderList $headers = null): HttpConnection
     {
         return new HttpConnection($this, $headers);
     }
@@ -346,7 +361,7 @@ abstract class HttpUri extends Uri
      * @return  \stubbles\peer\Socket
      * @since   6.0.0
      */
-    public function createSocket()
+    public function createSocket(): Socket
     {
         return new Socket(
                 $this->hostname(),
@@ -362,7 +377,7 @@ abstract class HttpUri extends Uri
      * @return  \stubbles\peer\Stream
      * @since   2.0.0
      */
-    public function openSocket($timeout = 5)
+    public function openSocket(int $timeout = 5): Stream
     {
         return $this->createSocket()->connect()->setTimeout($timeout);
     }

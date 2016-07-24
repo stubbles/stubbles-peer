@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -45,7 +46,6 @@ class Stream
      * constructor
      *
      * @param   resource  $resource  actual socket resource
-     * @param   int       $timeout  connection timeout
      * @throws  \InvalidArgumentException
      */
     public function __construct($resource)
@@ -55,7 +55,7 @@ class Stream
         }
 
         $this->resource = $resource;
-        $this->timeout  = ini_get('default_socket_timeout');
+        $this->timeout  = (float) ini_get('default_socket_timeout');
     }
 
     /**
@@ -76,9 +76,9 @@ class Stream
      * @param   int  $microseconds  optional  timeout for connection in microseconds
      * @return  $this
      */
-    public function setTimeout($seconds, $microseconds = 0)
+    public function setTimeout(int $seconds, int $microseconds = 0): self
     {
-        $this->timeout = $seconds . '.' . $microseconds;
+        $this->timeout = (float) ($seconds . '.' . $microseconds);
         stream_set_timeout($this->resource, $seconds, $microseconds);
         return $this;
     }
@@ -88,7 +88,7 @@ class Stream
      *
      * @return  float
      */
-    public function timeout()
+    public function timeout(): float
     {
         return $this->timeout;
     }
@@ -101,7 +101,7 @@ class Stream
      * @throws  \stubbles\peer\ConnectionFailure
      * @throws  \stubbles\peer\Timeout
      */
-    public function read($length = null)
+    public function read(int $length = null): string
     {
         // can not call fgets with null when not specified
         $data = null === $length ? fgets($this->resource) : fgets($this->resource, $length);
@@ -109,7 +109,7 @@ class Stream
             // fgets() returns false on eof while feof() returned false before
             // but will now return true
             if ($this->eof()) {
-                return null;
+                return '';
             }
 
             if (stream_get_meta_data($this->resource)['timed_out']) {
@@ -132,7 +132,7 @@ class Stream
      *
      * @return  string  data read from socket
      */
-    public function readLine()
+    public function readLine(): string
     {
         return rtrim($this->read());
     }
@@ -145,7 +145,7 @@ class Stream
      * @throws  \stubbles\peer\ConnectionFailure
      * @throws  \stubbles\peer\Timeout
      */
-    public function readBinary($length = 1024)
+    public function readBinary(int $length = 1024): string
     {
         $data = fread($this->resource, $length);
         if (false === $data) {
@@ -172,7 +172,7 @@ class Stream
      * @throws  \stubbles\peer\ConnectionFailure
      * @throws  \stubbles\peer\Timeout
      */
-    public function write($data)
+    public function write(string $data): int
     {
         $length = fputs($this->resource, $data, strlen($data));
         if (false === $length) {
@@ -196,7 +196,7 @@ class Stream
      *
      * @return  bool
      */
-    public function eof()
+    public function eof(): bool
     {
         return feof($this->resource);
     }

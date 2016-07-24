@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -19,10 +20,7 @@ use function bovigo\assert\assertTrue;
  */
 class IsMailAddressTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @return  array
-     */
-    public function validValues()
+    public function validValues(): array
     {
         return [['example@example.org'],
                 ['example.foo.bar@example.org']
@@ -30,19 +28,15 @@ class IsMailAddressTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param  string  $value
      * @test
      * @dataProvider  validValues
      */
-    public function validValueEvaluatesToTrue($value)
+    public function validValueEvaluatesToTrue(string $value)
     {
         assertTrue(isMailAddress($value));
     }
 
-    /**
-     * @return  array
-     */
-    public function invalidValues()
+    public function invalidValues(): array
     {
         return [['space in@mailadre.ss'],
                 ['fäö@mailadre.ss'],
@@ -68,10 +62,7 @@ class IsMailAddressTest extends \PHPUnit_Framework_TestCase
         assertFalse(isMailAddress($value));
     }
 
-    /**
-     * @return  array
-     */
-    public function mailAddressesWithDifferentCase()
+    public function mailAddressesWithDifferentCase(): array
     {
         return [
             ['Example@example.ORG'],
@@ -83,7 +74,7 @@ class IsMailAddressTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider  mailAddressesWithDifferentCase
      */
-    public function validatesIndependendOfLowerOrUpperCase($mailAddress)
+    public function validatesIndependendOfLowerOrUpperCase(string $mailAddress)
     {
         assertTrue(isMailAddress($mailAddress));
     }

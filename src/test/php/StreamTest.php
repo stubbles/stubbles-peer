@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -54,9 +55,8 @@ class StreamTest extends \PHPUnit_Framework_TestCase
      */
     public function createWithInvalidResourceThrowsIllegalArgumentException()
     {
-        expect(function() {
-                new Stream('foo');
-        })->throws(\InvalidArgumentException::class);
+        expect(function() { new Stream('foo'); })
+                ->throws(\InvalidArgumentException::class);
     }
 
     /**

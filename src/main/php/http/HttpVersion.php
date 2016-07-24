@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -41,10 +42,10 @@ class HttpVersion
      * parses http version from given string
      *
      * @param   string  $httpVersion  a http version string like "HTTP/1.1"
-     * @return  Version
+     * @return  HttpVersion
      * @throws  \InvalidArgumentException  in case string can not be parsed successfully
      */
-    public static function fromString($httpVersion)
+    public static function fromString($httpVersion): self
     {
         if (empty($httpVersion)) {
             throw new \InvalidArgumentException('Given HTTP version is empty');
@@ -68,7 +69,7 @@ class HttpVersion
      * @return  \stubbles\peer\http\HttpVersion
      * @throws  \InvalidArgumentException  in case neither $httpVersion nor $default represent a valid HTTP version
      */
-    public static function castFrom($httpVersion)
+    public static function castFrom($httpVersion): self
     {
         if (empty($httpVersion)) {
             throw new \InvalidArgumentException('Given HTTP version is empty');
@@ -85,42 +86,40 @@ class HttpVersion
      * constructor
      *
      * In case the given major or minor version can not be casted to a valid
-     * integer or casting them yields a different result an
-     * IllegalArgumentException is thrown.
+     * integer an InvalidArgumentException is thrown.
      *
      * @param  int|string  $major
      * @param  int|string  $minor
+     * @throws  \InvalidArgumentException
      */
     public function __construct($major, $minor)
     {
-        $this->major = $this->castInt($major, 'major');
-        $this->minor = $this->castInt($minor, 'minor');
-    }
-
-    /**
-     * casts given number to integer
-     *
-     * @param   int|string  $number
-     * @param   int|string  $type
-     * @return  int
-     * @throws  \InvalidArgumentException
-     */
-    private function castInt($number, $type)
-    {
-        $result = (int) $number;
-        if (strlen($result) !== strlen($number)) {
+        if (is_string($major) && !ctype_digit($major)) {
             throw new \InvalidArgumentException(
-                    'Given ' . $type . ' version "' . $number . '" is not an integer'
+                    'Given major version "' . $major . '" is not an integer.'
             );
         }
 
-        if (0 > $result) {
+        if (0 > $major) {
             throw new \InvalidArgumentException(
-                    ucfirst($type) . ' version can not be negative'
+                    'Major version can not be negative.'
             );
         }
 
-        return $result;
+        if (is_string($minor) && !ctype_digit($minor)) {
+            throw new \InvalidArgumentException(
+                    'Given minor version "' . $minor . '" is not an integer.'
+            );
+        }
+
+        if (0 > $minor) {
+            throw new \InvalidArgumentException(
+                    'Minor version can not be negative.'
+            );
+        }
+
+        $this->major = (int) $major;
+        $this->minor = (int) $minor;
     }
 
     /**
@@ -128,7 +127,7 @@ class HttpVersion
      *
      * @return  int
      */
-    public function major()
+    public function major(): int
     {
         return $this->major;
     }
@@ -138,7 +137,7 @@ class HttpVersion
      *
      * @return  int
      */
-    public function minor()
+    public function minor(): int
     {
         return $this->minor;
     }
@@ -149,7 +148,7 @@ class HttpVersion
      * @param   string|\stubbles\peer\http\HttpVersion  $httpVersion
      * @return  bool
      */
-    public function equals($httpVersion)
+    public function equals($httpVersion): bool
     {
         if (empty($httpVersion)) {
             return false;
@@ -169,9 +168,8 @@ class HttpVersion
      *
      * @return  string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return 'HTTP/' . $this->major . '.' . $this->minor;
     }
 }
-

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -33,13 +34,13 @@ class ParsedUri
      *
      * Passing a query string will omit any query string already present in $uri.
      *
-     * @param   string                      $uri          uri to parse
+     * @param   string|array                $uri          uri to parse
      * @param   \stubbles\peer\QueryString  $queryString  optional  parameters when not in uri
      * @throws  \stubbles\peer\MalformedUri
      */
     public function __construct($uri, QueryString $queryString = null)
     {
-        $this->uri = ((!is_array($uri)) ? (parse_url($uri)): ($uri));
+        $this->uri = !is_array($uri) ? parse_url($uri): $uri;
         if (!is_array($this->uri)) {
             throw new MalformedUri('The URI ' . $uri . ' is not a valid URI');
         }
@@ -79,7 +80,7 @@ class ParsedUri
      * @param   array  $changedUri
      * @return  \stubbles\peer\ParsedUri
      */
-    public function transpose(array $changedUri)
+    public function transpose(array $changedUri): self
     {
         return new self(array_merge($this->uri, $changedUri), $this->queryString);
     }
@@ -89,7 +90,7 @@ class ParsedUri
      *
      * @return  string
      */
-    public function asString()
+    public function asString(): string
     {
         return $this->createString(function(ParsedUri $uri) { return $uri->port();});
     }
@@ -99,7 +100,7 @@ class ParsedUri
      *
      * @return  string
      */
-    public function asStringWithoutPort()
+    public function asStringWithoutPort(): string
     {
         return $this->createString(function(ParsedUri $uri) { return null;});
     }
@@ -110,7 +111,7 @@ class ParsedUri
      * @param   \Closure  $portCreator
      * @return  string
      */
-    protected function createString(\Closure $portCreator)
+    protected function createString(\Closure $portCreator): string
     {
         $uri = $this->scheme() . '://';
         if ($this->hasUser()) {
@@ -127,7 +128,7 @@ class ParsedUri
 
         if ($this->hasHostname()) {
             $uri .= $this->hostname();
-            $port = $portCreator($this);
+            $port = (string) $portCreator($this);
             if (strlen($port) > 0) {
                 $uri .= ':' . $port;
             }
@@ -148,9 +149,9 @@ class ParsedUri
     /**
      * checks whether scheme is set
      *
-     * @return  string
+     * @return  bool
      */
-    public function hasScheme()
+    public function hasScheme(): bool
     {
         return isset($this->uri['scheme']);
     }
@@ -162,7 +163,7 @@ class ParsedUri
      * @return  bool
      * @since   4.0.0
      */
-    public function schemeEquals($scheme)
+    public function schemeEquals(string $scheme = null): bool
     {
         return $scheme === $this->scheme();
     }
@@ -170,7 +171,7 @@ class ParsedUri
     /**
      * returns the scheme of the uri
      *
-     * @return  string
+     * @return  string|null
      */
     public function scheme()
     {
@@ -184,9 +185,9 @@ class ParsedUri
     /**
      * checks whether user is set
      *
-     * @return  string
+     * @return  bool
      */
-    public function hasUser()
+    public function hasUser(): bool
     {
         return isset($this->uri['user']);
     }
@@ -195,9 +196,9 @@ class ParsedUri
      * returns the user of the uri
      *
      * @param   string  $defaultUser  user to return if no user is set
-     * @return  string
+     * @return  string|null
      */
-    public function user($defaultUser = null)
+    public function user(string $defaultUser = null)
     {
         if (isset($this->uri['user'])) {
             return $this->uri['user'];
@@ -209,9 +210,9 @@ class ParsedUri
     /**
      * checks whether password is set
      *
-     * @return  string
+     * @return  bool
      */
-    public function hasPassword()
+    public function hasPassword(): bool
     {
         return isset($this->uri['pass']);
     }
@@ -219,7 +220,7 @@ class ParsedUri
     /**
      * returns the password of the uri
      *
-     * @return  string
+     * @return  string|null
      */
     public function password()
     {
@@ -235,7 +236,7 @@ class ParsedUri
      *
      * @return  bool
      */
-    public function hasHostname()
+    public function hasHostname(): bool
     {
         return isset($this->uri['host']);
     }
@@ -245,7 +246,7 @@ class ParsedUri
      *
      * @return  bool
      */
-    public function isLocalHost()
+    public function isLocalHost(): bool
     {
         return in_array($this->uri['host'], ['localhost', '127.0.0.1', '[::1]']);
     }
@@ -253,7 +254,7 @@ class ParsedUri
     /**
      * returns hostname of the uri
      *
-     * @return  string
+     * @return  string|null
      */
     public function hostname()
     {
@@ -269,7 +270,7 @@ class ParsedUri
      *
      * @return  bool
      */
-    public function hasPort()
+    public function hasPort(): bool
     {
         return isset($this->uri['port']);
     }
@@ -281,7 +282,7 @@ class ParsedUri
      * @return  bool
      * @since   4.0.0
      */
-    public function portEquals($port)
+    public function portEquals(int $port = null): bool
     {
         return $port === $this->port();
     }
@@ -289,7 +290,7 @@ class ParsedUri
     /**
      * returns port of the uri
      *
-     * @return  string
+     * @return  int|null
      */
     public function port()
     {
@@ -306,7 +307,7 @@ class ParsedUri
      * @return  bool
      * @since   4.0.0
      */
-    public function hasPath()
+    public function hasPath(): bool
     {
         return isset($this->uri['path']);
     }
@@ -314,7 +315,7 @@ class ParsedUri
     /**
      * returns path of the uri
      *
-     * @return  string
+     * @return  string|null
      */
     public function path()
     {
@@ -330,7 +331,7 @@ class ParsedUri
      *
      * @return  \stubbles\peer\QueryString
      */
-    public function queryString()
+    public function queryString(): QueryString
     {
         return $this->queryString;
     }
@@ -340,7 +341,7 @@ class ParsedUri
      *
      * @return  bool
      */
-    public function hasFragment()
+    public function hasFragment(): bool
     {
         return isset($this->uri['fragment']);
     }
@@ -348,7 +349,7 @@ class ParsedUri
     /**
      * returns port of the uri
      *
-     * @return  string
+     * @return  string|null
      */
     public function fragment()
     {
@@ -365,7 +366,7 @@ class ParsedUri
      * @XmlIgnore
      * @return  string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->asString();
     }

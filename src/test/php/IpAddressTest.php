@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -318,10 +319,7 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
         assertTrue(IpAddress::isValidV6('febc:a574:382b:23c1:aa49::'));
     }
 
-    /**
-     * @return  array
-     */
-    public function invalidValues()
+    public function invalidValues(): array
     {
         return [['foo'], [-1.5], [true], [false]];
     }
@@ -345,10 +343,7 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
         assert(new IpAddress(2130706433), equals('127.0.0.1'));
     }
 
-    /**
-     * @return  array
-     */
-    public function validValues()
+    public function validValues(): array
     {
         return [
                 [2130706433, IpAddress::V4],
@@ -360,25 +355,21 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param  string  $value
-     * @param  string  $expectedType
      * @test
      * @dataProvider  validValues
      * @since  7.0.0
      */
-    public function typeReturnsInfoBasedOnValue($value, $expectedType)
+    public function typeReturnsInfoBasedOnValue(string $value, string $expectedType)
     {
         assert(IpAddress::castFrom($value)->type(), equals($expectedType));
     }
 
     /**
-     * @param  string  $value
-     * @param  string  $expectedType
      * @test
      * @dataProvider  validValues
      * @since  7.0.0
      */
-    public function isVxReturnsTrueBasedOnType($value, $expectedType)
+    public function isVxReturnsTrueBasedOnType(string $value, string $expectedType)
     {
         if (IpAddress::V4 === $expectedType) {
             assertTrue(IpAddress::castFrom($value)->isV4());
@@ -388,13 +379,11 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param  string  $value
-     * @param  string  $expectedType
      * @test
      * @dataProvider  validValues
      * @since  7.0.0
      */
-    public function isVxReturnsFalseBasedOnType($value, $expectedType)
+    public function isVxReturnsFalseBasedOnType(string $value, string $expectedType)
     {
         if (IpAddress::V4 === $expectedType) {
             assertFalse(IpAddress::castFrom($value)->isV6());
@@ -470,65 +459,64 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @return  array
-     */
-    public function containedInCidr()
+    public function containedInCidr(): array
     {
         return [['10.16.0.1', '10.16', '13'],
-                ['10.23.255.253', '10.16', '13'],
+                ['10.23.255.253', '10.16', 13],
                 ['10.23.255.254', '10.16', '13'],
                 ['172.19.13.1', '172.19.13', '24'],
-                ['172.19.13.2', '172.19.13', '24'],
+                ['172.19.13.2', '172.19.13', 24],
                 ['172.19.13.253', '172.19.13', '24'],
                 ['172.19.13.254', '172.19.13', '24'],
                 ['217.160.127.241', '217.160.127.240', '28'],
                 ['217.160.127.242', '217.160.127.240', '28'],
-                ['217.160.127.253', '217.160.127.240', '28'],
-                ['217.160.127.254', '217.160.127.240', '28']
+                ['217.160.127.253', '217.160.127.240', 28],
+                ['217.160.127.254', '217.160.127.240', 28]
         ];
     }
 
     /**
-     * @param  string  $ip
-     * @param  string  $cidrIpShort
-     * @param  string  $cidrMask
      * @test
      * @dataProvider  containedInCidr
      */
-    public function isInCidrRangeReturnsTrueIfIpIsInRange($ip, $cidrIpShort, $cidrMask)
+    public function isInCidrRangeReturnsTrueIfIpIsInRange(string $ip, string $cidrIpShort, $cidrMask)
     {
         assertTrue(
                 IpAddress::castFrom($ip)->isInCidrRange($cidrIpShort, $cidrMask)
         );
     }
 
-    /**
-     * @return  array
-     */
-    public function notContainedInCidr()
+    public function notContainedInCidr(): array
     {
         return [['10.15.0.1', '10.16', '13'],
-                ['10.24.0.1', '10.16', '13'],
+                ['10.24.0.1', '10.16', 13],
                 ['172.19.12.254', '172.19.13', '24'],
-                ['172.19.14.1', '172.19.13', '24'],
+                ['172.19.14.1', '172.19.13', 24],
                 ['217.160.127.238', '217.160.127.240', '28'],
-                ['217.160.127.239', '217.160.127.240', '28'],
+                ['217.160.127.239', '217.160.127.240', 28],
                 ['217.160.128.1', '217.160.127.240', '28']
         ];
     }
 
     /**
-     * @param  string  $ip
-     * @param  string  $cidrIpShort
-     * @param  string  $cidrMask
      * @test
      * @dataProvider  notContainedInCidr
      */
-    public function isInCidrRangeReturnsFalseIfIpIsNotInRange($ip, $cidrIpShort, $cidrMask)
+    public function isInCidrRangeReturnsFalseIfIpIsNotInRange(string $ip, string $cidrIpShort, $cidrMask)
     {
         assertFalse(
                 IpAddress::castFrom($ip)->isInCidrRange($cidrIpShort, $cidrMask)
         );
+    }
+
+    /**
+     * @test
+     * @since  8.0.0
+     */
+    public function isInCidrRangeThrowsWhenCidrMaskNoValidInteger()
+    {
+        $ip = new IpAddress('172.19.14.1');
+        expect(function() use ($ip) { $ip->isInCidrRange('172.19.13', 'invalid'); })
+                ->throws(\InvalidArgumentException::class);
     }
 }

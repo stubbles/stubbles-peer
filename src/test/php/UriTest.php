@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -29,9 +30,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function canNotCreateUriWithoutScheme()
     {
-        expect(function() {
-                Uri::fromString('stubbles.net');
-        })->throws(MalformedUri::class);
+        expect(function() { Uri::fromString('stubbles.net'); })
+                ->throws(MalformedUri::class);
     }
 
     /**
@@ -897,17 +897,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         $parsedUri = new ParsedUri('foo://example.org/?wsdl#top');
         assertTrue($parsedUri->portEquals(null));
-        assertFalse($parsedUri->portEquals(''));
-    }
-
-    /**
-     * @test
-     * @since  4.0.0
-     */
-    public function emptyPortDoesNotEqualEmptyString()
-    {
-        $parsedUri = new ParsedUri('foo://example.org/?wsdl#top');
-        assertFalse($parsedUri->portEquals(''));
     }
 
     /**

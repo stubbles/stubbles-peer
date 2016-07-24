@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -107,73 +108,75 @@ class Http
      *
      * @type type
      */
-    private static $statusClass     = [0 => Http::STATUS_CLASS_UNKNOWN,
-                                       1 => Http::STATUS_CLASS_INFO,
-                                       2 => Http::STATUS_CLASS_SUCCESS,
-                                       3 => Http::STATUS_CLASS_REDIRECT,
-                                       4 => Http::STATUS_CLASS_ERROR_CLIENT,
-                                       5 => Http::STATUS_CLASS_ERROR_SERVER
-                                      ];
+    private static $statusClass     = [
+            0 => Http::STATUS_CLASS_UNKNOWN,
+            1 => Http::STATUS_CLASS_INFO,
+            2 => Http::STATUS_CLASS_SUCCESS,
+            3 => Http::STATUS_CLASS_REDIRECT,
+            4 => Http::STATUS_CLASS_ERROR_CLIENT,
+            5 => Http::STATUS_CLASS_ERROR_SERVER
+    ];
     /**
      * map of status codes to reason phrases
      *
      * @type  array
      */
-    private static $reasonPhrases   = [100 => 'Continue',
-                                       101 => 'Switching Protocols',
-                                       102 => 'Processing',
-                                       118 => 'Connection timed out',
-                                       200 => 'OK',
-                                       201 => 'Created',
-                                       202 => 'Accepted',
-                                       203 => 'Non-Authoritative Information',
-                                       204 => 'No Content',
-                                       205 => 'Reset Content',
-                                       206 => 'Partial Content',
-                                       207 => 'Multi-Status',
-                                       300 => 'Multiple Choices',
-                                       301 => 'Moved Permanently',
-                                       302 => 'Found',
-                                       303 => 'See Other',
-                                       304 => 'Not Modified',
-                                       305 => 'Use Proxy',
-                                       307 => 'Temporary Redirect',
-                                       400 => 'Bad Request',
-                                       401 => 'Unauthorized',
-                                       402 => 'Payment Required',
-                                       403 => 'Forbidden',
-                                       404 => 'Not Found',
-                                       405 => 'Method Not Allowed',
-                                       406 => 'Not Acceptable',
-                                       407 => 'Proxy Authentication Required',
-                                       408 => 'Request Timeout',
-                                       409 => 'Conflict',
-                                       410 => 'Gone',
-                                       411 => 'Length Required',
-                                       412 => 'Precondition Failed',
-                                       413 => 'Request Entity Too Large',
-                                       414 => 'Request-URI Too Long',
-                                       415 => 'Unsupported Media Type',
-                                       416 => 'Requested Range Not Satisfiable',
-                                       417 => 'Expectation Failed',
-                                       418 => 'I\'m a Teapot',
-                                       421 => 'There are too many connections from your internet address',
-                                       422 => 'Unprocessable Entity',
-                                       423 => 'Locked',
-                                       424 => 'Failed Dependency',
-                                       425 => 'Unordered Collection',
-                                       426 => 'Upgrade Required',
-                                       500 => 'Internal Server Error',
-                                       501 => 'Not Implemented',
-                                       502 => 'Bad Gateway',
-                                       503 => 'Service Unavailable',
-                                       504 => 'Gateway Timeout',
-                                       505 => 'HTTP Version Not Supported',
-                                       506 => 'Variant Also Negotiates',
-                                       507 => 'Insufficient Storage',
-                                       509 => 'Bandwidth Limit Exceeded',
-                                       510 => 'Not Extended'
-                                      ];
+    private static $reasonPhrases   = [
+            100 => 'Continue',
+            101 => 'Switching Protocols',
+            102 => 'Processing',
+            118 => 'Connection timed out',
+            200 => 'OK',
+            201 => 'Created',
+            202 => 'Accepted',
+            203 => 'Non-Authoritative Information',
+            204 => 'No Content',
+            205 => 'Reset Content',
+            206 => 'Partial Content',
+            207 => 'Multi-Status',
+            300 => 'Multiple Choices',
+            301 => 'Moved Permanently',
+            302 => 'Found',
+            303 => 'See Other',
+            304 => 'Not Modified',
+            305 => 'Use Proxy',
+            307 => 'Temporary Redirect',
+            400 => 'Bad Request',
+            401 => 'Unauthorized',
+            402 => 'Payment Required',
+            403 => 'Forbidden',
+            404 => 'Not Found',
+            405 => 'Method Not Allowed',
+            406 => 'Not Acceptable',
+            407 => 'Proxy Authentication Required',
+            408 => 'Request Timeout',
+            409 => 'Conflict',
+            410 => 'Gone',
+            411 => 'Length Required',
+            412 => 'Precondition Failed',
+            413 => 'Request Entity Too Large',
+            414 => 'Request-URI Too Long',
+            415 => 'Unsupported Media Type',
+            416 => 'Requested Range Not Satisfiable',
+            417 => 'Expectation Failed',
+            418 => 'I\'m a Teapot',
+            421 => 'There are too many connections from your internet address',
+            422 => 'Unprocessable Entity',
+            423 => 'Locked',
+            424 => 'Failed Dependency',
+            425 => 'Unordered Collection',
+            426 => 'Upgrade Required',
+            500 => 'Internal Server Error',
+            501 => 'Not Implemented',
+            502 => 'Bad Gateway',
+            503 => 'Service Unavailable',
+            504 => 'Gateway Timeout',
+            505 => 'HTTP Version Not Supported',
+            506 => 'Variant Also Negotiates',
+            507 => 'Insufficient Storage',
+            509 => 'Bandwidth Limit Exceeded',
+            510 => 'Not Extended'
+    ];
 
     /**
      * returns status class for given status code
@@ -185,9 +188,9 @@ class Http
      * @return  string
      * @since   4.0.0
      */
-    public static function statusClassFor($statusCode)
+    public static function statusClassFor(int $statusCode): string
     {
-        $class = substr($statusCode, 0, 1);
+        $class = substr((string) $statusCode, 0, 1);
         if (isset(self::$statusClass[$class])) {
             return self::$statusClass[$class];
         }
@@ -202,7 +205,7 @@ class Http
      * @return  array
      * @since   4.0.0
      */
-    public static function statusCodes()
+    public static function statusCodes(): array
     {
         return self::$reasonPhrases;
     }
@@ -216,7 +219,7 @@ class Http
      * @throws  \InvalidArgumentException
      * @since   4.0.0
      */
-    public static function reasonPhraseFor($statusCode)
+    public static function reasonPhraseFor(int $statusCode): string
     {
         if (isset(self::$reasonPhrases[$statusCode])) {
             return self::$reasonPhrases[$statusCode];
@@ -233,7 +236,7 @@ class Http
      * @param   string  $line
      * @return  string
      */
-    public static function line($line)
+    public static function line(string $line): string
     {
         return $line . self::END_OF_LINE;
     }
@@ -248,7 +251,7 @@ class Http
      * @return  string
      * @since   4.0.0
      */
-    public static function lines(...$lines)
+    public static function lines(string ...$lines): string
     {
         $head = true;
         return join(
@@ -277,7 +280,7 @@ class Http
      *
      * @return  string
      */
-    public static function emptyLine()
+    public static function emptyLine(): string
     {
         return self::END_OF_LINE;
     }
@@ -288,7 +291,7 @@ class Http
      * @param   string  $rfc
      * @return  bool
      */
-    public static function isValidRfc($rfc)
+    public static function isValidRfc(string $rfc): bool
     {
         return in_array($rfc, [self::RFC_2616, self::RFC_7230]);
     }

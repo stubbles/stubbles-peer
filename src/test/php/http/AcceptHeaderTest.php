@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -57,12 +58,7 @@ class AcceptHeaderTest extends \PHPUnit_Framework_TestCase
         assert($this->acceptHeader->addAcceptable('text/plain'), isOfSize(1));
     }
 
-    /**
-     * data provider
-     *
-     * @return  array
-     */
-    public function provider()
+    public function provider(): array
     {
         return [['text/plain;q=0.5',
                  ['text/plain' => 0.5],
@@ -120,7 +116,7 @@ class AcceptHeaderTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider  provider
      */
-    public function parseYieldsCorrectValues($parseValue, $expectedList)
+    public function parseYieldsCorrectValues(string $parseValue, array $expectedList)
     {
         $acceptHeader = AcceptHeader::parse($parseValue);
         foreach ($expectedList as $mimeType => $priority) {
@@ -133,8 +129,11 @@ class AcceptHeaderTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider  provider
      */
-    public function parsedStringCanBeRecreated($parseValue, $expectedList, $expectedString)
-    {
+    public function parsedStringCanBeRecreated(
+            string $parseValue,
+            array $expectedList,
+            string $expectedString
+    ) {
         assert(
                 (string) AcceptHeader::parse($parseValue),
                 equals($expectedString)
@@ -249,10 +248,7 @@ class AcceptHeaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @return  array
-     */
-    public function acceptedMimetypes()
+    public function acceptedMimetypes(): array
     {
         return [
                 'empty list'  => [[]],
@@ -273,7 +269,7 @@ class AcceptHeaderTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider  acceptedMimetypes
      */
-    public function sharedAcceptablesForEmptyListReturnsEmptyArray($accepted)
+    public function sharedAcceptablesForEmptyListReturnsEmptyArray(array $accepted)
     {
         assertEmptyArray($this->acceptHeader->getSharedAcceptables($accepted));
     }
@@ -294,7 +290,7 @@ class AcceptHeaderTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider  acceptedMimetypes
      */
-    public function sharedAcceptablesForNonEqualListsReturnsEmptyArray($accepted)
+    public function sharedAcceptablesForNonEqualListsReturnsEmptyArray(array $accepted)
     {
         assertEmptyArray(
                 $this->acceptHeader->addAcceptable('text/html')

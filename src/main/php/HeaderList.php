@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -39,7 +40,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      * @param   string  $headers  string to parse for headers
      * @return  \stubbles\peer\HeaderList
      */
-    public static function fromString($headers)
+    public static function fromString(string $headers): self
     {
         return new self(self::parse($headers));
     }
@@ -50,7 +51,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      * @param   string  $headers
      * @return  array
      */
-    private static function parse($headers)
+    private static function parse(string $headers): array
     {
         $header  = [];
         $matches = [];
@@ -78,7 +79,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      * @throws  \InvalidArgumentException
      * @since   2.0.0
      */
-    public function append($headers)
+    public function append($headers): self
     {
         if (is_string($headers)) {
             $append = self::parse($headers);
@@ -105,15 +106,8 @@ class HeaderList implements \IteratorAggregate, \Countable
      * @return  \stubbles\peer\HeaderList
      * @throws  \InvalidArgumentException
      */
-    public function put($key, $value)
+    public function put(string $key, $value): self
     {
-        if (!is_string($key)) {
-            throw new \InvalidArgumentException(
-                    'Argument 1 passed to ' . __METHOD__
-                    . ' must be an instance of string.'
-            );
-        }
-
         if (!is_scalar($value)) {
             throw new \InvalidArgumentException(
                     'Argument 2 passed to ' . __METHOD__
@@ -131,7 +125,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      * @param   string  $key  name of header
      * @return  \stubbles\peer\HeaderList
      */
-    public function remove($key)
+    public function remove(string $key): self
     {
         if (isset($this->headers[$key]) == true) {
             unset($this->headers[$key]);
@@ -146,7 +140,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      * @param   string  $userAgent  name of user agent
      * @return  \stubbles\peer\HeaderList
      */
-    public function putUserAgent($userAgent)
+    public function putUserAgent(string $userAgent): self
     {
         $this->put('User-Agent', $userAgent);
         return $this;
@@ -158,7 +152,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      * @param   string  $referer  referer uri
      * @return  \stubbles\peer\HeaderList
      */
-    public function putReferer($referer)
+    public function putReferer(string $referer): self
     {
         $this->put('Referer', $referer);
         return $this;
@@ -170,7 +164,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      * @param   array  $cookieValues  cookie values
      * @return  \stubbles\peer\HeaderList
      */
-    public function putCookie(array $cookieValues)
+    public function putCookie(array $cookieValues): self
     {
         $cookieValue = '';
         foreach ($cookieValues as $key => $value) {
@@ -188,7 +182,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      * @param   string  $password  login password
      * @return  \stubbles\peer\HeaderList
      */
-    public function putAuthorization($user, $password)
+    public function putAuthorization(string $user, string $password): self
     {
         $this->put('Authorization', 'BASIC ' . base64_encode($user . ':' . $password));
         return $this;
@@ -197,15 +191,15 @@ class HeaderList implements \IteratorAggregate, \Countable
     /**
      * adds a date header
      *
-     * @param   int  $date  timestamp to use as date, defaults to current timestamp
+     * @param   int  $timestamp  timestamp to use as date, defaults to current timestamp
      * @return  \stubbles\peer\HeaderList
      */
-    public function putDate($date = null)
+    public function putDate(int $timestamp = null): self
     {
-        if (null === $date) {
+        if (null === $timestamp) {
             $date = gmdate('D, d M Y H:i:s');
         } else {
-            $date = gmdate('D, d M Y H:i:s', $date);
+            $date = gmdate('D, d M Y H:i:s', $timestamp);
         }
 
         $this->put('Date', $date . ' GMT');
@@ -217,7 +211,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      *
      * @return  \stubbles\peer\HeaderList
      */
-    public function enablePower()
+    public function enablePower(): self
     {
         $this->put('X-Binford', 'More power!');
         return $this;
@@ -228,7 +222,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      *
      * @return  \stubbles\peer\HeaderList
      */
-    public function clear()
+    public function clear(): self
     {
         $this->headers = [];
         return $this;
@@ -239,9 +233,9 @@ class HeaderList implements \IteratorAggregate, \Countable
      *
      * @param   string  $key      name of header
      * @param   mixed   $default  value to return if given header not set
-     * @return  string
+     * @return  mixed
      */
-    public function get($key, $default = null)
+    public function get(string $key, $default = null)
     {
         if ($this->containsKey($key) == true) {
             return $this->headers[$key];
@@ -256,7 +250,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      * @param   string  $key  name of header
      * @return  bool
      */
-    public function containsKey($key)
+    public function containsKey(string $key): bool
     {
         return isset($this->headers[$key]);
     }
@@ -266,7 +260,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      *
      * @return  \Traversable
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayObject($this->headers);
     }
@@ -277,7 +271,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      * @return  int
      * @since   7.0.0
      */
-    public function count()
+    public function count(): int
     {
         return count($this->headers);
     }
@@ -288,7 +282,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      * @XmlIgnore
      * @return  string
      */
-    public function __toString()
+    public function __toString(): string
     {
         $result = [];
         foreach ($this->headers as $name => $value) {

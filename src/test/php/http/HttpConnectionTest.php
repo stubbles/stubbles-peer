@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * This file is part of stubbles.
  *
@@ -43,7 +44,7 @@ class HttpConnectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->memory = '';
         $socket       = NewInstance::stub(Stream::class)->mapCalls([
-                'write' => function($line) { $this->memory .= $line;}
+                'write' => function(string $line) { $this->memory .= $line; return strlen($line); }
         ]);
         $httpUri      = NewInstance::stub(HttpUri::class)->mapCalls([
                 'openSocket'     => $socket,

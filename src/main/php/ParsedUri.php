@@ -45,6 +45,10 @@ class ParsedUri
             throw new MalformedUri('The URI ' . $uri . ' is not a valid URI');
         }
 
+        if (!isset($this->uri['scheme'])) {
+            throw new MalformedUri('The URI ' . $uri . ' is missing a scheme.');
+        }
+
         if (isset($this->uri['host'])) {
             $this->uri['host'] = strtolower($this->uri['host']);
         }
@@ -150,6 +154,7 @@ class ParsedUri
      * checks whether scheme is set
      *
      * @return  bool
+     * @deprecated  since 8.0.0, a valid URI always has a scheme, will be removed with 9.0.0
      */
     public function hasScheme(): bool
     {
@@ -171,11 +176,11 @@ class ParsedUri
     /**
      * returns the scheme of the uri
      *
-     * @return  string|null
+     * @return  string
      */
-    public function scheme()
+    public function scheme(): string
     {
-        return $this->uri['scheme'] ?? null;
+        return $this->uri['scheme'];
     }
 
     /**

@@ -855,28 +855,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function parsedUriReturnsNullIfNoSchemeInUri()
     {
-        $parsedUri = new ParsedUri('://example.org/?wsdl#top');
-        assertNull($parsedUri->scheme());
-    }
-
-    /**
-     * @test
-     * @since  4.0.0
-     */
-    public function emptySchemeEqualsNull()
-    {
-        $parsedUri = new ParsedUri('://example.org/?wsdl#top');
-        assertTrue($parsedUri->schemeEquals(null));
-    }
-
-    /**
-     * @test
-     * @since  4.0.0
-     */
-    public function emptySchemeDoesNotEqualEmptyString()
-    {
-        $parsedUri = new ParsedUri('://example.org/?wsdl#top');
-        assertFalse($parsedUri->schemeEquals(''));
+        expect(function() { new ParsedUri('://example.org/?wsdl#top'); })
+                ->throws(MalformedUri::class);
     }
 
     /**

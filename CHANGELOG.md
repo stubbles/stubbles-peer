@@ -6,6 +6,7 @@
   * raised minimum required PHP version to 7.0.0
   * introduced scalar type hints and strict type checking
   * calling `stubbles\peer\http\HttpUri::fromString()` or `stubbles\peer\Uri::fromString()` with an empty string now throws `stubbles\peer\MalformedUri` instead of returning `null`
+  * creating a URI or HTTP Uri with empty scheme will now throw `stubbles\peer\MalformedUri`
 
 
 7.1.0 (2016-06-08)

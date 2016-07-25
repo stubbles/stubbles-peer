@@ -63,6 +63,26 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @since  8.0.0
+     */
+    public function urisWithEmptyHost(): array
+    {
+        return [['http:///foobar.html'], ['http:///'], ['http://?foo=bar']];
+    }
+
+    /**
+     * @test
+     * @dataProvider  urisWithEmptyHost
+     * @since  8.0.0
+     */
+    public function canNotCreateHttpUriFromEmptyHost($emptyHost)
+    {
+        expect(function() use ($emptyHost) {
+                HttpUri::fromString($emptyHost);
+        })->throws(MalformedUri::class);
+    }
+
+    /**
      * @since  2.0.0
      * @test
      */

@@ -211,6 +211,17 @@ abstract class HttpUri extends Uri
 
         return false;
     }
+
+    /**
+     * returns hostname of the uri
+     *
+     * @return  string
+     */
+    public function hostname(): string
+    {
+        return parent::hostname();
+    }
+
     /**
      * checks whether the uri uses a default port or not
      *

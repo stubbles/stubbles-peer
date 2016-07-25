@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace stubbles\peer\http;
 
 use function bovigo\assert\assert;
+use function bovigo\assert\assertFalse;
+use function bovigo\assert\assertTrue;
 use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isNotOfSize;
@@ -173,5 +175,32 @@ class HttpTest extends \PHPUnit_Framework_TestCase
                         . 'bodyline2'
                 )
         );
+    }
+
+    /**
+     * @since  8.0.0
+     */
+    public function validRfcs(): array
+    {
+        return [[Http::RFC_2616], [Http::RFC_7230]];
+    }
+
+    /**
+     * @test
+     * @dataProvider  validRfcs
+     * @since  8.0.0
+     */
+    public function validRfcsAreValid($rfc)
+    {
+        assertTrue(Http::isValidRfc($rfc));
+    }
+
+    /**
+     * @test
+     * @since  8.0.0
+     */
+    public function invalidRfcsAreInvalid()
+    {
+        assertFalse(Http::isValidRfc('RFC 0815'));
     }
 }

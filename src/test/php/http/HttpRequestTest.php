@@ -123,12 +123,21 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
+     * @since  8.0.0
      */
-    public function getWithInvalidHttpVersionThrowsIllegalArgumentException()
+    public function invalidHttpVersions(): array
     {
-        expect(function() {
-                $this->createHttpRequest()->get(5, 'invalid');
+        return [['invalid'], [new HttpVersion(10, 9)]];
+    }
+
+    /**
+     * @test
+     * @dataProvider  invalidHttpVersions
+     */
+    public function getWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion)
+    {
+        expect(function() use ($httpVersion) {
+                $this->createHttpRequest()->get(5, $httpVersion);
         })->throws(\InvalidArgumentException::class);
     }
 
@@ -189,11 +198,12 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider  invalidHttpVersions
      */
-    public function headWithInvalidHttpVersionThrowsIllegalArgumentException()
+    public function headWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion)
     {
-        expect(function() {
-                $this->createHttpRequest()->head(5, 'invalid');
+        expect(function() use ($httpVersion) {
+                $this->createHttpRequest()->head(5, $httpVersion);
         })->throws(\InvalidArgumentException::class);
     }
 
@@ -320,11 +330,12 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @dataProvider  invalidHttpVersions
      */
-    public function postWithInvalidHttpVersionThrowsIllegalArgumentException()
+    public function postWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion)
     {
-        expect(function() {
-                $this->createHttpRequest()->post('foobar', 5, 'invalid');
+        expect(function() use ($httpVersion) {
+                $this->createHttpRequest()->post('foobar', 5, $httpVersion);
         })->throws(\InvalidArgumentException::class);
     }
 
@@ -456,11 +467,12 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     /**
      * @since   2.0.0
      * @test
+     * @dataProvider  invalidHttpVersions
      */
-    public function deleteWithInvalidHttpVersionThrowsIllegalArgumentException()
+    public function deleteWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion)
     {
-        expect(function() {
-                $this->createHttpRequest()->delete(5, 'invalid');
+        expect(function() use ($httpVersion) {
+                $this->createHttpRequest()->delete(5, $httpVersion);
         })->throws(\InvalidArgumentException::class);
     }
 }

@@ -198,10 +198,6 @@ abstract class HttpUri extends Uri
      */
     public function hasDnsRecord(): bool
     {
-        if (!$this->parsedUri->hasHostname()) {
-            return false;
-        }
-
         if ($this->parsedUri->isLocalHost()
           || checkdnsrr($this->parsedUri->hostname(), 'A')
           || checkdnsrr($this->parsedUri->hostname(), 'AAAA')

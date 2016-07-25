@@ -58,8 +58,9 @@ For the methods, the following rules apply:
 
  * `hasDnsRecord()` returns `false` if the URI does not contain a host.
  * `hasDnsRecord()`always returns true for _localhost_, _127.0.0.1_ and _[::1]_.
- * `hasDefaultPort()` always returns false. This method is meant for child
-    classed which provide additional methods for certain protocols.
+ * `hasDefaultPort()` returns `false` when a port is specified, even if it might
+   be the default port for the scheme. This method is meant for child classes
+   which provide additional methods for certain protocols.
 
 URI instances can only be changed regarding their URI parameters. It is not
 possible to change the scheme, host, user, password, port, or fragment of the

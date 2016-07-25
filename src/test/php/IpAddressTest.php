@@ -24,6 +24,11 @@ use function bovigo\assert\predicate\isSameAs;
  */
 class IpAddressTest extends \PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+        FsockopenResult::$return = null;
+    }
+
     /**
      * @test
      * @since  7.1.0
@@ -450,12 +455,66 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function openSecureSocketUsesSsl()
+    public function createSecureSocketUsesSsl()
     {
         assertTrue(
                 IpAddress::castFrom('127.0.0.1')
                         ->createSecureSocket(443)
                         ->usesSsl()
+        );
+    }
+
+    /**
+     * @test
+     * @since  8.0.0
+     */
+    public function openSocketReturnsStreamInstance()
+    {
+        FsockopenResult::$return = fopen(__FILE__, 'rb');
+        assert(
+                IpAddress::castFrom('127.0.0.1')->openSocket(80),
+                isInstanceOf(Stream::class)
+        );
+    }
+
+    /**
+     * @test
+     * @since  8.0.0
+     */
+    public function openSocketDoesNotUseTls()
+    {
+        FsockopenResult::$return = fopen(__FILE__, 'rb');
+        assertFalse(
+                IpAddress::castFrom('127.0.0.1')
+                        ->openSocket(80)
+                        ->usesTls()
+        );
+    }
+
+    /**
+     * @test
+     * @since  8.0.0
+     */
+    public function openSecureSocketReturnsStreamInstance()
+    {
+        FsockopenResult::$return = fopen(__FILE__, 'rb');
+        assert(
+                IpAddress::castFrom('127.0.0.1')->openSecureSocket(443),
+                isInstanceOf(Stream::class)
+        );
+    }
+
+    /**
+     * @test
+     * @since  8.0.0
+     */
+    public function openSecureSocketUsesTls()
+    {
+        FsockopenResult::$return = fopen(__FILE__, 'rb');
+        assertTrue(
+                IpAddress::castFrom('127.0.0.1')
+                        ->openSecureSocket(443)
+                        ->usesTls()
         );
     }
 

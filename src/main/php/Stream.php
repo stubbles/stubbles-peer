@@ -24,6 +24,10 @@ class Stream
      */
     private $resource;
     /**
+     * @type  bool
+     */
+    private $usesTls;
+    /**
      * timeout
      *
      * @type  int
@@ -46,15 +50,17 @@ class Stream
      * constructor
      *
      * @param   resource  $resource  actual socket resource
+     * @param   bool      $usesTls   optional  indicator whether stream uses transport layer security
      * @throws  \InvalidArgumentException
      */
-    public function __construct($resource)
+    public function __construct($resource, bool $usesTls = false)
     {
         if (!is_resource($resource) || get_resource_type($resource) !== 'stream') {
             throw new \InvalidArgumentException('Given resource is not a socket stream');
         }
 
         $this->resource = $resource;
+        $this->usesTls  = $usesTls;
         $this->timeout  = (float) ini_get('default_socket_timeout');
     }
 
@@ -67,6 +73,17 @@ class Stream
         if (is_resource($this->resource)) {
             fclose($this->resource);
         }
+    }
+
+    /**
+     * indicates whether stream was opened using transport layer security
+     *
+     * @return  bool
+     * @since   8.0.0
+     */
+    public function usesTls(): bool
+    {
+        return $this->usesTls;
     }
 
     /**

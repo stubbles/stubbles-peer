@@ -85,7 +85,7 @@ class Socket
             );
         }
 
-        return new Stream($resource);
+        return new Stream($resource, $this->usesSsl());
     }
 
     /**

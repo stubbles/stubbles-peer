@@ -100,7 +100,7 @@ class IpAddress
                 settype($ip, 'string');
             }
 
-            $this->ip = long2ip((string) $ip);
+            $this->ip = long2ip($ip);
         } else {
             $this->ip = $ip;
         }

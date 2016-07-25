@@ -8,6 +8,22 @@ declare(strict_types=1);
  *
  * @package  stubbles\peer
  */
+ namespace stubbles\peer
+ {
+     class CheckdnsrrResult
+     {
+         public static $value = null;
+     }
+
+     function checkdnsrr(string $host, string $type = 'MX')
+     {
+         if (null !== CheckdnsrrResult::$value) {
+             return CheckdnsrrResult::$value;
+         }
+
+         return \checkdnsrr($host, $type);
+     }
+}
 namespace stubbles\peer\http
 {
     class CheckdnsrrResult
@@ -17,6 +33,10 @@ namespace stubbles\peer\http
 
     function checkdnsrr(string $host, string $type = 'MX')
     {
-        return CheckdnsrrResult::$value;
+        if (null !== CheckdnsrrResult::$value) {
+            return CheckdnsrrResult::$value;
+        }
+
+        return \checkdnsrr($host, $type);
     }
 }

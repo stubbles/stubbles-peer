@@ -25,6 +25,11 @@ use function bovigo\assert\predicate\isNotSameAs;
  */
 class UriTest extends \PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+        CheckdnsrrResult::$value = null;
+    }
+
     /**
      * @test
      */
@@ -473,6 +478,18 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         assertTrue(
                 Uri::fromString('http://[::1]')->hasDnsRecord()
+        );
+    }
+
+    /**
+     * @test
+     * @since  8.0.0
+     */
+    public function hasNoDnsRecordForNonExistingHost()
+    {
+        CheckdnsrrResult::$value = false;
+        assertFalse(
+                Uri::fromString('http://foobar')->hasDnsRecord()
         );
     }
 

@@ -28,6 +28,11 @@ use function bovigo\assert\predicate\isSameAs;
  */
 class HttpUriTest extends \PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+        CheckdnsrrResult::$value = null;
+    }
+
     /**
      * @since  2.0.0
      * @test

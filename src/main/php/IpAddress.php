@@ -96,6 +96,10 @@ class IpAddress
     public function __construct($ip)
     {
         if (ctype_digit($ip)) {
+            if (version_compare(PHP_VERSION, '7.1.0', '<')) {
+                settype($ip, 'string');
+            }
+
             $this->ip = long2ip((string) $ip);
         } else {
             $this->ip = $ip;

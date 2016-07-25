@@ -118,6 +118,16 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @test
+     * @since  8.0.0
+     */
+    public function createWithSyntacticallyInvalidUriThrowsMalformedUri()
+    {
+        expect(function() { HttpUri::fromString('http://fööbär?:'); })
+                ->throws(MalformedUri::class);
+    }
+
+    /**
      * @since  2.0.0
      * @test
      */
@@ -300,7 +310,7 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
      * @since  4.0.2
      * @test
      */
-    public function transposingToHttpChangesPort()
+    public function transposingToHttpDoesNotChangeOriginalPort()
     {
         assert(
                 HttpUri::fromString('http://example.net:8080/foo.php?bar=baz#top')
@@ -321,6 +331,34 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
                        ->toHttp()
                        ->asString(),
                 equals('http://example.net/foo.php?bar=baz#top')
+        );
+    }
+
+    /**
+     * @test
+     * @since  8.0.0
+     */
+    public function transposingHttpWithPortToHttpAppliesGivenPort()
+    {
+        assert(
+                HttpUri::fromString('http://example.net:80/foo.php?bar=baz#top')
+                       ->toHttp(8080)
+                       ->asString(),
+                equals('http://example.net:8080/foo.php?bar=baz#top')
+        );
+    }
+
+    /**
+     * @test
+     * @since  8.0.0
+     */
+    public function transposingHttpWithoutPortToHttpAppliesGivenPort()
+    {
+        assert(
+                HttpUri::fromString('http://example.net/foo.php?bar=baz#top')
+                       ->toHttp(8080)
+                       ->asString(),
+                equals('http://example.net:8080/foo.php?bar=baz#top')
         );
     }
 
@@ -383,6 +421,34 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
                        ->toHttps()
                        ->asString(),
                 equals('https://example.net/foo.php?bar=baz#top')
+        );
+    }
+
+    /**
+     * @test
+     * @since  8.0.0
+     */
+    public function transposingHttpsWithPortToHttpsAppliesGivenPort()
+    {
+        assert(
+                HttpUri::fromString('https://example.net:443/foo.php?bar=baz#top')
+                       ->toHttps(8080)
+                       ->asString(),
+                equals('https://example.net:8080/foo.php?bar=baz#top')
+        );
+    }
+
+    /**
+     * @test
+     * @since  8.0.0
+     */
+    public function transposingHttpsWithoutPortToHttpsAppliesGivenPort()
+    {
+        assert(
+                HttpUri::fromString('https://example.net/foo.php?bar=baz#top')
+                       ->toHttps(8080)
+                       ->asString(),
+                equals('https://example.net:8080/foo.php?bar=baz#top')
         );
     }
 

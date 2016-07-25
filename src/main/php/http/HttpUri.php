@@ -304,7 +304,7 @@ abstract class HttpUri extends Uri
     public function toHttp(int $port = null): self
     {
         if ($this->isHttp()) {
-            if ($this->parsedUri->hasPort() && null !== $port) {
+            if (null !== $port && !$this->parsedUri->portEquals($port)) {
                 return new ConstructedHttpUri($this->parsedUri->transpose(['port' => $port]));
             }
 
@@ -329,7 +329,7 @@ abstract class HttpUri extends Uri
     public function toHttps(int $port = null): self
     {
         if ($this->isHttps()) {
-            if ($this->parsedUri->hasPort() && null !== $port) {
+            if (null !== $port && !$this->parsedUri->portEquals($port)) {
                 return new ConstructedHttpUri($this->parsedUri->transpose(['port' => $port]));
             }
 

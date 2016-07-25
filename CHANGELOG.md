@@ -14,6 +14,11 @@
   * deprecated `stubbles\peer\http\AcceptHeader::getSharedAcceptables()`, use `stubbles\peer\http\AcceptHeader::sharedAcceptables()` instead, will be removed with 9.0.0
 
 
+### Other changes
+
+  * fixed bug in `stubbles\peer\http\HttpUri::toHttp()` and `stubbles\peer\http\HttpUri::toHttps()` not changing the port when the only the port must be changed
+
+
 7.1.0 (2016-06-08)
 ------------------
 

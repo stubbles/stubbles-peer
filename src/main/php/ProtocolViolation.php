@@ -10,19 +10,20 @@ declare(strict_types=1);
  */
 namespace stubbles\peer;
 /**
- * Exception to be thrown when an error on a network connection occurs.
+ * Exception to be thrown when the protocol of a connection is violated.
+ *
+ * @since  8.0.0
  */
-class ConnectionFailure extends \Exception
+class ProtocolViolation extends ConnectionFailure
 {
     /**
      * constructor
      *
      * @param  string      $message
      * @param  \Throwable  $previous
-     * @param  int         $code
      */
-    public function __construct(string $message, \Throwable $previous = null, int $code = 1)
+    public function __construct(string $message, \Throwable $previous = null)
     {
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, $previous, 3);
     }
 }

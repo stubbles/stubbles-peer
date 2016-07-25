@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace stubbles\peer\http;
 use stubbles\peer\HeaderList;
+use stubbles\peer\ProtocolViolation;
 use stubbles\peer\Stream;
 /**
  * Class for reading a HTTP response.
@@ -86,10 +87,10 @@ class HttpResponse
      * returns status line of response
      *
      * @api
-     * @return  string|null
+     * @return  string
      * @since   4.0.0
      */
-    public function statusLine()
+    public function statusLine(): string
     {
         return $this->readHeader()->statusLine;
     }
@@ -98,10 +99,10 @@ class HttpResponse
      * returns http version of response
      *
      * @api
-     * @return  \stubbles\peer\http\HttpVersion|null
+     * @return  \stubbles\peer\http\HttpVersion
      * @since   4.0.0
      */
-    public function httpVersion()
+    public function httpVersion(): HttpVersion
     {
         return $this->readHeader()->version;
     }
@@ -110,10 +111,10 @@ class HttpResponse
      * returns status code of response
      *
      * @api
-     * @return  int|null
+     * @return  int
      * @since   4.0.0
      */
-    public function statusCode()
+    public function statusCode(): int
     {
         return $this->readHeader()->statusCode;
     }
@@ -122,27 +123,22 @@ class HttpResponse
      * return status code class of response
      *
      * @api
-     * @return  string|null
+     * @return  string
      * @since   4.0.0
      */
-    public function statusCodeClass()
+    public function statusCodeClass(): string
     {
-        $this->readHeader();
-        if (empty($this->statusCode)) {
-            return null;
-        }
-
-        return Http::statusClassFor($this->statusCode);
+        return Http::statusClassFor($this->statusCode());
     }
 
     /**
      * returns reason phrase of response
      *
      * @api
-     * @return  string|null
+     * @return  string
      * @since   5.0.0
      */
-    public function reasonPhrase()
+    public function reasonPhrase(): string
     {
         return $this->readHeader()->reasonPhrase;
     }
@@ -197,13 +193,17 @@ class HttpResponse
     /**
      * parses first line of response
      *
-     * @param  string  $statusLine  first line of response
+     * @param   string  $statusLine  first line of response
+     * @throws  ProtocolViolation  when status line can not be parsed
      */
     private function parseStatusLine(string $statusLine)
     {
         $matches = [];
         if (preg_match("=^(HTTP/\d+\.\d+) (\d{3}) ([^\r]*)=", $statusLine, $matches) == false) {
-            return;
+            throw new ProtocolViolation(
+                    'Received status line "' . addcslashes($statusLine, "\0..\37!\177..\377")
+                    . '" does not match expected format "=^(HTTP/\d+\.\d+) (\d{3}) ([^\r]*)="'
+            );
         }
 
         $this->statusLine   = $matches[0];

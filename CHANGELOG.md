@@ -8,6 +8,7 @@
   * calling `stubbles\peer\http\HttpUri::fromString()` or `stubbles\peer\Uri::fromString()` with an empty string now throws `stubbles\peer\MalformedUri` instead of returning `null`
   * creating a URI or HTTP Uri with empty scheme will now throw `stubbles\peer\MalformedUri`
   * deprecated support for password in URIs, passing a password via URI is inherintly insecure, will be removed with 9.0.0
+  * all `stubbles\peer\http\HttpResonse` methods now throw a `stubbles\peer\ProtocolViolation` when the response can not be read properly
 
 
 7.1.0 (2016-06-08)

@@ -10,12 +10,16 @@ declare(strict_types=1);
  */
 namespace stubbles\peer\http;
 use org\bovigo\vfs\vfsStream;
+use stubbles\peer\ProtocolViolation;
 use stubbles\peer\Stream;
 
-use function bovigo\assert\assert;
-use function bovigo\assert\assertEmpty;
-use function bovigo\assert\assertNull;
-use function bovigo\assert\predicate\equals;
+use function bovigo\assert\{
+    assert,
+    assertEmpty,
+    assertNull,
+    expect,
+    predicate\equals
+};
 /**
  * Test for stubbles\peer\http\HttpResponse.
  *
@@ -43,19 +47,17 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function chunkedResponseCanBeRead()
     {
-        $httpResponse = $this->createResponse(
-                Http::lines(
-                        'HTTP/1.1 200 OK',
-                        'Host: localhost',
-                        'Transfer-Encoding: chunked',
-                        '',
-                        dechex(3) . " ext\r\n",
-                        "foo\r\n",
-                        dechex(3) . "\r\n",
-                        "bar\r\n",
-                        dechex(0)
-                )
-        );
+        $httpResponse = $this->createResponse(Http::lines(
+                'HTTP/1.1 200 OK',
+                'Host: localhost',
+                'Transfer-Encoding: chunked',
+                '',
+                dechex(3) . " ext\r\n",
+                "foo\r\n",
+                dechex(3) . "\r\n",
+                "bar\r\n",
+                dechex(0)
+        ));
         assert($httpResponse->body(), equals('foobar'));
         $headerList = $httpResponse->headers();
         assert($headerList->get('Host'), equals('localhost'));
@@ -68,14 +70,12 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function nonChunkedResponseWithoutContentLengthHeaderCanBeRead()
     {
-        $httpResponse = $this->createResponse(
-                Http::lines(
-                        'HTTP/1.1 200 OK',
-                        'Host: localhost',
-                        '',
-                        'foobar'
-                )
-        );
+        $httpResponse = $this->createResponse(Http::lines(
+                'HTTP/1.1 200 OK',
+                'Host: localhost',
+                '',
+                'foobar'
+        ));
         $headerList = $httpResponse->headers();
         assert($headerList->get('Host'), equals('localhost'));
         assert($httpResponse->body(), equals('foobar'));
@@ -86,15 +86,13 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function nonChunkedResponseWithContentLengthHeaderCanBeRead()
     {
-        $httpResponse = $this->createResponse(
-                Http::lines(
-                        'HTTP/1.1 200 OK',
-                        'Host: localhost',
-                        'Content-Length: 6',
-                        '',
-                        'foobar'
-                )
-        );
+        $httpResponse = $this->createResponse(Http::lines(
+                'HTTP/1.1 200 OK',
+                'Host: localhost',
+                'Content-Length: 6',
+                '',
+                'foobar'
+        ));
         $headerList = $httpResponse->headers();
         assert($headerList->get('Host'), equals('localhost'));
         assert($headerList->get('Content-Length'), equals(6));
@@ -106,15 +104,13 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function canReadResponseTwice()
     {
-        $httpResponse = $this->createResponse(
-                Http::lines(
-                        'HTTP/1.1 200 OK',
-                        'Host: localhost',
-                        'Content-Length: 6',
-                        '',
-                        'foobar'
-                )
-        );
+        $httpResponse = $this->createResponse(Http::lines(
+                'HTTP/1.1 200 OK',
+                'Host: localhost',
+                'Content-Length: 6',
+                '',
+                'foobar'
+        ));
         assert($httpResponse->body(), equals('foobar'));
         assert($httpResponse->body(), equals('foobar'));
     }
@@ -170,43 +166,58 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
+     * @since  8.0.0
      */
-    public function illegalStatusLineLeadsToEmptyResponse()
+    public function responseInstanceMethods(): array
     {
-        $httpResponse = $this->createResponse(
-                Http::lines(
-                        'Illegal Response',
-                        'Host: localhost',
-                        ''
-                )
-        );
-        assertNull($httpResponse->statusLine());
-        assertNull($httpResponse->httpVersion());
-        assertNull($httpResponse->statusCode());
-        assertNull($httpResponse->reasonPhrase());
-        assertNull($httpResponse->statusCodeClass());
-        assertEmpty($httpResponse->body());
+        return [
+                ['statusLine'],
+                ['httpVersion'],
+                ['statusCode'],
+                ['reasonPhrase'],
+                ['statusCodeClass'],
+                ['headers'],
+                ['body']
+        ];
     }
 
     /**
      * @test
+     * @dataProvider  responseInstanceMethods
+     */
+    public function illegalStatusLineLeadsToProtocolViolation($method)
+    {
+        $httpResponse = $this->createResponse(Http::lines(
+                "Illegal Response containing \36 dangerous \0 characters",
+                'Host: localhost',
+                ''
+        ));
+        expect(function() use ($httpResponse, $method) { $httpResponse->$method(); } )
+                ->throws(ProtocolViolation::class)
+                ->withMessage(
+                        'Received status line "Illegal Response containing \036'
+                        . ' dangerous \000 characters" does not match expected'
+                        . ' format "=^(HTTP/\d+\.\d+) (\d{3}) ([^\r]*)="'
+                );
+    }
+
+    /**
+     * @test
+     * @dataProvider  responseInstanceMethods
      * @since  4.0.0
      */
-    public function statusLineWithInvalidHttpVersionLeadsToEmptyResponse()
+    public function statusLineWithInvalidHttpVersionLeadsToProtocolViolation($method)
     {
-        $httpResponse = $this->createResponse(
-                Http::lines(
-                        'HTTP/400 102 Processing',
-                        'Host: localhost',
-                        ''
-                )
-        );
-        assertNull($httpResponse->statusLine());
-        assertNull($httpResponse->httpVersion());
-        assertNull($httpResponse->statusCode());
-        assertNull($httpResponse->reasonPhrase());
-        assertNull($httpResponse->statusCodeClass());
-        assertEmpty($httpResponse->body());
+        $httpResponse = $this->createResponse(Http::lines(
+                'HTTP/400 102 Processing',
+                'Host: localhost',
+                ''
+        ));
+        expect(function() use ($httpResponse, $method) { $httpResponse->$method(); } )
+                ->throws(ProtocolViolation::class)
+                ->withMessage(
+                        'Received status line "HTTP/400 102 Processing" does not match'
+                        . ' expected format "=^(HTTP/\d+\.\d+) (\d{3}) ([^\r]*)="'
+                );
     }
 }

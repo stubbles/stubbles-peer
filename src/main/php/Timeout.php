@@ -14,7 +14,7 @@ namespace stubbles\peer;
  *
  * @since  6.0.0
  */
-class Timeout extends \Exception
+class Timeout extends ConnectionFailure
 {
     /**
      * constructor
@@ -24,6 +24,6 @@ class Timeout extends \Exception
      */
     public function __construct(string $message, \Throwable $previous = null)
     {
-        parent::__construct($message, 0, $previous);
+        parent::__construct($message, $previous, 2);
     }
 }

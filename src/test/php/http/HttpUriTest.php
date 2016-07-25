@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @package  stubbles\peer
  */
 namespace stubbles\peer\http;
+use stubbles\peer\FsockopenResult;
 use stubbles\peer\MalformedUri;
 
 use function bovigo\assert\assert;
@@ -31,8 +32,8 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         CheckdnsrrResult::$value = null;
+        FsockopenResult::$return = null;
     }
-
     /**
      * @since  2.0.0
      * @test
@@ -494,6 +495,7 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
      */
     public function openSocketUsesDefaultTimeout()
     {
+        FsockopenResult::$return = fopen(__FILE__, 'rb');
         assert(
                HttpUri::fromString('http://example.net/')
                       ->openSocket()
@@ -508,6 +510,7 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
      */
     public function openSocketUsesGivenTimeout()
     {
+        FsockopenResult::$return = fopen(__FILE__, 'rb');
         assert(
                 HttpUri::fromString('http://example.net/')
                        ->openSocket(2)

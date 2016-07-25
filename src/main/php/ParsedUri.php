@@ -17,6 +17,16 @@ namespace stubbles\peer;
 class ParsedUri
 {
     /**
+     * list of hostnames that are localhost
+     *
+     * @type  array
+     */
+    const LOCALHOSTNAMES = [
+            'localhost' => 'localhost',
+            '127.0.0.1' => '127.0.0.1',
+            '[::1]'     => '[::1]'
+    ];
+    /**
      * internal representation after parse_url()
      *
      * @type  array
@@ -247,7 +257,7 @@ class ParsedUri
      */
     public function isLocalHost(): bool
     {
-        return in_array($this->uri['host'], ['localhost', '127.0.0.1', '[::1]']);
+        return isset(self::LOCALHOSTNAMES[$this->uri['host']]);
     }
 
     /**

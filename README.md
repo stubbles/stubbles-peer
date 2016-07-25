@@ -7,7 +7,7 @@ Help with socket operations.
 Build status
 ------------
 
-[![Build Status](https://secure.travis-ci.org/stubbles/stubbles-peer.png)](http://travis-ci.org/stubbles/stubbles-peer) [![Coverage Status](https://coveralls.io/repos/stubbles/stubbles-peer/badge.png?branch=master)](https://coveralls.io/r/stubbles/stubbles-peer?branch=master)
+[![Build Status](https://secure.travis-ci.org/stubbles/stubbles-peer.png)](http://travis-ci.org/stubbles/stubbles-peer) [![Coverage Status](https://coveralls.io/repos/github/stubbles/stubbles-peer/badge.svg?branch=master)](https://coveralls.io/github/stubbles/stubbles-peer?branch=master)
 
 [![Latest Stable Version](https://poser.pugx.org/stubbles/peer/version.png)](https://packagist.org/packages/stubbles/peer) [![Latest Unstable Version](https://poser.pugx.org/stubbles/peer/v/unstable.png)](//packagist.org/packages/stubbles/peer)
 
@@ -34,7 +34,7 @@ Working with URIs
 Sometimes it's useful to have a URI wrapped into a class which provides methods
 to work with this URI. Stubbles Core provides `stubbles\peer\Uri` for such cases.
 
-New instances can be created via `Uri::fromString('ftp://user:secret@example.net/');`.
+New instances can be created via `Uri::fromString('ftp://user@example.net/');`.
 The following rules apply:
 
  * If the supplied uri string is empty no instance will be returned, but `null`
@@ -42,6 +42,10 @@ The following rules apply:
  * If the supplied uri string is not a valid URI a `stubbles\peer\MalformedUri`
    will be thrown.
  * For all other cases, an instance of `stubbles\peer\Uri` is returned.
+ * Since release 8.0.0 using passwords in URIs is discouraged, and support for
+   passwords in URIs will be removed with 9.0.0. Generally, protocols provide
+   other and better means to transport the password, as using it in URIs is
+   inherently insecure.
 
 In order for a uri string to be a valid URI it must adhere to the specification
 laid out in [RFC 3986](https://www.ietf.org/rfc/rfc3986.txt).

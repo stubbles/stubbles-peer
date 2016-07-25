@@ -69,10 +69,12 @@ abstract class Uri
             }
         }
 
+        if (!$this->parsedUri->hasHostname() || strlen($this->parsedUri->hostname()) === 0) {
+            return true;
+        }
+
         if ($this->parsedUri->hasHostname()
           && preg_match('!^([a-zA-Z0-9\.-]+|\[[^\]]+\])(:([0-9]+))?$!', $this->parsedUri->hostname()) != 0) {
-            return true;
-        } elseif (!$this->parsedUri->hasHostname() || strlen($this->parsedUri->hostname()) === 0) {
             return true;
         }
 

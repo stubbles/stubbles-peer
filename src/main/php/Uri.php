@@ -51,10 +51,6 @@ abstract class Uri
      */
     protected function isSyntacticallyValid(): bool
     {
-        if (!$this->parsedUri->hasScheme()) {
-            return false;
-        }
-
         if (preg_match('!^([a-z][a-z0-9\+]*)://([^@]+@)?([^/?#]*)(/([^#?]*))?(.*)$!', $this->parsedUri->asString()) == 0) {
             return false;
         }

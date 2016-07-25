@@ -201,11 +201,18 @@ abstract class Uri
     /**
      * checks whether the uri uses a default port or not
      *
+     * This generic implementation doesn't know default ports for protocols. It
+     * simply assumes that when no port is specified in the URI that the default
+     * port should be used. However, when the string from which the URI was
+     * constructed explicitly contains the default port for the protocol the
+     * return value of this method will be wrong, as it would return `false`
+     * when in fact the default port was specified.
+     *
      * @return  bool
      */
     public function hasDefaultPort(): bool
     {
-        return false;
+        return !$this->parsedUri->hasPort();
     }
 
     /**

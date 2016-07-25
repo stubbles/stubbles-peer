@@ -110,10 +110,21 @@ class UriTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function neverHasDefaultPort()
+    public function hasDefaultPortReturnsFalseWhenPortSpecified()
     {
         assertFalse(
                 Uri::fromString('http://stubbles.net:80/')->hasDefaultPort()
+        );
+    }
+
+    /**
+     * @test
+     * @since  8.0.0
+     */
+    public function hasDefaultPortReturnsTrueWhenNoPortSpecified()
+    {
+        assertTrue(
+                Uri::fromString('http://stubbles.net/')->hasDefaultPort()
         );
     }
 

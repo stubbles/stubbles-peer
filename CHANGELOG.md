@@ -10,6 +10,7 @@
   * deprecated support for password in URIs, passing a password via URI is inherintly insecure, will be removed with 9.0.0
   * all `stubbles\peer\http\HttpResonse` methods now throw a `stubbles\peer\ProtocolViolation` when the response can not be read properly
   * `stubbles\peer\Timeout` now extends `stubbles\peer\ConnectionFailure`
+  * `stubbles\peer\Uri::hasDefaultPort()` will now return `true` instead of `false` when the string it was constructed from doesn't contain a port
 
 
 7.1.0 (2016-06-08)

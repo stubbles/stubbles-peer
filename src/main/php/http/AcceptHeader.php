@@ -21,7 +21,7 @@ class AcceptHeader implements \Countable
      *
      * @type  array
      */
-    protected $acceptables = [];
+    private $acceptables = [];
 
     /**
      * method to create an instance from a string header value
@@ -123,14 +123,14 @@ class AcceptHeader implements \Countable
     {
         $sharedAcceptables = array_intersect_key(
                 $this->acceptables,
-                array_flip($this->getSharedAcceptables($mimeTypes))
+                array_flip($this->sharedAcceptables($mimeTypes))
         );
         if (count($sharedAcceptables) > 0) {
-            return $this->findAcceptableWithGreatestPriorityFromList($sharedAcceptables);
+            return $this->selectAcceptableWithGreatestPriority($sharedAcceptables);
         }
 
         foreach ($mimeTypes as $acceptable) {
-            list($maintype, $subtype) = explode('/', $acceptable);
+            list($maintype) = explode('/', $acceptable);
             if (isset($this->acceptables[$maintype . '/*'])) {
                 return $acceptable;
             }
@@ -149,14 +149,10 @@ class AcceptHeader implements \Countable
      * @param   array  $acceptables
      * @return  string|null
      */
-    protected function findAcceptableWithGreatestPriorityFromList(array $acceptables)
+    private function selectAcceptableWithGreatestPriority(array $acceptables)
     {
-        if (count($acceptables) === 0) {
-            return null;
-        }
-
         arsort($acceptables);
-        // use temp var to prevent E_STRICT Only variables should be passed by reference
+        // use temp var to prevent error "Only variables should be passed by reference"
         $acceptableKeys = array_keys($acceptables);
         return array_shift($acceptableKeys);
     }
@@ -170,7 +166,7 @@ class AcceptHeader implements \Countable
      */
     public function findAcceptableWithGreatestPriority()
     {
-        return $this->findAcceptableWithGreatestPriorityFromList($this->acceptables);
+        return $this->selectAcceptableWithGreatestPriority($this->acceptables);
     }
 
     /**
@@ -181,7 +177,7 @@ class AcceptHeader implements \Countable
      */
     public function hasSharedAcceptables(array $acceptables): bool
     {
-        return (count($this->getSharedAcceptables($acceptables)) > 0);
+        return (count($this->sharedAcceptables($acceptables)) > 0);
     }
 
     /**
@@ -190,9 +186,21 @@ class AcceptHeader implements \Countable
      * @param   string[]  $acceptables
      * @return  string[]
      */
-    public function getSharedAcceptables(array $acceptables): array
+    public function sharedAcceptables(array $acceptables): array
     {
         return array_intersect(array_keys($this->acceptables), $acceptables);
+    }
+
+    /**
+     * returns a list of acceptables that are both in header and given list
+     *
+     * @param   string[]  $acceptables
+     * @return  string[]
+     * @deprecated  since 8.0.0, use sharedAcceptables() instead, will be removed with 9.0.0
+     */
+    public function getSharedAcceptables(array $acceptables): array
+    {
+        return $this->sharedAcceptables($acceptables);
     }
 
     /**

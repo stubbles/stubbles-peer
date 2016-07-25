@@ -96,7 +96,7 @@ class IpAddress
     public function __construct($ip)
     {
         if (ctype_digit($ip)) {
-            if (version_compare(PHP_VERSION, '7.1.0', '<')) {
+            if (PHP_MAJOR_VERSION === 7 && PHP_MINOR_VERSION === 0) {
                 settype($ip, 'string');
             }
 

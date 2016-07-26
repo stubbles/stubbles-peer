@@ -96,8 +96,11 @@ class IpAddress
     public function __construct($ip)
     {
         if (ctype_digit($ip)) {
+            // long2ip() in PHP 7.0 expects string, and int since 7.1
             if (PHP_MAJOR_VERSION === 7 && PHP_MINOR_VERSION === 0) {
                 settype($ip, 'string');
+            } else {
+                settype($ip, 'int');
             }
 
             $this->ip = long2ip($ip);

@@ -78,7 +78,7 @@ class SocketTest extends \PHPUnit_Framework_TestCase
                 NewCallable::of('fsockopen')->mapCall(fopen(__FILE__, 'rb'))
         );
         assert(
-                createSocket('localhost', 80)->connect(),
+                $socket->connect(),
                 isInstanceOf(Stream::class)
         );
     }

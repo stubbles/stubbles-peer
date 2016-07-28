@@ -1,3 +1,17 @@
+8.1.0 (2016-07-28)
+------------------
+
+  * added optional parameter `$checkWith` to influence which function is used for dns checks:
+    * `stubbles\peer\Uri::hasDnsRecord()`
+    * `stubbles\peer\http\HttpUri::exists()`
+    * `stubbles\peer\http\HttpUri::hasDnsRecord()`
+  * added optional parameter `$openWith` to influence which function is used to open sockets:
+      * `stubbles\peer\IpAddress::openSocket()`
+      * `stubbles\peer\IpAddress::openSecureSocket()`
+      * `stubbles\peer\http\HttpUri::openSocket()`
+  * added `stubbles\peer\Socket::openWith()` to change which function is used to open sockets
+
+
 8.0.0 (2016-07-26)
 ------------------
 

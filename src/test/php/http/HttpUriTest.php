@@ -9,18 +9,20 @@ declare(strict_types=1);
  * @package  stubbles\peer
  */
 namespace stubbles\peer\http;
-use stubbles\peer\FsockopenResult;
+use bovigo\callmap\NewCallable;
 use stubbles\peer\MalformedUri;
 
-use function bovigo\assert\assert;
-use function bovigo\assert\assertFalse;
-use function bovigo\assert\assertNull;
-use function bovigo\assert\assertTrue;
-use function bovigo\assert\expect;
-use function bovigo\assert\predicate\equals;
-use function bovigo\assert\predicate\isInstanceOf;
-use function bovigo\assert\predicate\isNotSameAs;
-use function bovigo\assert\predicate\isSameAs;
+use function bovigo\assert\{
+    assert,
+    assertFalse,
+    assertNull,
+    assertTrue,
+    expect,
+    predicate\equals,
+    predicate\isInstanceOf,
+    predicate\isNotSameAs,
+    predicate\isSameAs
+};
 /**
  * Test for stubbles\peer\http\HttpUri.
  *
@@ -29,11 +31,6 @@ use function bovigo\assert\predicate\isSameAs;
  */
 class HttpUriTest extends \PHPUnit_Framework_TestCase
 {
-    public function tearDown()
-    {
-        CheckdnsrrResult::$value = null;
-        FsockopenResult::$return = null;
-    }
     /**
      * @since  2.0.0
      * @test
@@ -495,10 +492,10 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
      */
     public function openSocketUsesDefaultTimeout()
     {
-        FsockopenResult::$return = fopen(__FILE__, 'rb');
+        $fsockopen = NewCallable::of('fsockopen')->mapCall(fopen(__FILE__, 'rb'));
         assert(
                HttpUri::fromString('http://example.net/')
-                      ->openSocket()
+                      ->openSocket(5, $fsockopen)
                       ->timeout(),
                 equals(5)
         );
@@ -510,10 +507,10 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
      */
     public function openSocketUsesGivenTimeout()
     {
-        FsockopenResult::$return = fopen(__FILE__, 'rb');
+        $fsockopen = NewCallable::of('fsockopen')->mapCall(fopen(__FILE__, 'rb'));
         assert(
                 HttpUri::fromString('http://example.net/')
-                       ->openSocket(2)
+                       ->openSocket(2, $fsockopen)
                        ->timeout(),
                 equals(2)
         );
@@ -733,7 +730,9 @@ class HttpUriTest extends \PHPUnit_Framework_TestCase
      */
     public function validHttpUrlWithoutDnsEntryEvaluatesToFalseWhenTestedForExistance()
     {
-        CheckdnsrrResult::$value = false;
-        assertFalse(HttpUri::exists('http://stubbles.doesNotExist/'));
+        assertFalse(HttpUri::exists(
+                'http://stubbles.doesNotExist/',
+                NewCallable::of('checkdnsrr')->mapCall(false)
+        ));
     }
 }

@@ -67,45 +67,6 @@ namespace stubbles\peer {
     }
 
     /**
-     * mock PHP's own fsockopen()
-     *
-     * @param   string  $hostname
-     * @param   int     $port      port number to connect to
-     * @param   int     $errno     holds the system level error number that occurred in the system-level connect() call
-     * @param   string  $errstr    error message as a string.
-     * @param   float   $timeout   connection timeout, in seconds
-     * @return  bool|resource
-     * @since   6.0.0
-     */
-    function fsockopen(
-            string $hostname,
-            int $port = -1,
-            int &$errno = null,
-            string &$errstr = null,
-            float $timeout = null
-    ) {
-        if (FsockopenResult::$return !== null) {
-            return FsockopenResult::$return;
-        }
-
-        if (null === $timeout) {
-            $timeout = ini_get('default_socket_timeout');
-        }
-
-        return @\fsockopen($hostname, $port, $errno, $errstr, $timeout);
-    }
-
-    /**
-     * helper class for tests
-     *
-     * @since  6.0.0
-     */
-    class FsockopenResult
-    {
-        public static $return = null;
-    }
-
-    /**
      * checks if given value is a valid mail address
      *
      * @param   string  $value

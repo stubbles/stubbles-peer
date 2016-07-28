@@ -80,17 +80,19 @@ abstract class Uri
     /**
      * checks whether host of uri is listed in dns
      *
+     * @param   callable  $checkdnsrr  optional  function to check dns record with
      * @return  bool
      */
-    public function hasDnsRecord(): bool
+    public function hasDnsRecord(callable $checkWith = null): bool
     {
         if (!$this->parsedUri->hasHostname()) {
             return false;
         }
 
+        $checkdnsrr = null === $checkWith ? 'checkdnsrr': $checkWith;
         if ($this->parsedUri->isLocalHost()
-          || checkdnsrr($this->parsedUri->hostname(), 'ANY')
-          || checkdnsrr($this->parsedUri->hostname(), 'MX')) {
+          || $checkdnsrr($this->parsedUri->hostname(), 'ANY')
+          || $checkdnsrr($this->parsedUri->hostname(), 'MX')) {
             return true;
         }
 

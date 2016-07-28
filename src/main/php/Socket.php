@@ -34,6 +34,10 @@ class Socket
      * @type  string
      */
     private $prefix;
+    /**
+     * @type  callable
+     */
+    private $fsockopen = '\fsockopen';
 
     /**
      * constructor
@@ -59,6 +63,19 @@ class Socket
     }
 
     /**
+     * sets function to open socket with
+     *
+     * @param   callable  $fsockopen
+     * @return  Socket
+     * @since   8.1.0
+     */
+    public function openWith(callable $fsockopen): self
+    {
+        $this->fsockopen = $fsockopen;
+        return $this;
+    }
+
+    /**
      * opens a connection to host
      *
      * @param   float  $connectTimeout  optional timeout for establishing the connection, defaults to 1 second
@@ -69,7 +86,8 @@ class Socket
     {
         $errno  = 0;
         $errstr = '';
-        $resource = fsockopen(
+        $fsockopen = $this->fsockopen;
+        $resource = $fsockopen(
                 $this->prefix . $this->host,
                 $this->port,
                 $errno,

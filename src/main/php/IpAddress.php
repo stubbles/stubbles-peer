@@ -281,13 +281,18 @@ class IpAddress
     /**
      * opens socket to this ip address
      *
-     * @param   int  $port     port to connect to
-     * @param   int  $timeout  connection timeout
+     * @param   int       $port      port to connect to
+     * @param   int       $timeout   optional  connection timeout
+     * @param   callable  $openWith  optional  open port with this function
      * @return  \stubbles\peer\Stream
      */
-    public function openSocket(int $port, int $timeout = 5): Stream
+    public function openSocket(int $port, int $timeout = 5, callable $openWith = null): Stream
     {
         $socket = new Socket($this->ip, $port, null);
+        if (null !== $openWith) {
+            $socket->openWith($openWith);
+        }
+
         return $socket->connect()->setTimeout($timeout);
     }
 
@@ -306,13 +311,18 @@ class IpAddress
     /**
      * opens secure socket using ssl to this ip address
      *
-     * @param   int  $port     port to connect to
-     * @param   int  $timeout  connection timeout
+     * @param   int       $port      port to connect to
+     * @param   int       $timeout   optional  connection timeout
+     * @param   callable  $openWith  optional  open port with this function
      * @return  \stubbles\peer\Stream
      */
-    public function openSecureSocket(int $port, int $timeout = 5): Stream
+    public function openSecureSocket(int $port, int $timeout = 5, callable $openWith = null): Stream
     {
         $socket = new Socket($this->ip, $port, 'ssl://');
+        if (null !== $openWith) {
+            $socket->openWith($openWith);
+        }
+
         return $socket->connect()->setTimeout($timeout);
     }
 }

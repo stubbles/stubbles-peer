@@ -9,26 +9,23 @@ declare(strict_types=1);
  * @package  stubbles\peer
  */
 namespace stubbles\peer;
-use function bovigo\assert\assert;
-use function bovigo\assert\assertFalse;
-use function bovigo\assert\assertTrue;
-use function bovigo\assert\expect;
-use function bovigo\assert\predicate\isInstanceOf;
+use bovigo\callmap\NewCallable;
+
+use function bovigo\assert\{
+    assert,
+    assertFalse,
+    assertTrue,
+    expect,
+    predicate\isInstanceOf
+};
 /**
  * Test for stubbles\peer\Socket.
  *
  * @group  peer
+ * @group  socket
  */
 class SocketTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * clean up test environment
-     */
-    public function tearDown()
-    {
-        FsockopenResult::$return = null;
-    }
-
     /**
      * @test
      */
@@ -77,7 +74,9 @@ class SocketTest extends \PHPUnit_Framework_TestCase
      */
     public function connectReturnsStream()
     {
-        FsockopenResult::$return = fopen(__FILE__, 'rb');
+        $socket = createSocket('localhost', 80)->openWith(
+                NewCallable::of('fsockopen')->mapCall(fopen(__FILE__, 'rb'))
+        );
         assert(
                 createSocket('localhost', 80)->connect(),
                 isInstanceOf(Stream::class)
@@ -90,8 +89,10 @@ class SocketTest extends \PHPUnit_Framework_TestCase
      */
     public function connectThrowsConnectionFailureOnFailure()
     {
-        FsockopenResult::$return = false;
-        expect(function() { createSocket('localhost', 80)->connect(); })
+        $socket = createSocket('localhost', 80)->openWith(
+                NewCallable::of('fsockopen')->mapCall(false)
+        );
+        expect(function() use ($socket) { $socket->connect(); })
                 ->throws(ConnectionFailure::class);
     }
 }

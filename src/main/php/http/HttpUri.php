@@ -125,14 +125,15 @@ abstract class HttpUri extends Uri
     /**
      * checks whether given http uri exists, i.e. has a DNS entry
      *
-     * @param   string  $httpUri
+     * @param   string    $httpUri
+     * @param   callable  $checkWith  optional  function to check dns record with
      * @return  bool
      * @since   7.1.0
      */
-    public static function exists($httpUri): bool
+    public static function exists($httpUri, callable $checkWith = null): bool
     {
         if ($httpUri instanceof self) {
-            return $httpUri->hasDnsRecord();
+            return $httpUri->hasDnsRecord($checkWith);
         }
 
         if (empty($httpUri) || !is_string($httpUri)) {
@@ -140,7 +141,7 @@ abstract class HttpUri extends Uri
         }
 
         try {
-            return self::fromString($httpUri)->hasDnsRecord();
+            return self::fromString($httpUri)->hasDnsRecord($checkWith);
         } catch (MalformedUri $murle) {
             return false;
         }
@@ -194,14 +195,16 @@ abstract class HttpUri extends Uri
     /**
      * checks whether host of uri is listed in dns
      *
+     * @param   callable  $checkWith  optional  function to check dns record with
      * @return  bool
      */
-    public function hasDnsRecord(): bool
+    public function hasDnsRecord(callable $checkWith = null): bool
     {
+        $checkdnsrr = null === $checkWith ? 'checkdnsrr': $checkWith;
         if ($this->parsedUri->isLocalHost()
-          || checkdnsrr($this->parsedUri->hostname(), 'A')
-          || checkdnsrr($this->parsedUri->hostname(), 'AAAA')
-          || checkdnsrr($this->parsedUri->hostname(), 'CNAME')) {
+          || $checkdnsrr($this->parsedUri->hostname(), 'A')
+          || $checkdnsrr($this->parsedUri->hostname(), 'AAAA')
+          || $checkdnsrr($this->parsedUri->hostname(), 'CNAME')) {
             return true;
         }
 
@@ -381,12 +384,18 @@ abstract class HttpUri extends Uri
     /**
      * opens socket to this uri
      *
-     * @param   int  $timeout  connection timeout
+     * @param   int       $timeout  connection timeout
+     * @param   callable  $openWith  optional  open port with this function
      * @return  \stubbles\peer\Stream
      * @since   2.0.0
      */
-    public function openSocket(int $timeout = 5): Stream
+    public function openSocket(int $timeout = 5, callable $openWith = null): Stream
     {
-        return $this->createSocket()->connect()->setTimeout($timeout);
+        $socket = $this->createSocket();
+        if (null !== $openWith) {
+            $socket->openWith($openWith);
+        }
+
+        return $socket->connect()->setTimeout($timeout);
     }
 }

@@ -9,15 +9,19 @@ declare(strict_types=1);
  * @package  stubbles\peer
  */
 namespace stubbles\peer;
+use bovigo\callmap\NewCallable;
 
-use function bovigo\assert\assert;
-use function bovigo\assert\assertEmptyString;
-use function bovigo\assert\assertFalse;
-use function bovigo\assert\assertNull;
-use function bovigo\assert\assertTrue;
-use function bovigo\assert\expect;
-use function bovigo\assert\predicate\equals;
-use function bovigo\assert\predicate\isNotSameAs;
+use function bovigo\callmap\verify;
+use function bovigo\assert\{
+    assert,
+    assertEmptyString,
+    assertFalse,
+    assertNull,
+    assertTrue,
+    expect,
+    predicate\equals,
+    predicate\isNotSameAs
+};
 /**
  * Test for stubbles\peer\Uri.
  *
@@ -25,11 +29,6 @@ use function bovigo\assert\predicate\isNotSameAs;
  */
 class UriTest extends \PHPUnit_Framework_TestCase
 {
-    public function tearDown()
-    {
-        CheckdnsrrResult::$value = null;
-    }
-
     /**
      * @test
      */
@@ -443,11 +442,11 @@ class UriTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function hasNoDnsRecordWitoutHost()
+    public function hasNoDnsRecordWithoutHost()
     {
-        assertFalse(
-                Uri::fromString('file:///home/test.txt')->hasDnsRecord()
-        );
+        $checkdnsrr = NewCallable::of('checkdnsrr');
+        assertFalse(Uri::fromString('file:///home/test.txt')->hasDnsRecord($checkdnsrr));
+        verify($checkdnsrr)->wasNeverCalled();
     }
 
     /**
@@ -455,9 +454,9 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasDnsRecordForLocalhost()
     {
-        assertTrue(
-                Uri::fromString('http://localhost')->hasDnsRecord()
-        );
+        $checkdnsrr = NewCallable::of('checkdnsrr');
+        assertTrue(Uri::fromString('http://localhost')->hasDnsRecord($checkdnsrr));
+        verify($checkdnsrr)->wasNeverCalled();
     }
 
     /**
@@ -465,9 +464,9 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasDnsRecordForIpv4Localhost()
     {
-        assertTrue(
-                Uri::fromString('http://127.0.0.1')->hasDnsRecord()
-        );
+        $checkdnsrr = NewCallable::of('checkdnsrr');
+        assertTrue(Uri::fromString('http://127.0.0.1')->hasDnsRecord($checkdnsrr));
+        verify($checkdnsrr)->wasNeverCalled();
     }
 
     /**
@@ -476,9 +475,9 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasDnsRecordForIpv6Localhost()
     {
-        assertTrue(
-                Uri::fromString('http://[::1]')->hasDnsRecord()
-        );
+        $checkdnsrr = NewCallable::of('checkdnsrr');
+        assertTrue(Uri::fromString('http://[::1]')->hasDnsRecord($checkdnsrr));
+        verify($checkdnsrr)->wasNeverCalled();
     }
 
     /**
@@ -487,9 +486,10 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasNoDnsRecordForNonExistingHost()
     {
-        CheckdnsrrResult::$value = false;
         assertFalse(
-                Uri::fromString('http://foobar')->hasDnsRecord()
+                Uri::fromString('http://foobar')->hasDnsRecord(
+                        NewCallable::of('checkdnsrr')->mapCall(false)
+                )
         );
     }
 

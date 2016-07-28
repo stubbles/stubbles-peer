@@ -9,13 +9,17 @@ declare(strict_types=1);
  * @package  stubbles\peer
  */
 namespace stubbles\peer;
-use function bovigo\assert\assert;
-use function bovigo\assert\assertFalse;
-use function bovigo\assert\assertTrue;
-use function bovigo\assert\expect;
-use function bovigo\assert\predicate\equals;
-use function bovigo\assert\predicate\isInstanceOf;
-use function bovigo\assert\predicate\isSameAs;
+use bovigo\callmap\NewCallable;
+
+use function bovigo\assert\{
+    assert,
+    assertFalse,
+    assertTrue,
+    expect,
+    predicate\equals,
+    predicate\isInstanceOf,
+    predicate\isSameAs
+};
 /**
  * Test for stubbles\peer\IpAddress.
  *
@@ -24,11 +28,6 @@ use function bovigo\assert\predicate\isSameAs;
  */
 class IpAddressTest extends \PHPUnit_Framework_TestCase
 {
-    public function tearDown()
-    {
-        FsockopenResult::$return = null;
-    }
-
     /**
      * @test
      * @since  7.1.0
@@ -470,9 +469,9 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function openSocketReturnsStreamInstance()
     {
-        FsockopenResult::$return = fopen(__FILE__, 'rb');
+        $fsockopen = NewCallable::of('fsockopen')->mapCall(fopen(__FILE__, 'rb'));
         assert(
-                IpAddress::castFrom('127.0.0.1')->openSocket(80),
+                IpAddress::castFrom('127.0.0.1')->openSocket(80, 1, $fsockopen),
                 isInstanceOf(Stream::class)
         );
     }
@@ -483,10 +482,10 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function openSocketDoesNotUseTls()
     {
-        FsockopenResult::$return = fopen(__FILE__, 'rb');
+        $fsockopen = NewCallable::of('fsockopen')->mapCall(fopen(__FILE__, 'rb'));
         assertFalse(
                 IpAddress::castFrom('127.0.0.1')
-                        ->openSocket(80)
+                        ->openSocket(80, 1, $fsockopen)
                         ->usesTls()
         );
     }
@@ -497,9 +496,9 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function openSecureSocketReturnsStreamInstance()
     {
-        FsockopenResult::$return = fopen(__FILE__, 'rb');
+        $fsockopen = NewCallable::of('fsockopen')->mapCall(fopen(__FILE__, 'rb'));
         assert(
-                IpAddress::castFrom('127.0.0.1')->openSecureSocket(443),
+                IpAddress::castFrom('127.0.0.1')->openSecureSocket(443, 1, $fsockopen),
                 isInstanceOf(Stream::class)
         );
     }
@@ -510,10 +509,10 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function openSecureSocketUsesTls()
     {
-        FsockopenResult::$return = fopen(__FILE__, 'rb');
+        $fsockopen = NewCallable::of('fsockopen')->mapCall(fopen(__FILE__, 'rb'));
         assertTrue(
                 IpAddress::castFrom('127.0.0.1')
-                        ->openSecureSocket(443)
+                        ->openSecureSocket(443, 1, $fsockopen)
                         ->usesTls()
         );
     }

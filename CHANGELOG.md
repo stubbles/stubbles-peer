@@ -5,6 +5,7 @@
 ### BC breaks
 
 * `stubbles\peer\IpAddress::isValid()`, `stubbles\peer\IpAddress::isValidV4()` and `stubbles\peer\IpAddress::isValidV6()` now always expect a string to test
+* removed `stubbles\peer\http\AcceptHeader::getSharedAcceptables()`, deprecated since 8.0.0
 
 ### Other changes
 

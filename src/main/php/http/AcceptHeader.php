@@ -191,18 +191,6 @@ class AcceptHeader implements \Countable
     }
 
     /**
-     * returns a list of acceptables that are both in header and given list
-     *
-     * @param   string[]  $acceptables
-     * @return  string[]
-     * @deprecated  since 8.0.0, use sharedAcceptables() instead, will be removed with 9.0.0
-     */
-    public function getSharedAcceptables(array $acceptables): array
-    {
-        return $this->sharedAcceptables($acceptables);
-    }
-
-    /**
      * returns current list as string
      *
      * @return  string

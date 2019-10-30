@@ -267,7 +267,7 @@ class AcceptHeaderTest extends TestCase
      */
     public function sharedAcceptablesForEmptyListReturnsEmptyArray(array $accepted)
     {
-        assertEmptyArray($this->acceptHeader->getSharedAcceptables($accepted));
+        assertEmptyArray($this->acceptHeader->sharedAcceptables($accepted));
     }
 
     /**
@@ -290,7 +290,7 @@ class AcceptHeaderTest extends TestCase
     {
         assertEmptyArray(
                 $this->acceptHeader->addAcceptable('text/html')
-                        ->getSharedAcceptables($accepted)
+                        ->sharedAcceptables($accepted)
         );
     }
 
@@ -312,7 +312,7 @@ class AcceptHeaderTest extends TestCase
     {
         assertThat(
                 $this->acceptHeader->addAcceptable('text/plain', 0.2)
-                        ->getSharedAcceptables(['text/plain', 'text/other']),
+                        ->sharedAcceptables(['text/plain', 'text/other']),
                 equals(['text/plain'])
         );
     }

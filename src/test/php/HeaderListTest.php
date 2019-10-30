@@ -107,7 +107,7 @@ class HeaderListTest extends TestCase
     /**
      * helper method to assert presence and content of binford headers
      *
-     * @param  stubbles\peer\HeaderList  $headerList
+     * @param  \stubbles\peer\HeaderList  $headerList
      */
     protected function assertBinford(HeaderList $headerList)
     {

@@ -78,7 +78,7 @@ abstract class Uri
     /**
      * checks whether host of uri is listed in dns
      *
-     * @param   callable  $checkdnsrr  optional  function to check dns record with
+     * @param   callable  $checkWith  optional  function to check dns record with
      * @return  bool
      */
     public function hasDnsRecord(callable $checkWith = null): bool

@@ -241,7 +241,7 @@ class Http
      * If the array contains an empty line all lines after this empty line are
      * considered to belong to the body and will be returned as they are.
      *
-     * @param   string[]  $lines
+     * @param   array<int, string>  $lines
      * @return  string
      * @since   4.0.0
      */

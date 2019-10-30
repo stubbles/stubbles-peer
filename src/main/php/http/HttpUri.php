@@ -123,8 +123,8 @@ abstract class HttpUri extends Uri
     /**
      * checks whether given http uri exists, i.e. has a DNS entry
      *
-     * @param   string    $httpUri
-     * @param   callable  $checkWith  optional  function to check dns record with
+     * @param   string|\stubbles\peer\http\HttpUri  $httpUri
+     * @param   callable                            $checkWith  optional  function to check dns record with
      * @return  bool
      * @since   7.1.0
      */

@@ -7,3 +7,7 @@ parameters:
     - '#Call to an undefined method stubbles\\values\\Value#'
     # Prevent errors because of generated mock objects
     - '#bovigo\\callmap\\ClassProxy given#'
+    - '#bovigo\\callmap\\FunctionProxy given#'
+    # Explicit tests for those cases
+    - '#stubbles\\peer\\Stream constructor expects resource, string given#'
+    - '#static method stubbles\\peer\\http\\HttpUri::castFrom\(\) expects string\|stubbles\\peer\\http\\HttpUri, stdClass given#'

@@ -13,3 +13,5 @@ parameters:
     - '#static method stubbles\\peer\\http\\HttpUri::castFrom\(\) expects string\|stubbles\\peer\\http\\HttpUri, stdClass given#'
     # False positive, value of $this->ip is always a valid IP address
     - '#Method stubbles\\peer\\IpAddress::asLong\(\) should return int but returns int\|false#'
+    # False positive, both arrays that are merge are of type array<string>
+    - '#Method stubbles\\peer\\http\\AcceptHeader::sharedAcceptables\(\) should return array<string> but returns array<int, int\|string>#'

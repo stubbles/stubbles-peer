@@ -17,7 +17,7 @@ class AcceptHeader implements \Countable
     /**
      * list of acceptables
      *
-     * @type  array
+     * @type  array<string, float>
      */
     private $acceptables = [];
 
@@ -36,16 +36,17 @@ class AcceptHeader implements \Countable
             if (strstr($acceptable, 'q=') !== false) {
                 list($acceptable, $priority) = explode('q=', trim($acceptable));
             } else {
-                $priority = 1;
+                $priority = 1.0;
             }
 
-            settype($priority, 'float');
             $acceptable = trim($acceptable);
             if (substr($acceptable, -1) === ';') {
                 $acceptable = substr($acceptable, 0, -1);
             }
 
-            $self->addAcceptable($acceptable, $priority);
+            settype($priority, 'float');
+            // cast anyway when passing argument because phpstan doesn't account for settype
+            $self->addAcceptable($acceptable, (float) $priority);
         }
 
         return $self;

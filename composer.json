@@ -23,6 +23,11 @@
         },
         "files": ["src/main/php/functions.php"]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "stubbles\\peer\\": "src/test/php"
+        }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "8.1.x-dev"

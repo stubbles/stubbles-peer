@@ -4,6 +4,7 @@
 
 ### BC breaks
 
+* raised minimum required PHP version to 7.3
 * `stubbles\peer\IpAddress::isValid()`, `stubbles\peer\IpAddress::isValidV4()` and `stubbles\peer\IpAddress::isValidV6()` now always expect a string to test
 * removed `stubbles\peer\http\AcceptHeader::getSharedAcceptables()`, deprecated since 8.0.0
 

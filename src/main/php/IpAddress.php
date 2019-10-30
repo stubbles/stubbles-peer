@@ -94,8 +94,7 @@ class IpAddress
     public function __construct($ip)
     {
         if (ctype_digit($ip)) {
-            settype($ip, 'int');
-            $this->ip = long2ip($ip);
+            $this->ip = long2ip((int) $ip);
         } else {
             $this->ip = $ip;
         }
@@ -210,10 +209,16 @@ class IpAddress
      *
      * @param   string  $cidrIpShort
      * @return  int
+     * @throws  \LogicException  in case calcuation if complete version fails
      */
     private function completeCidrIp(string $cidrIpShort): int
     {
-        return ip2long($cidrIpShort . str_repeat('.0', 3 - substr_count($cidrIpShort, '.')));
+        $completeCidrIp = ip2long($cidrIpShort . str_repeat('.0', 3 - substr_count($cidrIpShort, '.')));
+        if (false === $completeCidrIp) {
+            throw new \LogicException('Failure while calculating complete cidr ip from short version.');
+        }
+
+        return $completeCidrIp;
     }
 
     /**

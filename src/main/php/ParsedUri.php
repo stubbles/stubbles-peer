@@ -166,7 +166,6 @@ class ParsedUri
      * checks whether scheme is set
      *
      * @return  bool
-     * @deprecated  since 8.0.0, a valid URI always has a scheme, will be removed with 9.0.0
      */
     public function hasScheme(): bool
     {
@@ -220,7 +219,7 @@ class ParsedUri
      * checks whether password is set
      *
      * @return  bool
-     * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure, will be removed with 9.0.0
+     * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure
      */
     public function hasPassword(): bool
     {
@@ -231,7 +230,7 @@ class ParsedUri
      * returns the password of the uri
      *
      * @return  string|null
-     * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure, will be removed with 9.0.0
+     * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure
      */
     public function password(): ?string
     {

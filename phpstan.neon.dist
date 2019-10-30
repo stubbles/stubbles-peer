@@ -16,3 +16,5 @@ parameters:
     - '#Method stubbles\\peer\\IpAddress::asLong\(\) should return int but returns int\|false#'
     # False positive, both arrays that are merge are of type array<string>
     - '#Method stubbles\\peer\\http\\AcceptHeader::sharedAcceptables\(\) should return array<string> but returns array<int, int\|string>#'
+    # False positive, it's not possible implementation wise that null is returned
+    - '#Method stubbles\\peer\\http\\HttpUri::port\(\) should return int but returns int\|null#'

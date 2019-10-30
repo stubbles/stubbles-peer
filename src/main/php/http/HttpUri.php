@@ -216,7 +216,8 @@ abstract class HttpUri extends Uri
      */
     public function hostname(): string
     {
-        return parent::hostname();
+        $hostname = parent::hostname();
+        return null === $hostname ? '' : $hostname;
     }
 
     /**
@@ -251,7 +252,6 @@ abstract class HttpUri extends Uri
      */
     public function port(int $defaultPort = null): int
     {
-
         if ($this->isHttp()) {
             return parent::port(Http::PORT);
         }

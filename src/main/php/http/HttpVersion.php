@@ -18,11 +18,11 @@ class HttpVersion
     /**
      * HTTP version: HTTP/1.0
      */
-    const HTTP_1_0               = 'HTTP/1.0';
+    const HTTP_1_0  = 'HTTP/1.0';
     /**
      * HTTP version: HTTP/1.1
      */
-    const HTTP_1_1               = 'HTTP/1.1';
+    const HTTP_1_1  = 'HTTP/1.1';
     /**
      * major http version
      *

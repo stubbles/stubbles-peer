@@ -158,7 +158,7 @@ class HttpRequest
     /**
      * transforms post values to post body
      *
-     * @param   array  $postValues
+     * @param   array<string,string>  $postValues
      * @return  string
      */
     private function transformPostValues(array $postValues): string
@@ -179,7 +179,7 @@ class HttpRequest
      * @param   string|\stubbles\peer\http\HttpVersion  $version  http version
      * @throws  \InvalidArgumentException
      */
-    private function processHeader(Stream $socket, string $method, $version)
+    private function processHeader(Stream $socket, string $method, $version): void
     {
         $version = HttpVersion::castFrom($version);
         if (!$version->equals(HttpVersion::HTTP_1_0) && !$version->equals(HttpVersion::HTTP_1_1)) {

@@ -18,19 +18,17 @@ class HttpConnection
      *
      * @type  \stubbles\peer\http\HttpUri
      */
-    private $httpUri  = null;
+    private $httpUri = null;
     /**
      * contains request headers
      *
      * @type  \stubbles\peer\HeaderList
      */
-    private $headers  = null;
+    private $headers = null;
     /**
-     * timeout
-     *
      * @type  int
      */
-    private $timeout  = 30;
+    private $timeout = 30;
 
     /**
      * constructor
@@ -115,7 +113,7 @@ class HttpConnection
      *
      * @api
      * @param   string  $key    name of header
-     * @param   string  $value  value of header
+     * @param   scalar  $value  value of header
      * @return  \stubbles\peer\http\HttpConnection
      */
     public function usingHeader(string $key, $value): self

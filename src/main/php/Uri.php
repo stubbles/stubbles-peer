@@ -159,7 +159,7 @@ abstract class Uri
      * @param   string  $defaultUser  user to return if no user is set
      * @return  string|null
      */
-    public function user(string $defaultUser = null)
+    public function user(string $defaultUser = null): ?string
     {
         return $this->parsedUri->user($defaultUser);
     }
@@ -171,7 +171,7 @@ abstract class Uri
      * @return  string|null
      * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure, will be removed with 9.0.0
      */
-    public function password(string $defaultPassword = null)
+    public function password(string $defaultPassword = null): ?string
     {
         if (!$this->parsedUri->hasUser()) {
             return null;
@@ -189,7 +189,7 @@ abstract class Uri
      *
      * @return  string|null
      */
-    public function hostname()
+    public function hostname(): ?string
     {
         return $this->parsedUri->hostname();
     }
@@ -217,7 +217,7 @@ abstract class Uri
      * @param   int  $defaultPort  port to be used if no port is defined
      * @return  int|null
      */
-    public function port(int $defaultPort = null)
+    public function port(int $defaultPort = null): ?int
     {
         if ($this->parsedUri->hasPort()) {
             return $this->parsedUri->port();
@@ -340,7 +340,7 @@ abstract class Uri
      *
      * @return  string|null
      */
-    public function fragment()
+    public function fragment(): ?string
     {
         return $this->parsedUri->fragment();
     }

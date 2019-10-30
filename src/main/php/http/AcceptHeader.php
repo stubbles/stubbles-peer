@@ -118,7 +118,7 @@ class AcceptHeader implements \Countable
      * @param   string[]  $mimeTypes
      * @return  string|null
      */
-    public function findMatchWithGreatestPriority(array $mimeTypes)
+    public function findMatchWithGreatestPriority(array $mimeTypes): ?string
     {
         $sharedAcceptables = array_intersect_key(
                 $this->acceptables,
@@ -148,7 +148,7 @@ class AcceptHeader implements \Countable
      * @param   array  $acceptables
      * @return  string|null
      */
-    private function selectAcceptableWithGreatestPriority(array $acceptables)
+    private function selectAcceptableWithGreatestPriority(array $acceptables): ?string
     {
         arsort($acceptables);
         // use temp var to prevent error "Only variables should be passed by reference"
@@ -163,7 +163,7 @@ class AcceptHeader implements \Countable
      *
      * @return  string|null
      */
-    public function findAcceptableWithGreatestPriority()
+    public function findAcceptableWithGreatestPriority(): ?string
     {
         return $this->selectAcceptableWithGreatestPriority($this->acceptables);
     }

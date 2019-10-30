@@ -96,7 +96,7 @@ class Http
     /**
      * reference to RFC 7230, a revised version of HTTP/1.1
      *
-     * @ink    http://tools.ietf.org/html/rfc7230
+     * @link    http://tools.ietf.org/html/rfc7230
      * @since  4.0.0
      */
     const RFC_7230                  = 'RFC 7230';
@@ -104,7 +104,7 @@ class Http
     /**
      * map of status code classes
      *
-     * @type type
+     * @type array<int,string>
      */
     private static $statusClass     = [
             0 => Http::STATUS_CLASS_UNKNOWN,
@@ -117,7 +117,7 @@ class Http
     /**
      * map of status codes to reason phrases
      *
-     * @type  array
+     * @type  array<int,string>
      */
     private static $reasonPhrases   = [
             100 => 'Continue',
@@ -196,7 +196,7 @@ class Http
      * returns list of known status codes
      *
      * @api
-     * @return  array
+     * @return  array<int,string>
      * @since   4.0.0
      */
     public static function statusCodes(): array

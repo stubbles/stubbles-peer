@@ -211,7 +211,7 @@ class ParsedUri
      * @param   string  $defaultUser  user to return if no user is set
      * @return  string|null
      */
-    public function user(string $defaultUser = null)
+    public function user(string $defaultUser = null): ?string
     {
         return $this->uri['user'] ?? $defaultUser;
     }
@@ -233,7 +233,7 @@ class ParsedUri
      * @return  string|null
      * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure, will be removed with 9.0.0
      */
-    public function password()
+    public function password(): ?string
     {
         return $this->uri['pass'] ?? null;
     }
@@ -263,7 +263,7 @@ class ParsedUri
      *
      * @return  string|null
      */
-    public function hostname()
+    public function hostname(): ?string
     {
         return $this->uri['host'] ?? null;
     }
@@ -295,7 +295,7 @@ class ParsedUri
      *
      * @return  int|null
      */
-    public function port()
+    public function port(): ?int
     {
         if (isset($this->uri['port'])) {
             return (int) $this->uri['port'];
@@ -351,7 +351,7 @@ class ParsedUri
      *
      * @return  string|null
      */
-    public function fragment()
+    public function fragment(): ?string
     {
         return $this->uri['fragment'] ?? null;
     }

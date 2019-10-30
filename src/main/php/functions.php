@@ -12,6 +12,7 @@ namespace stubbles\peer {
 
     /**
      * creates a http connection to specified uri
+     *
      * @param   string                         $uri
      * @param   \stubbles\peer\HeaderList  $headers
      * @return  \stubbles\peer\http\HttpConnection

@@ -1,5 +1,11 @@
 # Changelog
 
+## 9.0.0 (2019-10-30)
+
+### BC breaks
+
+* `stubbles\peer\IpAddress::isValid()`, `stubbles\peer\IpAddress::isValidV4()` and `stubbles\peer\IpAddress::isValidV6()` now always expect a string to test
+
 ## 8.1.0 (2016-07-28)
 
 * added optional parameter `$checkWith` to influence which function is used for dns checks:

@@ -40,15 +40,6 @@ class IpAddressTest extends TestCase
      * @test
      * @since  7.1.0
      */
-    public function nullIsNoIpAndEvaluatesToFalse()
-    {
-        assertFalse(IpAddress::isValid(null));
-    }
-
-    /**
-     * @test
-     * @since  7.1.0
-     */
     public function emptyStringIsNoIpAndEvaluatesToFalse()
     {
         assertFalse(IpAddress::isValid(''));
@@ -83,34 +74,9 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function nullIsNoIpV4AndEvaluatesToFalse()
-    {
-        assertFalse(IpAddress::isValidV4(null));
-    }
-
-    /**
-     * @test
-     */
     public function emptyStringIsNoIpV4AndEvaluatesToFalse()
     {
         assertFalse(IpAddress::isValidV4(''));
-    }
-
-    /**
-     * @test
-     */
-    public function booleansAreNoIpV4AndResultInFalse()
-    {
-        assertFalse(IpAddress::isValidV4(true));
-        assertFalse(IpAddress::isValidV4(false));
-    }
-
-    /**
-     * @test
-     */
-    public function singleNumbersAreNoIpV4AndResultInFalse()
-    {
-        assertFalse(IpAddress::isValidV4(4));
     }
 
     /**
@@ -180,34 +146,9 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function nullIsNoIpV6AndEvaluatesToFalse()
-    {
-        assertFalse(IpAddress::isValidV6(null));
-    }
-
-    /**
-     * @test
-     */
     public function emptyStringIsNoIpV6AndEvaluatesToFalse()
     {
         assertFalse(IpAddress::isValidV6(''));
-    }
-
-    /**
-     * @test
-     */
-    public function booleansAreNoIpV6AndResultInFalse()
-    {
-        assertFalse(IpAddress::isValidV6(true));
-        assertFalse(IpAddress::isValidV6(false));
-    }
-
-    /**
-     * @test
-     */
-    public function singleNumbersAreNoIpV6AndResultInFalse()
-    {
-        assertFalse(IpAddress::isValidV6(4));
     }
 
     /**

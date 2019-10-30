@@ -42,7 +42,7 @@ class IpAddress
      * @return  bool
      * @since   7.1.0
      */
-    public static function isValid($value): bool
+    public static function isValid(string $value): bool
     {
         return self::isValidV4($value) || self::isValidV6($value);
     }
@@ -54,7 +54,7 @@ class IpAddress
      * @return  bool
      * @since   7.0.0
      */
-    public static function isValidV4($value): bool
+    public static function isValidV4(string $value): bool
     {
         return false !== filter_var(
                 $value,
@@ -70,7 +70,7 @@ class IpAddress
      * @return  bool
      * @since   7.0.0
      */
-    public static function isValidV6($value): bool
+    public static function isValidV6(string $value): bool
     {
         return false !== filter_var(
                 $value,
@@ -94,21 +94,15 @@ class IpAddress
     public function __construct($ip)
     {
         if (ctype_digit($ip)) {
-            // long2ip() in PHP 7.0 expects string, and int since 7.1
-            if (PHP_MAJOR_VERSION === 7 && PHP_MINOR_VERSION === 0) {
-                settype($ip, 'string');
-            } else {
-                settype($ip, 'int');
-            }
-
+            settype($ip, 'int');
             $this->ip = long2ip($ip);
         } else {
             $this->ip = $ip;
         }
 
-        if (self::isValidV4($this->ip)) {
+        if (is_string($this->ip) && self::isValidV4($this->ip)) {
             $this->type = self::V4;
-        } elseif (self::isValidV6($this->ip)) {
+        } elseif (is_string($this->ip) && self::isValidV6($this->ip)) {
             $this->type = self::V6;
         } else {
             throw new \InvalidArgumentException(

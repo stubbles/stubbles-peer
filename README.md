@@ -19,13 +19,13 @@ _stubbles/peer_ is distributed as [Composer](https://getcomposer.org/)
 package. To install it as a dependency of your package use the following
 command:
 
-    composer require "stubbles/peer": "^8.0"
+    composer require "stubbles/peer": "^9.0"
 
 
 Requirements
 ------------
 
-_stubbles/peer_ requires at least PHP 7.0.
+_stubbles/peer_ requires at least PHP 7.3.
 
 
 Working with URIs

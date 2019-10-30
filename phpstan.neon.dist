@@ -11,6 +11,7 @@ parameters:
     # Explicit tests for those cases
     - '#stubbles\\peer\\Stream constructor expects resource, string given#'
     - '#static method stubbles\\peer\\http\\HttpUri::castFrom\(\) expects string\|stubbles\\peer\\http\\HttpUri, stdClass given#'
+    - '#Parameter \#1 \$resource of class stubbles\\peer\\Stream constructor expects resource, resource\|false given.#'
     # False positive, value of $this->ip is always a valid IP address
     - '#Method stubbles\\peer\\IpAddress::asLong\(\) should return int but returns int\|false#'
     # False positive, both arrays that are merge are of type array<string>

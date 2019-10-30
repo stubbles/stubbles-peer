@@ -17,6 +17,7 @@ use function bovigo\assert\{
     assertEmpty,
     assertNull,
     expect,
+    fail,
     predicate\equals
 };
 /**
@@ -38,7 +39,12 @@ class HttpResponseTest extends TestCase
         $file = vfsStream::newFile('response')
                 ->withContent($response)
                 ->at(vfsStream::setup());
-        return HttpResponse::create(new Stream(fopen($file->url(), 'rb+')));
+        $fp = fopen($file->url(), 'rb+');
+        if (false === $fp) {
+            throw new \RuntimeException('Could not open vfsStream file.');
+        }
+
+        return HttpResponse::create(new Stream($fp));
     }
 
     /**

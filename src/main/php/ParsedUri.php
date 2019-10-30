@@ -50,11 +50,11 @@ class ParsedUri
     {
         $this->uri = !is_array($uri) ? parse_url($uri): $uri;
         if (!is_array($this->uri)) {
-            throw new MalformedUri('The URI ' . $uri . ' is not a valid URI');
+            throw new MalformedUri('Given URI ' . (is_string($uri) ? $uri : '') . ' is not a valid URI');
         }
 
         if (!isset($this->uri['scheme'])) {
-            throw new MalformedUri('The URI ' . $uri . ' is missing a scheme.');
+            throw new MalformedUri('Given URI ' . (is_string($uri) ? $uri : '') . ' is missing a scheme.');
         }
 
         if (isset($this->uri['host'])) {

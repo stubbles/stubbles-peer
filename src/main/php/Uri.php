@@ -169,7 +169,7 @@ abstract class Uri
      *
      * @param   string  $defaultPassword  password to return if no password is set
      * @return  string|null
-     * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure, will be removed with 9.0.0
+     * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure
      */
     public function password(string $defaultPassword = null): ?string
     {

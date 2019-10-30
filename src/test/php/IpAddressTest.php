@@ -5,14 +5,13 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles\peer
  */
 namespace stubbles\peer;
 use bovigo\callmap\NewCallable;
+use PHPUnit\Framework\TestCase;
 
 use function bovigo\assert\{
-    assert,
+    assertThat,
     assertFalse,
     assertTrue,
     expect,
@@ -26,7 +25,7 @@ use function bovigo\assert\{
  * @group  peer
  * @since  4.0.0
  */
-class IpAddressTest extends \PHPUnit_Framework_TestCase
+class IpAddressTest extends TestCase
 {
     /**
      * @test
@@ -344,7 +343,7 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function createWithLong()
     {
-        assert(new IpAddress(2130706433), equals('127.0.0.1'));
+        assertThat(new IpAddress(2130706433), equals('127.0.0.1'));
     }
 
     public function validValues(): array
@@ -363,9 +362,9 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      * @dataProvider  validValues
      * @since  7.0.0
      */
-    public function typeReturnsInfoBasedOnValue(string $value, string $expectedType)
+    public function typeReturnsInfoBasedOnValue($value, string $expectedType)
     {
-        assert(IpAddress::castFrom($value)->type(), equals($expectedType));
+        assertThat(IpAddress::castFrom($value)->type(), equals($expectedType));
     }
 
     /**
@@ -373,7 +372,7 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      * @dataProvider  validValues
      * @since  7.0.0
      */
-    public function isVxReturnsTrueBasedOnType(string $value, string $expectedType)
+    public function isVxReturnsTrueBasedOnType($value, string $expectedType)
     {
         if (IpAddress::V4 === $expectedType) {
             assertTrue(IpAddress::castFrom($value)->isV4());
@@ -387,7 +386,7 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      * @dataProvider  validValues
      * @since  7.0.0
      */
-    public function isVxReturnsFalseBasedOnType(string $value, string $expectedType)
+    public function isVxReturnsFalseBasedOnType($value, string $expectedType)
     {
         if (IpAddress::V4 === $expectedType) {
             assertFalse(IpAddress::castFrom($value)->isV6());
@@ -401,7 +400,7 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function longNotationIsTransformedIntoStringNotation()
     {
-        assert(IpAddress::castFrom(2130706433), equals('127.0.0.1'));
+        assertThat(IpAddress::castFrom(2130706433), equals('127.0.0.1'));
     }
 
     /**
@@ -409,7 +408,7 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function castFromCreatesIpAddress()
     {
-        assert(IpAddress::castFrom('127.0.0.1'), equals('127.0.0.1'));
+        assertThat(IpAddress::castFrom('127.0.0.1'), equals('127.0.0.1'));
     }
 
     /**
@@ -418,7 +417,7 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
     public function castFromInstanceReturnsInstance()
     {
         $ipAddress = new IpAddress('127.0.0.1');
-        assert(IpAddress::castFrom($ipAddress), isSameAs($ipAddress));
+        assertThat(IpAddress::castFrom($ipAddress), isSameAs($ipAddress));
     }
 
     /**
@@ -426,7 +425,7 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function asLongReturnsLongValueForIpAddress()
     {
-        assert(IpAddress::castFrom('127.0.0.1')->asLong(), equals(2130706433));
+        assertThat(IpAddress::castFrom('127.0.0.1')->asLong(), equals(2130706433));
     }
 
     /**
@@ -434,7 +433,7 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function createSocketReturnsSocketInstance()
     {
-        assert(
+        assertThat(
                 IpAddress::castFrom('127.0.0.1')->createSocket(80),
                 isInstanceOf(Socket::class)
         );
@@ -445,7 +444,7 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function createSecureSocketReturnsSocketInstance()
     {
-        assert(
+        assertThat(
                 IpAddress::castFrom('127.0.0.1')->createSecureSocket(443),
                 isInstanceOf(Socket::class)
         );
@@ -469,8 +468,8 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function openSocketReturnsStreamInstance()
     {
-        $fsockopen = NewCallable::of('fsockopen')->mapCall(fopen(__FILE__, 'rb'));
-        assert(
+        $fsockopen = NewCallable::of('fsockopen')->returns(fopen(__FILE__, 'rb'));
+        assertThat(
                 IpAddress::castFrom('127.0.0.1')->openSocket(80, 1, $fsockopen),
                 isInstanceOf(Stream::class)
         );
@@ -482,7 +481,7 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function openSocketDoesNotUseTls()
     {
-        $fsockopen = NewCallable::of('fsockopen')->mapCall(fopen(__FILE__, 'rb'));
+        $fsockopen = NewCallable::of('fsockopen')->returns(fopen(__FILE__, 'rb'));
         assertFalse(
                 IpAddress::castFrom('127.0.0.1')
                         ->openSocket(80, 1, $fsockopen)
@@ -496,8 +495,8 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function openSecureSocketReturnsStreamInstance()
     {
-        $fsockopen = NewCallable::of('fsockopen')->mapCall(fopen(__FILE__, 'rb'));
-        assert(
+        $fsockopen = NewCallable::of('fsockopen')->returns(fopen(__FILE__, 'rb'));
+        assertThat(
                 IpAddress::castFrom('127.0.0.1')->openSecureSocket(443, 1, $fsockopen),
                 isInstanceOf(Stream::class)
         );
@@ -509,7 +508,7 @@ class IpAddressTest extends \PHPUnit_Framework_TestCase
      */
     public function openSecureSocketUsesTls()
     {
-        $fsockopen = NewCallable::of('fsockopen')->mapCall(fopen(__FILE__, 'rb'));
+        $fsockopen = NewCallable::of('fsockopen')->returns(fopen(__FILE__, 'rb'));
         assertTrue(
                 IpAddress::castFrom('127.0.0.1')
                         ->openSecureSocket(443, 1, $fsockopen)

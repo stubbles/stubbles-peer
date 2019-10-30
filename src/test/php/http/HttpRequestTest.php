@@ -5,16 +5,15 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles\peer
  */
 namespace stubbles\peer\http;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\TestCase;
 use stubbles\peer\HeaderList;
 use stubbles\peer\Stream;
 use stubbles\peer\http\HttpUri;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 /**
@@ -23,7 +22,7 @@ use function bovigo\assert\predicate\equals;
  * @group  peer
  * @group  peer_http
  */
-class HttpRequestTest extends \PHPUnit_Framework_TestCase
+class HttpRequestTest extends TestCase
 {
     /**
      * memory to write http request to
@@ -32,10 +31,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
      */
     private $memory;
 
-    /**
-     * set up test environment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->memory = '';
     }
@@ -48,7 +44,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
      */
     private function createHttpRequest(string $queryString = null): HttpRequest
     {
-        $socket   = NewInstance::stub(Stream::class)->mapCalls([
+        $socket   = NewInstance::stub(Stream::class)->returns([
                 'write' => function(string $line) { $this->memory .= $line; return strlen($line); }
         ]);
 
@@ -65,7 +61,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
         }
 
         return HttpRequest::create(
-                NewInstance::stub(HttpUri::class)->mapCalls($uriCalls),
+                NewInstance::stub(HttpUri::class)->returns($uriCalls),
                 new HeaderList(['X-Binford' => 6100])
         );
     }
@@ -76,7 +72,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function getWritesCorrectRequest()
     {
         $this->createHttpRequest()->get();
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'GET /foo/resource HTTP/1.1',
@@ -94,7 +90,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function getWritesCorrectRequestWithQueryString()
     {
         $this->createHttpRequest('foo=bar&baz=1')->get();
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'GET /foo/resource?foo=bar&baz=1 HTTP/1.1',
@@ -111,7 +107,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function getWritesCorrectRequestWithVersion()
     {
         $this->createHttpRequest()->get(5, HttpVersion::HTTP_1_0);
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'GET /foo/resource HTTP/1.0',
@@ -147,7 +143,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function headWritesCorrectRequest()
     {
         $this->createHttpRequest()->head();
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'HEAD /foo/resource HTTP/1.1',
@@ -166,7 +162,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function headWritesCorrectRequestWithQueryString()
     {
         $this->createHttpRequest('foo=bar&baz=1')->head();
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'HEAD /foo/resource?foo=bar&baz=1 HTTP/1.1',
@@ -184,7 +180,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function headWritesCorrectRequestWithVersion()
     {
         $this->createHttpRequest()->head(5, HttpVersion::HTTP_1_0);
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'HEAD /foo/resource HTTP/1.0',
@@ -213,7 +209,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function postWritesCorrectRequest()
     {
         $this->createHttpRequest()->post('foobar');
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'POST /foo/resource HTTP/1.1',
@@ -233,7 +229,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function postIgnoresQueryString()
     {
         $this->createHttpRequest('foo=bar&baz=1')->post('foobar');
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'POST /foo/resource HTTP/1.1',
@@ -252,7 +248,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function postWritesCorrectRequestWithVersion()
     {
         $this->createHttpRequest()->post('foobar', 5, HttpVersion::HTTP_1_0);
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'POST /foo/resource HTTP/1.0',
@@ -271,7 +267,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function postWritesCorrectRequestUsingEmptyPostValues()
     {
         $this->createHttpRequest()->post([]);
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'POST /foo/resource HTTP/1.1',
@@ -290,7 +286,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function postWritesCorrectRequestUsingPostValues()
     {
         $this->createHttpRequest()->post(['foo' => 'bar', 'ba z' => 'dum my']);
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'POST /foo/resource HTTP/1.1',
@@ -314,7 +310,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
                 5,
                 HttpVersion::HTTP_1_0
         );
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'POST /foo/resource HTTP/1.0',
@@ -346,7 +342,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function putWritesCorrectRequest()
     {
         $this->createHttpRequest()->put('foobar');
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'PUT /foo/resource HTTP/1.1',
@@ -366,7 +362,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function putIgnoresQueryString()
     {
         $this->createHttpRequest('foo=bar&baz=1')->put('foobar');
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'PUT /foo/resource HTTP/1.1',
@@ -386,7 +382,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function putWritesCorrectRequestWithVersion()
     {
         $this->createHttpRequest()->put('foobar', 5, HttpVersion::HTTP_1_0);
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'PUT /foo/resource HTTP/1.0',
@@ -417,7 +413,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function deleteWritesCorrectRequest()
     {
         $this->createHttpRequest()->delete();
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'DELETE /foo/resource HTTP/1.1',
@@ -435,7 +431,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function deleteIgnoresQueryString()
     {
         $this->createHttpRequest('foo=bar&baz=1')->delete();
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'DELETE /foo/resource HTTP/1.1',
@@ -453,7 +449,7 @@ class HttpRequestTest extends \PHPUnit_Framework_TestCase
     public function deleteWritesCorrectRequestWithVersion()
     {
         $this->createHttpRequest()->delete(5, HttpVersion::HTTP_1_0);
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'DELETE /foo/resource HTTP/1.0',

@@ -5,15 +5,14 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles\peer
  */
 namespace stubbles\peer;
 use bovigo\callmap\NewCallable;
+use PHPUnit\Framework\TestCase;
 
 use function bovigo\callmap\verify;
 use function bovigo\assert\{
-    assert,
+    assertThat,
     assertEmptyString,
     assertFalse,
     assertNull,
@@ -27,7 +26,7 @@ use function bovigo\assert\{
  *
  * @group  peer
  */
-class UriTest extends \PHPUnit_Framework_TestCase
+class UriTest extends TestCase
 {
     /**
      * @test
@@ -92,7 +91,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function schemeIsRecognized()
     {
-        assert(Uri::fromString('http://stubbles.net/')->scheme(), equals('http'));
+        assertThat(Uri::fromString('http://stubbles.net/')->scheme(), equals('http'));
     }
 
     /**
@@ -100,7 +99,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function schemeIsRecognizedForIpAddresses()
     {
-        assert(Uri::fromString('http://127.0.0.1')->scheme(), equals('http'));
+        assertThat(Uri::fromString('http://127.0.0.1')->scheme(), equals('http'));
     }
 
     /**
@@ -108,7 +107,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function schemeIsRecognizedIfHostIsMissing()
     {
-        assert(Uri::fromString('file:///home')->scheme(), equals('file'));
+        assertThat(Uri::fromString('file:///home')->scheme(), equals('file'));
     }
 
     /**
@@ -145,7 +144,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasDefaultUserIfNoUserGiven()
     {
-        assert(
+        assertThat(
                 Uri::fromString('ftp://stubbles.net')->user('mikey'),
                 equals('mikey')
         );
@@ -156,7 +155,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasGivenUser()
     {
-        assert(
+        assertThat(
                 Uri::fromString('ftp://mikey@stubbles.net')->user(),
                 equals('mikey')
         );
@@ -167,7 +166,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasGivenUserEvenIfDefaultChanged()
     {
-        assert(
+        assertThat(
                 Uri::fromString('ftp://mikey@stubbles.net')->user('other'),
                 equals('mikey')
         );
@@ -213,7 +212,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasDefaultPasswordIfUserButNoPasswordGiven()
     {
-        assert(
+        assertThat(
                 Uri::fromString('ftp://mikey@stubbles.net')->password('secret'),
                 equals('secret')
         );
@@ -225,7 +224,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasGivenPassword()
     {
-        assert(
+        assertThat(
                 Uri::fromString('ftp://mikey:secret@stubbles.net')->password(),
                 equals('secret')
         );
@@ -237,7 +236,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasGivenPasswordEvenIfDefaultChanged()
     {
-        assert(
+        assertThat(
                 Uri::fromString('ftp://mikey:secret@stubbles.net')->password('other'),
                 equals('secret')
         );
@@ -270,7 +269,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasHostFromGivenUri()
     {
-        assert(
+        assertThat(
                 Uri::fromString('ftp://stubbles.net:21')->hostname(),
                 equals('stubbles.net')
         );
@@ -281,7 +280,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hostIsTransformedToLowercase()
     {
-        assert(
+        assertThat(
                 Uri::fromString('ftp://stUBBles.net:21')->hostname(),
                 equals('stubbles.net')
         );
@@ -300,7 +299,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function getHostReturnsIpv4()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://127.0.0.1/')->hostname(),
                 equals('127.0.0.1')
         );
@@ -312,7 +311,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function getHostReturnsIpv6ShortNotation()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://[2001:db8:12:34::1]/')->hostname(),
                 equals('[2001:db8:12:34::1]')
         );
@@ -324,7 +323,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function getHostReturnsIpv6LongNotation()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://[2001:8d8f:1fe:5:abba:dbff:fefe:7755]:80/')
                         ->hostname(),
                 equals('[2001:8d8f:1fe:5:abba:dbff:fefe:7755]')
@@ -344,7 +343,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasDefaultValueIfNoPortGiven()
     {
-        assert(Uri::fromString('ftp://stubbles.net')->port(303), equals(303));
+        assertThat(Uri::fromString('ftp://stubbles.net')->port(303), equals(303));
     }
 
     /**
@@ -352,7 +351,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasGivenPortIfPortGiven()
     {
-        assert(Uri::fromString('ftp://stubbles.net:21')->port(), equals(21));
+        assertThat(Uri::fromString('ftp://stubbles.net:21')->port(), equals(21));
     }
 
     /**
@@ -360,7 +359,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasGivenPortFromIpv4Adress()
     {
-        assert(Uri::fromString('ftp://127.0.01:21')->port(), equals(21));
+        assertThat(Uri::fromString('ftp://127.0.01:21')->port(), equals(21));
     }
 
     /**
@@ -369,7 +368,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasGivenPortFromIpv6AdressShortNotation()
     {
-        assert(Uri::fromString('ftp://[2001:db8:12:34::1]:21')->port(), equals(21));
+        assertThat(Uri::fromString('ftp://[2001:db8:12:34::1]:21')->port(), equals(21));
     }
 
     /**
@@ -378,7 +377,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasGivenPortFromIpv6AdressLongNotation()
     {
-        assert(
+        assertThat(
                 Uri::fromString('ftp://[2001:8d8f:1fe:5:abba:dbff:fefe:7755]:21')->port(),
                 equals(21)
         );
@@ -389,7 +388,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function hasGivenPortEvenIfDefaultChanged()
     {
-        assert(Uri::fromString('ftp://stubbles.net:21')->port(303), equals(21));
+        assertThat(Uri::fromString('ftp://stubbles.net:21')->port(303), equals(21));
     }
 
     /**
@@ -405,7 +404,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function getPathReturnsGivenPath()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://stubbles.net/index.php?foo=bar#baz')->path(),
                 equals('/index.php')
         );
@@ -416,7 +415,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function getPathReturnsPathEvenIfNoHostPresent()
     {
-        assert(Uri::fromString('file:///home')->path(), equals('/home'));
+        assertThat(Uri::fromString('file:///home')->path(), equals('/home'));
     }
 
     /**
@@ -488,7 +487,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
     {
         assertFalse(
                 Uri::fromString('http://foobar')->hasDnsRecord(
-                        NewCallable::of('checkdnsrr')->mapCall(false)
+                        NewCallable::of('checkdnsrr')->returns(false)
                 )
         );
     }
@@ -499,7 +498,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function canBeCastedToString()
     {
-        assert(
+        assertThat(
                 (string) Uri::fromString('http://stubbles.net:80/index.php?content=features#top'),
                 equals('http://stubbles.net:80/index.php?content=features#top')
         );
@@ -510,7 +509,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringReturnsOriginalGivenUri()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://stubbles.net:80/index.php?content=features#top')
                         ->asString(),
                 equals('http://stubbles.net:80/index.php?content=features#top')
@@ -522,7 +521,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringWithoutPortReturnsOriginalGivenUriButWithoutPort()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://stubbles.net:80/index.php?content=features#top')
                         ->asStringWithoutPort(),
                 equals('http://stubbles.net/index.php?content=features#top')
@@ -534,7 +533,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithPort()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://stubbles.net:80/index.php?content=features#top')
                         ->asStringWithNonDefaultPort(),
                 equals('http://stubbles.net:80/index.php?content=features#top')
@@ -546,7 +545,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithoutPort()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://stubbles.net/index.php?content=features#top')
                         ->asStringWithNonDefaultPort(),
                 equals('http://stubbles.net/index.php?content=features#top')
@@ -558,7 +557,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringReturnsOriginalGivenUriWithUsernameAndPassword()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://mikey:secret@stubbles.net:80/index.php?content=features#top')
                         ->asString(),
                 equals('http://mikey:secret@stubbles.net:80/index.php?content=features#top')
@@ -570,7 +569,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringWithoutPortReturnsOriginalGivenUriWithUsernameAndPasswordWithoutPort()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://mikey:secret@stubbles.net:80/index.php?content=features#top')
                         ->asStringWithoutPort(),
                 equals('http://mikey:secret@stubbles.net/index.php?content=features#top')
@@ -582,7 +581,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringReturnsOriginalGivenUriWithUsername()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://mikey@stubbles.net:80/index.php?content=features#top')
                         ->asString(),
                 equals('http://mikey@stubbles.net:80/index.php?content=features#top')
@@ -594,7 +593,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringWithoutPortReturnsOriginalGivenUriWithUsernameWithoutPort()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://mikey@stubbles.net:80/index.php?content=features#top')
                         ->asStringWithoutPort(),
                 equals('http://mikey@stubbles.net/index.php?content=features#top')
@@ -606,7 +605,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringReturnsOriginalGivenUriWithUsernameAndEmptyPassword()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://mikey:@stubbles.net:80/index.php?content=features#top')
                         ->asString(),
                 equals('http://mikey:@stubbles.net:80/index.php?content=features#top')
@@ -618,7 +617,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringWithoutPortReturnsOriginalGivenUriWithUsernameAndEmptyPasswordWithoutPort()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://mikey:@stubbles.net:80/index.php?content=features#top')
                         ->asStringWithoutPort(),
                 equals('http://mikey:@stubbles.net/index.php?content=features#top')
@@ -630,7 +629,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringReturnsOriginalGivenUriWithIpv4Address()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://127.0.0.1:80/index.php?content=features#top')
                         ->asString(),
                 equals('http://127.0.0.1:80/index.php?content=features#top')
@@ -642,7 +641,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringWithoutPortReturnsOriginalGivenUriButWithoutPortWithIpv4Address()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://127.0.0.1:80/index.php?content=features#top')
                         ->asStringWithoutPort(),
                 equals('http://127.0.0.1/index.php?content=features#top')
@@ -654,7 +653,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithIpv4Address()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://127.0.0.1:80/index.php?content=features#top')
                         ->asStringWithNonDefaultPort(),
                 equals('http://127.0.0.1:80/index.php?content=features#top')
@@ -667,7 +666,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringReturnsOriginalGivenUriWithIpv6AddressShortNotation()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://[2001:db8:12:34::1]:80/index.php?content=features#top')
                         ->asString(),
                 equals('http://[2001:db8:12:34::1]:80/index.php?content=features#top')
@@ -680,7 +679,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringWithoutPortReturnsOriginalGivenUriButWithoutPortWithIpv6AddressShortNotation()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://[2001:db8:12:34::1]:80/index.php?content=features#top')
                         ->asStringWithoutPort(),
                 equals('http://[2001:db8:12:34::1]/index.php?content=features#top')
@@ -693,7 +692,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithIpv6AddressShortNotation()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://[2001:db8:12:34::1]:80/index.php?content=features#top')
                         ->asStringWithNonDefaultPort(),
                 equals('http://[2001:db8:12:34::1]:80/index.php?content=features#top')
@@ -706,7 +705,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringReturnsOriginalGivenUriWithIpv6AddressLongNotation()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://[2001:8d8f:1fe:5:abba:dbff:fefe:7755]:80/index.php?content=features#top')
                         ->asString(),
                 equals('http://[2001:8d8f:1fe:5:abba:dbff:fefe:7755]:80/index.php?content=features#top')
@@ -719,7 +718,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringWithoutPortReturnsOriginalGivenUriButWithoutPortWithIpv6AddressLongNotation()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://[2001:8d8f:1fe:5:abba:dbff:fefe:7755]:80/index.php?content=features#top')
                         ->asStringWithoutPort(),
                 equals('http://[2001:8d8f:1fe:5:abba:dbff:fefe:7755]/index.php?content=features#top')
@@ -732,7 +731,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithIpv6AddressLongNotation()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://[2001:8d8f:1fe:5:abba:dbff:fefe:7755]:80/index.php?content=features#top')
                         ->asStringWithNonDefaultPort(),
                 equals('http://[2001:8d8f:1fe:5:abba:dbff:fefe:7755]:80/index.php?content=features#top')
@@ -755,7 +754,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function paramWithoutValue()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://example.org/?wsdl')->asStringWithoutPort(),
                 equals('http://example.org/?wsdl')
         );
@@ -796,7 +795,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function getParamReturnsDefaultValueIfParamNotSet()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://example.org/?foo=bar')->param('bar', 'baz'),
                 equals('baz')
         );
@@ -807,7 +806,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function getParamReturnsValueIfParamSet()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://example.org/?foo=bar')->param('foo'),
                 equals('bar')
         );
@@ -818,7 +817,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function removeNonExistingParamChangesNothing()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://example.org/?wsdl')
                         ->removeParam('doesNotExist')
                         ->asStringWithoutPort(),
@@ -831,7 +830,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function removeExistingParamChangesQueryString()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://example.org/?wsdl&foo=bar')
                         ->removeParam('foo')
                         ->asStringWithoutPort(),
@@ -845,7 +844,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function addParamsChangesQueryString()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://example.org/?wsdl')
                         ->addParams(['foo' => 'bar', 'baz' => '303'])
                         ->asStringWithoutPort(),
@@ -858,7 +857,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function addParamChangesQueryString()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://example.org/?wsdl')
                         ->addParam('foo', 'bar')
                         ->asStringWithoutPort(),
@@ -879,7 +878,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function fragmentFromUriIsReturned()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://example.org/?wsdl#top')->fragment(),
                 equals('top')
         );
@@ -978,7 +977,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function queryStringEqualsGivenQueryString()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://example.org/?foo=bar&baz=true')
                         ->queryString(),
                 equals('foo=bar&baz=true')
@@ -991,7 +990,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function queryStringEqualsAddedParameters()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://example.org/')
                         ->addParam('foo', 'bar')
                         ->queryString(),
@@ -1017,7 +1016,7 @@ class UriTest extends \PHPUnit_Framework_TestCase
      */
     public function withPathExchangesPathCompletely()
     {
-        assert(
+        assertThat(
                 Uri::fromString('http://example.org/foo')->withPath('/bar'),
                 equals('http://example.org/bar')
         );
@@ -1030,6 +1029,6 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function withPathReturnsNewInstance()
     {
         $uri = Uri::fromString('http://example.org/foo');
-        assert($uri->withPath('/bar'), isNotSameAs($uri));
+        assertThat($uri->withPath('/bar'), isNotSameAs($uri));
     }
 }

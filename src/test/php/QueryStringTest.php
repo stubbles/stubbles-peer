@@ -5,11 +5,10 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles\peer
  */
 namespace stubbles\peer;
-use function bovigo\assert\assert;
+use PHPUnit\Framework\TestCase;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\assertEmptyString;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertNull;
@@ -21,7 +20,7 @@ use function bovigo\assert\predicate\equals;
  *
  * @group  peer
  */
-class QueryStringTest extends \PHPUnit_Framework_TestCase
+class QueryStringTest extends TestCase
 {
     /**
      * empty instance to test
@@ -36,10 +35,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     protected $prefilledQueryString;
 
-    /**
-     * set up test environment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->emptyQueryString     = new QueryString();
         $this->prefilledQueryString = new QueryString(
@@ -89,7 +85,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function parsedParametersAreCorrect(string $paramName, $expectedValue)
     {
-        assert(
+        assertThat(
                 $this->prefilledQueryString->param($paramName),
                 equals($expectedValue)
         );
@@ -108,7 +104,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function buildNonEmptQueryStringReturnsString()
     {
-        assert(
+        assertThat(
                 $this->prefilledQueryString->build(),
                 equals('foo.hm=bar&baz[dummy]=blubb&baz[]=more&empty=&set')
         );
@@ -159,7 +155,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function getNonExistingParamReturnsDefaultValue()
     {
-        assert(
+        assertThat(
                 $this->emptyQueryString->param('doesNotExist', 'example'),
                 equals('example')
         );
@@ -170,7 +166,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function getExistingParamReturnsValue()
     {
-        assert($this->prefilledQueryString->param('foo.hm'), equals('bar'));
+        assertThat($this->prefilledQueryString->param('foo.hm'), equals('bar'));
     }
 
     /**
@@ -178,7 +174,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function removeNonExistingParamDoesNothing()
     {
-        assert(
+        assertThat(
                 $this->prefilledQueryString->removeParam('doesNotExist')->build(),
                 equals('foo.hm=bar&baz[dummy]=blubb&baz[]=more&empty=&set')
         );
@@ -189,7 +185,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function removeExistingEmptyParam()
     {
-        assert(
+        assertThat(
                 $this->prefilledQueryString->removeParam('empty')->build(),
                 equals('foo.hm=bar&baz[dummy]=blubb&baz[]=more&set')
         );
@@ -200,7 +196,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function removeExistingNullValueParam()
     {
-        assert(
+        assertThat(
                 $this->prefilledQueryString->removeParam('set')->build(),
                 equals('foo.hm=bar&baz[dummy]=blubb&baz[]=more&empty=')
         );
@@ -211,7 +207,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function removeExistingArrayParam()
     {
-        assert(
+        assertThat(
                 $this->prefilledQueryString->removeParam('baz')->build(),
                 equals('foo.hm=bar&empty=&set')
         );
@@ -233,7 +229,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function allowsToAddObjectWithToStringMethodAsParam()
     {
-        assert(
+        assertThat(
                 $this->emptyQueryString->addParam(
                         'some',
                         new IpAddress('127.0.0.1')
@@ -247,7 +243,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function addNullValueAddsParamNameOnly()
     {
-        assert(
+        assertThat(
                 $this->emptyQueryString->addParam('some', null)->build(),
                 equals('some')
         );
@@ -258,7 +254,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function addEmptyValueAddsParamNameAndEqualsign()
     {
-        assert(
+        assertThat(
                 $this->emptyQueryString->addParam('some', '')->build(),
                 equals('some=')
         );
@@ -269,7 +265,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function addValueAddsParamNameWithValue()
     {
-        assert(
+        assertThat(
                 $this->emptyQueryString->addParam('some', 'bar')->build(),
                 equals('some=bar')
         );
@@ -280,7 +276,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function addArrayAddsParam()
     {
-        assert(
+        assertThat(
                 $this->emptyQueryString->addParam(
                         'some', ['foo' => 'bar', 'baz']
                 )->build(),
@@ -293,7 +289,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function addFalseValueTranslatesFalseTo0()
     {
-        assert(
+        assertThat(
                 $this->emptyQueryString->addParam('some', false)->build(),
                 equals('some=0')
         );
@@ -304,7 +300,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function addTrueValueTranslatesFalseTo1()
     {
-        assert(
+        assertThat(
                 $this->emptyQueryString->addParam('some', true)->build(),
                 equals('some=1')
         );
@@ -316,7 +312,7 @@ class QueryStringTest extends \PHPUnit_Framework_TestCase
      */
     public function canBeCastedToString()
     {
-        assert(
+        assertThat(
                 (string) $this->prefilledQueryString,
                 equals('foo.hm=bar&baz[dummy]=blubb&baz[]=more&empty=&set')
         );

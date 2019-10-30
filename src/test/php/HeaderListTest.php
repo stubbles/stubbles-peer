@@ -5,11 +5,10 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles\peer
  */
 namespace stubbles\peer;
-use function bovigo\assert\assert;
+use PHPUnit\Framework\TestCase;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertNull;
 use function bovigo\assert\assertTrue;
@@ -21,7 +20,7 @@ use function bovigo\assert\predicate\isOfSize;
  *
  * @group  peer
  */
-class HeaderListTest extends \PHPUnit_Framework_TestCase
+class HeaderListTest extends TestCase
 {
     /**
      * instance to test
@@ -30,10 +29,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
      */
     protected $headerList;
 
-    /**
-     * set up test environment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->headerList = headers();
     }
@@ -44,7 +40,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
      */
     public function hasNoHeadersByDefault()
     {
-        assert($this->headerList, isOfSize(0));
+        assertThat($this->headerList, isOfSize(0));
     }
 
     /**
@@ -64,7 +60,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
     public function initialSizeEqualsAmountOfGivenHeaders()
     {
         $headerList = headers(['Binford' => 6100]);
-        assert($headerList, isOfSize(1));
+        assertThat($headerList, isOfSize(1));
     }
 
     /**
@@ -74,7 +70,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
     public function returnsValeOfGivenHeader()
     {
         $headerList = headers(['Binford' => 6100]);
-        assert($headerList->get('Binford'), equals('6100'));
+        assertThat($headerList->get('Binford'), equals('6100'));
     }
 
     /**
@@ -82,7 +78,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
      */
     public function addingHeaderIncreasesSize()
     {
-        assert($this->headerList->put('Binford', 6100), isOfSize(1));
+        assertThat($this->headerList->put('Binford', 6100), isOfSize(1));
     }
 
     /**
@@ -101,7 +97,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsValueOfAddedHeader()
     {
-        assert(
+        assertThat(
                 $this->headerList->put('Binford', 6100)
                         ->get('Binford'),
                 equals('6100')
@@ -117,9 +113,9 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
     {
         assertTrue($headerList->containsKey('Binford'));
         assertTrue($headerList->containsKey('X-Power'));
-        assert($headerList, isOfSize(2));
-        assert($headerList->get('Binford'), equals('6100'));
-        assert($headerList->get('X-Power'), equals('More power!'));
+        assertThat($headerList, isOfSize(2));
+        assertThat($headerList->get('Binford'), equals('6100'));
+        assertThat($headerList->get('X-Power'), equals('More power!'));
     }
 
     /**
@@ -138,14 +134,14 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
     {
         $headerList = parseHeaders("Binford: 6100\r\nX-Powered-By: Servlet 2.4; JBoss-4.2.2.GA (build: SVNTag=JBoss_4_2_2_GA date=200710231031)/Tomcat-5.5\r\nContent-Type: text/html\r\n");
         assertTrue($headerList->containsKey('Binford'));
-        assert($headerList->get('Binford'), equals('6100'));
+        assertThat($headerList->get('Binford'), equals('6100'));
         assertTrue($headerList->containsKey('X-Powered-By'));
-        assert(
+        assertThat(
                 $headerList->get('X-Powered-By'),
                 equals('Servlet 2.4; JBoss-4.2.2.GA (build: SVNTag=JBoss_4_2_2_GA date=200710231031)/Tomcat-5.5')
         );
         assertTrue($headerList->containsKey('Content-Type'));
-        assert($headerList->get('Content-Type'), equals('text/html'));
+        assertThat($headerList->get('Content-Type'), equals('text/html'));
     }
 
     /**
@@ -248,7 +244,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
                 $this->headerList->putUserAgent('Binford 6100')
                         ->containsKey('User-Agent')
         );
-        assert($this->headerList->get('User-Agent'), equals('Binford 6100'));
+        assertThat($this->headerList->get('User-Agent'), equals('Binford 6100'));
     }
 
 
@@ -261,7 +257,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
                 $this->headerList->putReferer('http://example.com/')
                         ->containsKey('Referer')
         );
-        assert(
+        assertThat(
                 $this->headerList->get('Referer'),
                 equals('http://example.com/')
         );
@@ -277,7 +273,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
                 $this->headerList->putCookie(['testcookie1' => 'testvalue1 %&'])
                         ->containsKey('Cookie')
         );
-        assert(
+        assertThat(
                 $this->headerList->get('Cookie'),
                 equals('testcookie1=' . urlencode('testvalue1 %&') . ';')
         );
@@ -293,7 +289,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
                 $this->headerList->putAuthorization('user', 'pass')
                         ->containsKey('Authorization')
         );
-        assert(
+        assertThat(
                 $this->headerList->get('Authorization'),
                 equals('BASIC ' . base64_encode('user:pass'))
         );
@@ -322,7 +318,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
     {
         $time = time();
         assertTrue($this->headerList->putDate($time)->containsKey('Date'));
-        assert(
+        assertThat(
                 $this->headerList->get('Date'),
                 equals(gmdate('D, d M Y H:i:s', $time) . ' GMT')
         );
@@ -334,7 +330,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
     public function enablePower()
     {
         assertTrue($this->headerList->enablePower()->containsKey('X-Binford'));
-        assert($this->headerList->get('X-Binford'), equals('More power!'));
+        assertThat($this->headerList->get('X-Binford'), equals('More power!'));
     }
 
     /**
@@ -358,7 +354,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsDefaultValueForNonExistingHeader()
     {
-        assert($this->headerList->get('foo', 'bar'), equals('bar'));
+        assertThat($this->headerList->get('foo', 'bar'), equals('bar'));
     }
 
     /**
@@ -366,7 +362,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsAddedValueForExistingHeader()
     {
-        assert($this->headerList->put('foo', 'baz')->get('foo'), equals('baz'));
+        assertThat($this->headerList->put('foo', 'baz')->get('foo'), equals('baz'));
     }
 
     /**
@@ -374,7 +370,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsAddedValueForExistingHeaderWhenDefaultSupplied()
     {
-        assert(
+        assertThat(
                 $this->headerList->put('foo', 'baz')->get('foo', 'bar'),
                 equals('baz')
         );
@@ -385,7 +381,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
      */
     public function clearRemovesAllHeaders()
     {
-        assert(
+        assertThat(
                 $this->headerList->putUserAgent('Binford 6100')
                         ->putReferer('Home Improvement')
                         ->putCookie(['testcookie1' => 'testvalue1 %&'])
@@ -407,7 +403,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
             $counter++;
         }
 
-        assert($counter, equals(0));
+        assertThat($counter, equals(0));
     }
 
     /**
@@ -422,7 +418,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
             $counter++;
         }
 
-        assert($counter, equals(2));
+        assertThat($counter, equals(2));
     }
 
     /**
@@ -432,7 +428,7 @@ class HeaderListTest extends \PHPUnit_Framework_TestCase
     public function headerListCanBeCastedToString()
     {
         $headers = "Binford: 6100\r\nX-Power: More power!";
-        assert(
+        assertThat(
                 (string) parseHeaders($headers),
                 equals($headers)
         );

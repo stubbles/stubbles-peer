@@ -5,10 +5,9 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles\peer
  */
 namespace stubbles\peer;
+use PHPUnit\Framework\TestCase;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
 /**
@@ -18,7 +17,7 @@ use function bovigo\assert\assertTrue;
  * @group  mail
  * @since  7.1.0
  */
-class IsMailAddressTest extends \PHPUnit_Framework_TestCase
+class IsMailAddressTest extends TestCase
 {
     public function validValues(): array
     {

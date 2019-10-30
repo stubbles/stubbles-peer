@@ -5,12 +5,11 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles\peer
  */
 namespace stubbles\peer\http;
+use PHPUnit\Framework\TestCase;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
 use function bovigo\assert\expect;
@@ -23,7 +22,7 @@ use function bovigo\assert\predicate\isNotOfSize;
  * @group  peer
  * @group  peer_http
  */
-class HttpTest extends \PHPUnit_Framework_TestCase
+class HttpTest extends TestCase
 {
     public function statusCodeClassTuples(): array
     {
@@ -93,7 +92,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function detectCorrectStatusClass(int $statusCode, string $statusClass)
     {
-        assert(Http::statusClassFor($statusCode), equals($statusClass));
+        assertThat(Http::statusClassFor($statusCode), equals($statusClass));
     }
 
     /**
@@ -101,7 +100,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsListOfStatusCodes()
     {
-        assert(Http::statusCodes(), isNotOfSize(0));
+        assertThat(Http::statusCodes(), isNotOfSize(0));
     }
 
     public function statusCodeReasonPhraseTuples(): array
@@ -122,7 +121,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function returnsCorrectReasonPhrase(int $statusCode, string $reasonPhrase)
     {
-        assert(Http::reasonPhraseFor($statusCode), equals($reasonPhrase));
+        assertThat(Http::reasonPhraseFor($statusCode), equals($reasonPhrase));
     }
 
     /**
@@ -140,7 +139,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function addsLineEnding()
     {
-        assert(Http::line('foo'), equals('foo' . Http::END_OF_LINE));
+        assertThat(Http::line('foo'), equals('foo' . Http::END_OF_LINE));
     }
 
     /**
@@ -148,7 +147,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function emptyLineReturnsLineEndingOnly()
     {
-        assert(Http::emptyLine(), equals(Http::END_OF_LINE));
+        assertThat(Http::emptyLine(), equals(Http::END_OF_LINE));
     }
 
     /**
@@ -157,7 +156,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function linesConvertsAllLines()
     {
-        assert(
+        assertThat(
                 Http::lines(
                             'HEAD /foo/resource HTTP/1.1',
                             'Host: example.com',

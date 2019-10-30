@@ -5,17 +5,16 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles\peer
  */
 namespace stubbles\peer\http;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\TestCase;
 use stubbles\peer\Stream;
 use stubbles\peer\http\HttpConnection;
 use stubbles\peer\http\HttpUri;
 use stubbles\peer\http\HttpResponse;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isInstanceOf;
 /**
@@ -24,7 +23,7 @@ use function bovigo\assert\predicate\isInstanceOf;
  * @group  peer
  * @group  peer_http
  */
-class HttpConnectionTest extends \PHPUnit_Framework_TestCase
+class HttpConnectionTest extends TestCase
 {
     /**
      * instance to test
@@ -37,16 +36,13 @@ class HttpConnectionTest extends \PHPUnit_Framework_TestCase
      */
     private $memory;
 
-    /**
-     * set up test environment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->memory = '';
-        $socket       = NewInstance::stub(Stream::class)->mapCalls([
+        $socket       = NewInstance::stub(Stream::class)->returns([
                 'write' => function(string $line) { $this->memory .= $line; return strlen($line); }
         ]);
-        $httpUri      = NewInstance::stub(HttpUri::class)->mapCalls([
+        $httpUri      = NewInstance::stub(HttpUri::class)->returns([
                 'openSocket'     => $socket,
                 'path'           => '/foo/resource',
                 'hostname'       => 'example.com',
@@ -62,7 +58,7 @@ class HttpConnectionTest extends \PHPUnit_Framework_TestCase
      */
     public function getReturnsHttpResponse()
     {
-        assert(
+        assertThat(
                 $this->httpConnection->timeout(2)
                         ->asUserAgent('Stubbles HTTP Client')
                         ->referedFrom('http://example.com/')
@@ -86,7 +82,7 @@ class HttpConnectionTest extends \PHPUnit_Framework_TestCase
                 ->authorizedAs('user', 'pass')
                 ->usingHeader('X-Binford', 6100)
                 ->get();
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'GET /foo/resource?foo=bar HTTP/1.1',
@@ -106,7 +102,7 @@ class HttpConnectionTest extends \PHPUnit_Framework_TestCase
      */
     public function headReturnsHttpResponse()
     {
-        assert(
+        assertThat(
                 $this->httpConnection->timeout(2)
                             ->asUserAgent('Stubbles HTTP Client')
                             ->referedFrom('http://example.com/')
@@ -130,7 +126,7 @@ class HttpConnectionTest extends \PHPUnit_Framework_TestCase
                     ->authorizedAs('user', 'pass')
                     ->usingHeader('X-Binford', 6100)
                     ->head();
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'HEAD /foo/resource?foo=bar HTTP/1.1',
@@ -151,7 +147,7 @@ class HttpConnectionTest extends \PHPUnit_Framework_TestCase
      */
     public function postReturnsHttpResponse()
     {
-        assert(
+        assertThat(
                 $this->httpConnection->timeout(2)
                         ->asUserAgent('Stubbles HTTP Client')
                         ->referedFrom('http://example.com/')
@@ -175,7 +171,7 @@ class HttpConnectionTest extends \PHPUnit_Framework_TestCase
                 ->authorizedAs('user', 'pass')
                 ->usingHeader('X-Binford', 6100)
                 ->post('foobar');
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'POST /foo/resource HTTP/1.1',
@@ -204,7 +200,7 @@ class HttpConnectionTest extends \PHPUnit_Framework_TestCase
                 ->authorizedAs('user', 'pass')
                 ->usingHeader('X-Binford', 6100)
                 ->post(['foo' => 'bar', 'ba z' => 'dum my']);
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'POST /foo/resource HTTP/1.1',
@@ -228,7 +224,7 @@ class HttpConnectionTest extends \PHPUnit_Framework_TestCase
      */
     public function putReturnsHttpResponse()
     {
-        assert(
+        assertThat(
                 $this->httpConnection->timeout(2)
                         ->asUserAgent('Stubbles HTTP Client')
                         ->referedFrom('http://example.com/')
@@ -253,7 +249,7 @@ class HttpConnectionTest extends \PHPUnit_Framework_TestCase
                 ->authorizedAs('user', 'pass')
                 ->usingHeader('X-Binford', 6100)
                 ->put('foobar');
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'PUT /foo/resource HTTP/1.1',
@@ -276,7 +272,7 @@ class HttpConnectionTest extends \PHPUnit_Framework_TestCase
      */
     public function deleteReturnsHttpResponse()
     {
-        assert(
+        assertThat(
                 $this->httpConnection->timeout(2)
                         ->asUserAgent('Stubbles HTTP Client')
                         ->referedFrom('http://example.com/')
@@ -301,7 +297,7 @@ class HttpConnectionTest extends \PHPUnit_Framework_TestCase
                 ->authorizedAs('user', 'pass')
                 ->usingHeader('X-Binford', 6100)
                 ->delete();
-        assert(
+        assertThat(
                 $this->memory,
                 equals(Http::lines(
                         'DELETE /foo/resource HTTP/1.1',
@@ -322,7 +318,7 @@ class HttpConnectionTest extends \PHPUnit_Framework_TestCase
      */
     public function functionShortcut()
     {
-        assert(
+        assertThat(
                 \stubbles\peer\http('http://example.net/'),
                 isInstanceOf(HttpConnection::class)
         );

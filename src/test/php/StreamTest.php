@@ -5,13 +5,12 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles\peer
  */
 namespace stubbles\peer;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-use function bovigo\assert\assert;
+use function bovigo\assert\assertThat;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
 use function bovigo\assert\expect;
@@ -22,7 +21,7 @@ use function bovigo\assert\predicate\equals;
  * @group  peer
  * @since  6.0.0
  */
-class StreamTest extends \PHPUnit_Framework_TestCase
+class StreamTest extends TestCase
 {
     /**
      * @type  org\bovigo\vfs\vfsStreamFile
@@ -37,10 +36,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
      */
     private $stream;
 
-    /**
-     * set up test environment
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $root = vfsStream::setup();
         $this->file = vfsStream::newFile('foo.txt')
@@ -64,7 +60,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
      */
     public function readReturnsDataOfFirstLine()
     {
-        assert($this->stream->read(), equals("bar\n"));
+        assertThat($this->stream->read(), equals("bar\n"));
     }
 
     /**
@@ -72,7 +68,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
      */
     public function readLineReturnsTrimmedDataOfFirstLine()
     {
-        assert($this->stream->readLine(), equals('bar'));
+        assertThat($this->stream->readLine(), equals('bar'));
     }
 
     /**
@@ -80,7 +76,7 @@ class StreamTest extends \PHPUnit_Framework_TestCase
      */
     public function readBinaryReturnsData()
     {
-        assert($this->stream->readBinary(), equals("bar\nbaz"));
+        assertThat($this->stream->readBinary(), equals("bar\nbaz"));
     }
 
     /**
@@ -88,8 +84,8 @@ class StreamTest extends \PHPUnit_Framework_TestCase
      */
     public function writesToResource()
     {
-        assert($this->stream->write('yoyoyoyo'), equals(8));
-        assert($this->file->getContent(), equals('yoyoyoyo'));
+        assertThat($this->stream->write('yoyoyoyo'), equals(8));
+        assertThat($this->file->getContent(), equals('yoyoyoyo'));
     }
 
     /**

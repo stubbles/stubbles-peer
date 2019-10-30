@@ -5,16 +5,15 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles\peer
  */
 namespace stubbles\peer\http;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 use stubbles\peer\ProtocolViolation;
 use stubbles\peer\Stream;
 
 use function bovigo\assert\{
-    assert,
+    assertThat,
     assertEmpty,
     assertNull,
     expect,
@@ -26,7 +25,7 @@ use function bovigo\assert\{
  * @group  peer
  * @group  peer_http
  */
-class HttpResponseTest extends \PHPUnit_Framework_TestCase
+class HttpResponseTest extends TestCase
 {
     /**
      * creates instance to test
@@ -58,10 +57,10 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
                 "bar\r\n",
                 dechex(0)
         ));
-        assert($httpResponse->body(), equals('foobar'));
+        assertThat($httpResponse->body(), equals('foobar'));
         $headerList = $httpResponse->headers();
-        assert($headerList->get('Host'), equals('localhost'));
-        assert($headerList->get('Content-Length'), equals(6));
+        assertThat($headerList->get('Host'), equals('localhost'));
+        assertThat($headerList->get('Content-Length'), equals(6));
 
     }
 
@@ -77,8 +76,8 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
                 'foobar'
         ));
         $headerList = $httpResponse->headers();
-        assert($headerList->get('Host'), equals('localhost'));
-        assert($httpResponse->body(), equals('foobar'));
+        assertThat($headerList->get('Host'), equals('localhost'));
+        assertThat($httpResponse->body(), equals('foobar'));
     }
 
     /**
@@ -94,9 +93,9 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
                 'foobar'
         ));
         $headerList = $httpResponse->headers();
-        assert($headerList->get('Host'), equals('localhost'));
-        assert($headerList->get('Content-Length'), equals(6));
-        assert($httpResponse->body(), equals('foobar'));
+        assertThat($headerList->get('Host'), equals('localhost'));
+        assertThat($headerList->get('Content-Length'), equals(6));
+        assertThat($httpResponse->body(), equals('foobar'));
     }
 
     /**
@@ -111,8 +110,8 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
                 '',
                 'foobar'
         ));
-        assert($httpResponse->body(), equals('foobar'));
-        assert($httpResponse->body(), equals('foobar'));
+        assertThat($httpResponse->body(), equals('foobar'));
+        assertThat($httpResponse->body(), equals('foobar'));
     }
 
     /**
@@ -131,13 +130,13 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
                 . 'foobar'
         );
         $headerList = $httpResponse->headers();
-        assert($headerList->get('Host'), equals('localhost'));
-        assert($httpResponse->statusLine(), equals('HTTP/1.0 200 OK'));
-        assert($httpResponse->httpVersion(), equals(new HttpVersion(1, 0)));
-        assert($httpResponse->statusCode(), equals(200));
-        assert($httpResponse->reasonPhrase(), equals('OK'));
-        assert($httpResponse->statusCodeClass(), equals(Http::STATUS_CLASS_SUCCESS));
-        assert($httpResponse->body(), equals('foobar'));
+        assertThat($headerList->get('Host'), equals('localhost'));
+        assertThat($httpResponse->statusLine(), equals('HTTP/1.0 200 OK'));
+        assertThat($httpResponse->httpVersion(), equals(new HttpVersion(1, 0)));
+        assertThat($httpResponse->statusCode(), equals(200));
+        assertThat($httpResponse->reasonPhrase(), equals('OK'));
+        assertThat($httpResponse->statusCodeClass(), equals(Http::STATUS_CLASS_SUCCESS));
+        assertThat($httpResponse->body(), equals('foobar'));
     }
 
     /**
@@ -156,13 +155,13 @@ class HttpResponseTest extends \PHPUnit_Framework_TestCase
                 . 'foobar'
         );
         $headerList = $httpResponse->headers();
-        assert($headerList->get('Host'), equals('localhost'));
-        assert($httpResponse->statusLine(), equals('HTTP/1.1 404 Not Found'));
-        assert($httpResponse->httpVersion(), equals(new HttpVersion(1, 1)));
-        assert($httpResponse->statusCode(), equals(404));
-        assert($httpResponse->reasonPhrase(), equals('Not Found'));
-        assert($httpResponse->statusCodeClass(), equals(Http::STATUS_CLASS_ERROR_CLIENT));
-        assert($httpResponse->body(), equals('foobar'));
+        assertThat($headerList->get('Host'), equals('localhost'));
+        assertThat($httpResponse->statusLine(), equals('HTTP/1.1 404 Not Found'));
+        assertThat($httpResponse->httpVersion(), equals(new HttpVersion(1, 1)));
+        assertThat($httpResponse->statusCode(), equals(404));
+        assertThat($httpResponse->reasonPhrase(), equals('Not Found'));
+        assertThat($httpResponse->statusCodeClass(), equals(Http::STATUS_CLASS_ERROR_CLIENT));
+        assertThat($httpResponse->body(), equals('foobar'));
     }
 
     /**

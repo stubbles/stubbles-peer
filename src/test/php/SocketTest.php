@@ -5,14 +5,13 @@ declare(strict_types=1);
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * @package  stubbles\peer
  */
 namespace stubbles\peer;
 use bovigo\callmap\NewCallable;
+use PHPUnit\Framework\TestCase;
 
 use function bovigo\assert\{
-    assert,
+    assertThat,
     assertFalse,
     assertTrue,
     expect,
@@ -24,7 +23,7 @@ use function bovigo\assert\{
  * @group  peer
  * @group  socket
  */
-class SocketTest extends \PHPUnit_Framework_TestCase
+class SocketTest extends TestCase
 {
     /**
      * @test
@@ -75,9 +74,9 @@ class SocketTest extends \PHPUnit_Framework_TestCase
     public function connectReturnsStream()
     {
         $socket = createSocket('localhost', 80)->openWith(
-                NewCallable::of('fsockopen')->mapCall(fopen(__FILE__, 'rb'))
+                NewCallable::of('fsockopen')->returns(fopen(__FILE__, 'rb'))
         );
-        assert(
+        assertThat(
                 $socket->connect(),
                 isInstanceOf(Stream::class)
         );
@@ -90,7 +89,7 @@ class SocketTest extends \PHPUnit_Framework_TestCase
     public function connectThrowsConnectionFailureOnFailure()
     {
         $socket = createSocket('localhost', 80)->openWith(
-                NewCallable::of('fsockopen')->mapCall(false)
+                NewCallable::of('fsockopen')->returns(false)
         );
         expect(function() use ($socket) { $socket->connect(); })
                 ->throws(ConnectionFailure::class);

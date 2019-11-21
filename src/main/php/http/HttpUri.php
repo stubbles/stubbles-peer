@@ -42,7 +42,7 @@ abstract class HttpUri extends Uri
                 $scheme
                 . '://'
                 . $host
-                . (null === $port ? '' : ':' . $port)
+                . (null === $port ? '' : ':' . ((string) $port))
                 . $path
                 . ((null !== $queryString) ? (substr($queryString, 0, 1) !== '?' ? '?' . $queryString : $queryString) : $queryString)
         );

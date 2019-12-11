@@ -22,7 +22,7 @@ class ValueTest extends TestCase
     /**
      * @test
      */
-    public function valueCanBeValidatedAsHttpUri()
+    public function valueCanBeValidatedAsHttpUri(): void
     {
         assertTrue(value('http://example.net/')->isHttpUri());
     }
@@ -30,7 +30,7 @@ class ValueTest extends TestCase
     /**
      * @test
      */
-    public function valueCanBeValidatedAsExistingHttpUri()
+    public function valueCanBeValidatedAsExistingHttpUri(): void
     {
         assertTrue(value('http://localhost/')->isExistingHttpUri());
     }

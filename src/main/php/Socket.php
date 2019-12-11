@@ -17,23 +17,23 @@ class Socket
     /**
      * host to open socket to
      *
-     * @type  string
+     * @var  string
      */
     private $host;
     /**
      * port to use for opening the socket
      *
-     * @type  int
+     * @var  int
      */
     private $port;
     /**
      * prefix for host, e.g. ssl://
      *
-     * @type  string
+     * @var  string|null
      */
     private $prefix;
     /**
-     * @type  callable
+     * @var  callable
      */
     private $fsockopen = '\fsockopen';
 

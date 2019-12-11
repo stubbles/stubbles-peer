@@ -18,45 +18,45 @@ class HttpResponse
     /**
      * the socket we read the response from
      *
-     * @type  \stubbles\peer\Stream
+     * @var  \stubbles\peer\Stream
      */
     protected $socket;
     /**
      * status line of response
      *
-     * @type  string
+     * @var  string
      */
-    protected $statusLine   = null;
+    protected $statusLine;
     /**
      * http version of response
      *
-     * @type  \stubbles\peer\http\HttpVersion
+     * @var  \stubbles\peer\http\HttpVersion
      */
-    protected $version      = null;
+    protected $version;
     /**
      * status code of response
      *
-     * @type  int
+     * @var  int
      */
-    protected $statusCode   = null;
+    protected $statusCode;
     /**
      * status code reason phrase of response
      *
-     * @type  string
+     * @var  string
      */
-    protected $reasonPhrase = null;
+    protected $reasonPhrase;
     /**
      * contains headers of response
      *
-     * @type  \stubbles\peer\HeaderList
+     * @var  \stubbles\peer\HeaderList
      */
     protected $headers;
     /**
      * contains body of response
      *
-     * @type  string
+     * @var  string
      */
-    protected $body         = null;
+    protected $body;
 
     /**
      * constructor
@@ -194,7 +194,7 @@ class HttpResponse
      * @param   string  $statusLine  first line of response
      * @throws  ProtocolViolation  when status line can not be parsed
      */
-    private function parseStatusLine(string $statusLine)
+    private function parseStatusLine(string $statusLine): void
     {
         $matches = [];
         if (preg_match("=^(HTTP/\d+\.\d+) (\d{3}) ([^\r]*)=", $statusLine, $matches) == false) {

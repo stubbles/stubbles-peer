@@ -20,7 +20,7 @@ class ValueTest extends TestCase
     /**
      * @test
      */
-    public function valueCanBeValidatedAsIpAddress()
+    public function valueCanBeValidatedAsIpAddress(): void
     {
         assertTrue(value('127.0.0.1')->isIpAddress());
     }
@@ -28,7 +28,7 @@ class ValueTest extends TestCase
     /**
      * @test
      */
-    public function valueCanBeValidatedAsIpV4Address()
+    public function valueCanBeValidatedAsIpV4Address(): void
     {
         assertTrue(value('127.0.0.1')->isIpV4Address());
     }
@@ -36,7 +36,7 @@ class ValueTest extends TestCase
     /**
      * @test
      */
-    public function valueCanBeValidatedAsIpV6Address()
+    public function valueCanBeValidatedAsIpV6Address(): void
     {
         assertTrue(
                 value('febc:a574:382b:23c1:aa49:4592:4efe:9982')->isIpV6Address()
@@ -46,7 +46,7 @@ class ValueTest extends TestCase
     /**
      * @test
      */
-    public function valueCanBeValidatesAsMailAddress()
+    public function valueCanBeValidatesAsMailAddress(): void
     {
         assertTrue(value('example@example.org')->isMailAddress());
     }

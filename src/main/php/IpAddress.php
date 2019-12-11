@@ -25,13 +25,13 @@ class IpAddress
     /**
      * actual ip address
      *
-     * @type  string
+     * @var  string
      */
     private $ip;
     /**
      * stores whether it is a IPv4 or IPv6 address
      *
-     * @type  string
+     * @var  string
      */
     private $type;
 
@@ -93,20 +93,25 @@ class IpAddress
      */
     public function __construct($ip)
     {
-        if (ctype_digit($ip)) {
-            $this->ip = long2ip((int) $ip);
-        } else {
-            $this->ip = $ip;
+        if (\ctype_digit($ip)) {
+            $ip = \long2ip((int) $ip);
+        } elseif (!\is_string($ip)) {
+            throw new \InvalidArgumentException(
+                'Given ip address ' . (string) $ip
+                . ' does not denote a valid IP address'
+            );
+
         }
 
+        $this->ip = $ip;
         if (is_string($this->ip) && self::isValidV4($this->ip)) {
             $this->type = self::V4;
         } elseif (is_string($this->ip) && self::isValidV6($this->ip)) {
             $this->type = self::V6;
         } else {
             throw new \InvalidArgumentException(
-                    'Given ip address ' . $this->ip
-                    . ' does not denote a valid IP address'
+              'Given ip address ' . (string) $ip
+              . ' does not denote a valid IP address'
             );
         }
     }

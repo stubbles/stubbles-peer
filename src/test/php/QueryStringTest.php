@@ -25,13 +25,13 @@ class QueryStringTest extends TestCase
     /**
      * empty instance to test
      *
-     * @type  QueryString
+     * @var  QueryString
      */
     protected $emptyQueryString;
     /**
      * prefilled instance to test
      *
-     * @type  QueryString
+     * @var  QueryString
      */
     protected $prefilledQueryString;
 
@@ -46,7 +46,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function constructorThrowsIllegalArgumentExceptionIfQueryStringContainsErrors()
+    public function constructorThrowsIllegalArgumentExceptionIfQueryStringContainsErrors(): void
     {
         expect(function() {
                 new QueryString('foo.hm=bar&baz[dummy]=blubb&baz[=more&empty=&set');
@@ -56,7 +56,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function emptyHasNoParametersByDefault()
+    public function emptyHasNoParametersByDefault(): void
     {
         assertFalse($this->emptyQueryString->hasParams());
     }
@@ -64,11 +64,14 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function prefilledHasParametersFromInitialQueryString()
+    public function prefilledHasParametersFromInitialQueryString(): void
     {
         assertTrue($this->prefilledQueryString->hasParams());
     }
 
+    /**
+     * @return  array<array<mixed>>
+     */
     public function parsedParameters(): array
     {
         return [
@@ -80,10 +83,12 @@ class QueryStringTest extends TestCase
     }
 
     /**
+     * @param  string  $paramName
+     * @param  mixed   $expectedValue
      * @test
      * @dataProvider  parsedParameters
      */
-    public function parsedParametersAreCorrect(string $paramName, $expectedValue)
+    public function parsedParametersAreCorrect(string $paramName, $expectedValue): void
     {
         assertThat(
                 $this->prefilledQueryString->param($paramName),
@@ -94,7 +99,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function buildEmptQueryStringReturnsEmptyString()
+    public function buildEmptQueryStringReturnsEmptyString(): void
     {
         assertEmptyString($this->emptyQueryString->build());
     }
@@ -102,7 +107,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function buildNonEmptQueryStringReturnsString()
+    public function buildNonEmptQueryStringReturnsString(): void
     {
         assertThat(
                 $this->prefilledQueryString->build(),
@@ -113,7 +118,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function checkForNonExistingParamReturnsFalse()
+    public function checkForNonExistingParamReturnsFalse(): void
     {
         assertFalse($this->emptyQueryString->containsParam('doesNotExist'));
     }
@@ -121,7 +126,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function checkForExistingParamReturnsTrue()
+    public function checkForExistingParamReturnsTrue(): void
     {
         assertTrue($this->prefilledQueryString->containsParam('foo.hm'));
     }
@@ -129,7 +134,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function checkForExistingEmptyParamReturnsTrue()
+    public function checkForExistingEmptyParamReturnsTrue(): void
     {
         assertTrue($this->prefilledQueryString->containsParam('empty'));
     }
@@ -137,7 +142,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function checkForExistingNullValueParamReturnsTrue()
+    public function checkForExistingNullValueParamReturnsTrue(): void
     {
         assertTrue($this->prefilledQueryString->containsParam('set'));
     }
@@ -145,7 +150,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function getNonExistingParamReturnsNullByDefault()
+    public function getNonExistingParamReturnsNullByDefault(): void
     {
         assertNull($this->emptyQueryString->param('doesNotExist'));
     }
@@ -153,7 +158,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function getNonExistingParamReturnsDefaultValue()
+    public function getNonExistingParamReturnsDefaultValue(): void
     {
         assertThat(
                 $this->emptyQueryString->param('doesNotExist', 'example'),
@@ -164,7 +169,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function getExistingParamReturnsValue()
+    public function getExistingParamReturnsValue(): void
     {
         assertThat($this->prefilledQueryString->param('foo.hm'), equals('bar'));
     }
@@ -172,7 +177,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function removeNonExistingParamDoesNothing()
+    public function removeNonExistingParamDoesNothing(): void
     {
         assertThat(
                 $this->prefilledQueryString->removeParam('doesNotExist')->build(),
@@ -183,7 +188,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function removeExistingEmptyParam()
+    public function removeExistingEmptyParam(): void
     {
         assertThat(
                 $this->prefilledQueryString->removeParam('empty')->build(),
@@ -194,7 +199,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function removeExistingNullValueParam()
+    public function removeExistingNullValueParam(): void
     {
         assertThat(
                 $this->prefilledQueryString->removeParam('set')->build(),
@@ -205,7 +210,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function removeExistingArrayParam()
+    public function removeExistingArrayParam(): void
     {
         assertThat(
                 $this->prefilledQueryString->removeParam('baz')->build(),
@@ -216,7 +221,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function addIllegalParamThrowsIllegalArgumentException()
+    public function addIllegalParamThrowsIllegalArgumentException(): void
     {
         expect(function() {
                 $this->emptyQueryString->addParam('some', new \stdClass());
@@ -227,7 +232,7 @@ class QueryStringTest extends TestCase
      * @test
      * @since  5.3.1
      */
-    public function allowsToAddObjectWithToStringMethodAsParam()
+    public function allowsToAddObjectWithToStringMethodAsParam(): void
     {
         assertThat(
                 $this->emptyQueryString->addParam(
@@ -241,7 +246,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function addNullValueAddsParamNameOnly()
+    public function addNullValueAddsParamNameOnly(): void
     {
         assertThat(
                 $this->emptyQueryString->addParam('some', null)->build(),
@@ -252,7 +257,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function addEmptyValueAddsParamNameAndEqualsign()
+    public function addEmptyValueAddsParamNameAndEqualsign(): void
     {
         assertThat(
                 $this->emptyQueryString->addParam('some', '')->build(),
@@ -263,7 +268,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function addValueAddsParamNameWithValue()
+    public function addValueAddsParamNameWithValue(): void
     {
         assertThat(
                 $this->emptyQueryString->addParam('some', 'bar')->build(),
@@ -274,7 +279,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function addArrayAddsParam()
+    public function addArrayAddsParam(): void
     {
         assertThat(
                 $this->emptyQueryString->addParam(
@@ -287,7 +292,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function addFalseValueTranslatesFalseTo0()
+    public function addFalseValueTranslatesFalseTo0(): void
     {
         assertThat(
                 $this->emptyQueryString->addParam('some', false)->build(),
@@ -298,7 +303,7 @@ class QueryStringTest extends TestCase
     /**
      * @test
      */
-    public function addTrueValueTranslatesFalseTo1()
+    public function addTrueValueTranslatesFalseTo1(): void
     {
         assertThat(
                 $this->emptyQueryString->addParam('some', true)->build(),
@@ -310,7 +315,7 @@ class QueryStringTest extends TestCase
      * @test
      * @since  7.0.0
      */
-    public function canBeCastedToString()
+    public function canBeCastedToString(): void
     {
         assertThat(
                 (string) $this->prefilledQueryString,

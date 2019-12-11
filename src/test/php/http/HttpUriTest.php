@@ -17,6 +17,7 @@ use function bovigo\assert\{
     assertNull,
     assertTrue,
     expect,
+    fail,
     predicate\equals,
     predicate\isInstanceOf,
     predicate\isNotSameAs,
@@ -34,7 +35,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function canCreateInstanceForSchemeHttp()
+    public function canCreateInstanceForSchemeHttp(): void
     {
         assertThat(
                 HttpUri::fromString('http://example.net/'),
@@ -46,7 +47,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function canCreateInstanceForSchemeHttps()
+    public function canCreateInstanceForSchemeHttps(): void
     {
         assertThat(
                 HttpUri::fromString('https://example.net/'),
@@ -57,15 +58,15 @@ class HttpUriTest extends TestCase
     /**
      * @test
      */
-    public function canNotCreateHttpUriFromInvalidHost()
+    public function canNotCreateHttpUriFromInvalidHost(): void
     {
-        expect(function() {
-                HttpUri::fromString('http://:');
-        })->throws(MalformedUri::class);
+        expect(function() { HttpUri::fromString('http://:'); })
+            ->throws(MalformedUri::class);
     }
 
     /**
-     * @since  8.0.0
+     * @since   8.0.0
+     * @return  array<string[]>
      */
     public function urisWithEmptyHost(): array
     {
@@ -77,7 +78,7 @@ class HttpUriTest extends TestCase
      * @dataProvider  urisWithEmptyHost
      * @since  8.0.0
      */
-    public function canNotCreateHttpUriFromEmptyHost($emptyHost)
+    public function canNotCreateHttpUriFromEmptyHost(string $emptyHost): void
     {
         expect(function() use ($emptyHost) {
                 HttpUri::fromString($emptyHost);
@@ -88,7 +89,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function createInstanceForOtherSchemeThrowsMalformedUri()
+    public function createInstanceForOtherSchemeThrowsMalformedUri(): void
     {
         expect(function() {
                 HttpUri::fromString('invalid://example.net/');
@@ -98,7 +99,7 @@ class HttpUriTest extends TestCase
     /**
      * @test
      */
-    public function createInstanceFromInvalidUriThrowsMalformedUri()
+    public function createInstanceFromInvalidUriThrowsMalformedUri(): void
     {
         expect(function() {
                 HttpUri::fromString('invalid');
@@ -108,7 +109,7 @@ class HttpUriTest extends TestCase
     /**
      * @test
      */
-    public function createInstanceFromEmptyStringThrowsMalformedUri()
+    public function createInstanceFromEmptyStringThrowsMalformedUri(): void
     {
         expect(function() { HttpUri::fromString(''); })
                 ->throws(MalformedUri::class);
@@ -118,7 +119,7 @@ class HttpUriTest extends TestCase
      * @test
      * @since  8.0.0
      */
-    public function createWithSyntacticallyInvalidUriThrowsMalformedUri()
+    public function createWithSyntacticallyInvalidUriThrowsMalformedUri(): void
     {
         expect(function() { HttpUri::fromString('http://fööbär?:'); })
                 ->throws(MalformedUri::class);
@@ -128,7 +129,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function automaticallyAppensSlashAsPathIfNoPathSet()
+    public function automaticallyAppensSlashAsPathIfNoPathSet(): void
     {
         assertThat(HttpUri::fromString('http://example.net')->path(), equals('/'));
     }
@@ -137,7 +138,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function hasDefaultPortIfNoPortGivenInSchemeHttp()
+    public function hasDefaultPortIfNoPortGivenInSchemeHttp(): void
     {
         assertTrue(HttpUri::fromString('http://example.net/')->hasDefaultPort());
     }
@@ -146,7 +147,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function hasDefaultPortIfDefaultPortGivenInSchemeHttp()
+    public function hasDefaultPortIfDefaultPortGivenInSchemeHttp(): void
     {
         assertTrue(
                 HttpUri::fromString('http://example.net:80/')->hasDefaultPort()
@@ -157,7 +158,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function doesNotHaveDefaultPortIfOtherPortGivenInSchemeHttp()
+    public function doesNotHaveDefaultPortIfOtherPortGivenInSchemeHttp(): void
     {
         assertFalse(
                 HttpUri::fromString('http://example.net:8080/')->hasDefaultPort()
@@ -168,7 +169,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function hasDefaultPortIfNoPortGivenInSchemeHttps()
+    public function hasDefaultPortIfNoPortGivenInSchemeHttps(): void
     {
         assertTrue(
                 HttpUri::fromString('https://example.net/')->hasDefaultPort()
@@ -179,7 +180,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function hasDefaultPortIfDefaultPortGivenInSchemeHttps()
+    public function hasDefaultPortIfDefaultPortGivenInSchemeHttps(): void
     {
         assertTrue(
                 HttpUri::fromString('https://example.net:443/')->hasDefaultPort()
@@ -190,7 +191,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function doesNotHaveDefaultPortIfOtherPortGivenInSchemeHttps()
+    public function doesNotHaveDefaultPortIfOtherPortGivenInSchemeHttps(): void
     {
         assertFalse(
                 HttpUri::fromString('https://example.net:8080/')->hasDefaultPort()
@@ -201,7 +202,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function getPortReturnsGivenPort()
+    public function getPortReturnsGivenPort(): void
     {
         assertThat(
                 HttpUri::fromString('http://example.net:8080/')->port(),
@@ -213,7 +214,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function getPortReturns80IfSchemeIsHttp()
+    public function getPortReturns80IfSchemeIsHttp(): void
     {
         assertThat(
                 HttpUri::fromString('http://example.net/')->port(),
@@ -225,7 +226,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function getPortReturns443IfSchemeIsHttp()
+    public function getPortReturns443IfSchemeIsHttp(): void
     {
         assertThat(
                 HttpUri::fromString('https://example.net/')->port(),
@@ -237,7 +238,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function isHttpIfSchemeIsHttp()
+    public function isHttpIfSchemeIsHttp(): void
     {
         assertTrue(HttpUri::fromString('http://example.net/')->isHttp());
     }
@@ -246,7 +247,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function isNotHttpIfSchemeIsHttps()
+    public function isNotHttpIfSchemeIsHttps(): void
     {
         assertFalse(HttpUri::fromString('https://example.net/')->isHttp());
     }
@@ -255,7 +256,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function isHttpsIfSchemeIsHttps()
+    public function isHttpsIfSchemeIsHttps(): void
     {
         assertTrue(HttpUri::fromString('https://example.net/')->isHttps());
     }
@@ -264,7 +265,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function isNotHttpsIfSchemeIsHttp()
+    public function isNotHttpsIfSchemeIsHttp(): void
     {
         assertFalse(HttpUri::fromString('http://example.net/')->isHttps());
     }
@@ -273,7 +274,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function returnsSameInstanceWhenTransposingHttpToHttp()
+    public function returnsSameInstanceWhenTransposingHttpToHttp(): void
     {
         $httpUri = HttpUri::fromString('http://example.net/');
         assertThat($httpUri->toHttp(), isSameAs($httpUri));
@@ -283,7 +284,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function returnsDifferentInstanceWhenTransposingHttpToHttps()
+    public function returnsDifferentInstanceWhenTransposingHttpToHttps(): void
     {
         $httpUri = HttpUri::fromString('http://example.net/');
         assertThat($httpUri->toHttps(), isNotSameAs($httpUri));
@@ -293,7 +294,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function transposingToHttpsLeavesEverythingExceptSchemeAndPort()
+    public function transposingToHttpsLeavesEverythingExceptSchemeAndPort(): void
     {
         assertThat(
                 HttpUri::fromString('http://example.net:8080/foo.php?bar=baz#top')
@@ -307,7 +308,7 @@ class HttpUriTest extends TestCase
      * @since  4.0.2
      * @test
      */
-    public function transposingToHttpDoesNotChangeOriginalPort()
+    public function transposingToHttpDoesNotChangeOriginalPort(): void
     {
         assertThat(
                 HttpUri::fromString('http://example.net:8080/foo.php?bar=baz#top')
@@ -321,7 +322,7 @@ class HttpUriTest extends TestCase
      * @since  4.1.1
      * @test
      */
-    public function transposingToHttpUsesDefaultPortToDefaultIfDefault()
+    public function transposingToHttpUsesDefaultPortToDefaultIfDefault(): void
     {
         assertThat(
                 HttpUri::fromString('https://example.net/foo.php?bar=baz#top')
@@ -335,7 +336,7 @@ class HttpUriTest extends TestCase
      * @test
      * @since  8.0.0
      */
-    public function transposingHttpWithPortToHttpAppliesGivenPort()
+    public function transposingHttpWithPortToHttpAppliesGivenPort(): void
     {
         assertThat(
                 HttpUri::fromString('http://example.net:80/foo.php?bar=baz#top')
@@ -349,7 +350,7 @@ class HttpUriTest extends TestCase
      * @test
      * @since  8.0.0
      */
-    public function transposingHttpWithoutPortToHttpAppliesGivenPort()
+    public function transposingHttpWithoutPortToHttpAppliesGivenPort(): void
     {
         assertThat(
                 HttpUri::fromString('http://example.net/foo.php?bar=baz#top')
@@ -363,7 +364,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function returnsSameInstanceWhenTransposingHttpsToHttps()
+    public function returnsSameInstanceWhenTransposingHttpsToHttps(): void
     {
         $httpUri = HttpUri::fromString('https://example.net/');
         assertThat($httpUri->toHttps(), isSameAs($httpUri));
@@ -373,7 +374,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function returnsDifferentInstanceWhenTransposingHttpsToHttp()
+    public function returnsDifferentInstanceWhenTransposingHttpsToHttp(): void
     {
         $httpUri = HttpUri::fromString('https://example.net/');
         assertThat($httpUri->toHttp(), isNotSameAs($httpUri));
@@ -383,7 +384,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function transposingToHttpLeavesEverythingExceptSchemeAndPort()
+    public function transposingToHttpLeavesEverythingExceptSchemeAndPort(): void
     {
         assertThat(
                 HttpUri::fromString('https://example.net:8080/foo.php?bar=baz#top')
@@ -397,7 +398,7 @@ class HttpUriTest extends TestCase
      * @since  4.0.2
      * @test
      */
-    public function transposingToHttpsWithDifferentPort()
+    public function transposingToHttpsWithDifferentPort(): void
     {
         assertThat(
                 HttpUri::fromString('https://example.net:8080/foo.php?bar=baz#top')
@@ -411,7 +412,7 @@ class HttpUriTest extends TestCase
      * @since  4.1.1
      * @test
      */
-    public function transposingToHttpsUsesDefaultPortIfIsDefaultPort()
+    public function transposingToHttpsUsesDefaultPortIfIsDefaultPort(): void
     {
         assertThat(
                 HttpUri::fromString('http://example.net/foo.php?bar=baz#top')
@@ -425,7 +426,7 @@ class HttpUriTest extends TestCase
      * @test
      * @since  8.0.0
      */
-    public function transposingHttpsWithPortToHttpsAppliesGivenPort()
+    public function transposingHttpsWithPortToHttpsAppliesGivenPort(): void
     {
         assertThat(
                 HttpUri::fromString('https://example.net:443/foo.php?bar=baz#top')
@@ -439,7 +440,7 @@ class HttpUriTest extends TestCase
      * @test
      * @since  8.0.0
      */
-    public function transposingHttpsWithoutPortToHttpsAppliesGivenPort()
+    public function transposingHttpsWithoutPortToHttpsAppliesGivenPort(): void
     {
         assertThat(
                 HttpUri::fromString('https://example.net/foo.php?bar=baz#top')
@@ -452,7 +453,7 @@ class HttpUriTest extends TestCase
     /**
      * @test
      */
-    public function connectCreatesHttpConnection()
+    public function connectCreatesHttpConnection(): void
     {
         assertThat(
                 HttpUri::fromString('http://example.net/')->connect(),
@@ -464,7 +465,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function createSocketForHttpDoesNotYieldSocketWithSecureConnection()
+    public function createSocketForHttpDoesNotYieldSocketWithSecureConnection(): void
     {
         assertFalse(
                 HttpUri::fromString('http://example.net/')
@@ -476,7 +477,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function createSocketForHttpsDoesYieldSocketWithSecureConnection()
+    public function createSocketForHttpsDoesYieldSocketWithSecureConnection(): void
     {
         assertTrue(
                 HttpUri::fromString('https://example.net/')
@@ -489,9 +490,14 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function openSocketUsesDefaultTimeout()
+    public function openSocketUsesDefaultTimeout(): void
     {
-        $fsockopen = NewCallable::of('fsockopen')->returns(fopen(__FILE__, 'rb'));
+        $handle = fopen(__FILE__, 'rb');
+        if (false === $handle) {
+            fail('Could not open file to retrieve handle for test');
+        }
+
+        $fsockopen = NewCallable::of('fsockopen')->returns($handle);
         assertThat(
                HttpUri::fromString('http://example.net/')
                       ->openSocket(5, $fsockopen)
@@ -504,7 +510,7 @@ class HttpUriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function openSocketUsesGivenTimeout()
+    public function openSocketUsesGivenTimeout(): void
     {
         $fsockopen = NewCallable::of('fsockopen')->returns(fopen(__FILE__, 'rb'));
         assertThat(
@@ -519,7 +525,7 @@ class HttpUriTest extends TestCase
      * @since  4.0.0
      * @test
      */
-    public function createInstanceWithUserInfoThrowsMalformedUriForDefaultRfc()
+    public function createInstanceWithUserInfoThrowsMalformedUriForDefaultRfc(): void
     {
         expect(function() {
                 HttpUri::fromString('http://user:password@example.net/');
@@ -530,7 +536,7 @@ class HttpUriTest extends TestCase
      * @since  4.0.0
      * @test
      */
-    public function createInstanceWithUserInfoThrowsMalformedUriForRfc7230()
+    public function createInstanceWithUserInfoThrowsMalformedUriForRfc7230(): void
     {
         expect(function() {
                 HttpUri::fromString('http://user:password@example.net/', Http::RFC_7230);
@@ -541,7 +547,7 @@ class HttpUriTest extends TestCase
      * @since  4.0.0
      * @test
      */
-    public function createInstanceWithUserInfoThrowsNoMalformedUriForRfc2616()
+    public function createInstanceWithUserInfoThrowsNoMalformedUriForRfc2616(): void
     {
         $uri = 'http://user:password@example.net/';
         assertThat(
@@ -554,7 +560,7 @@ class HttpUriTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function castFromInstanceReturnsInstance()
+    public function castFromInstanceReturnsInstance(): void
     {
         $uri = HttpUri::fromString('http://example.net/');
         assertThat(HttpUri::castFrom($uri), isSameAs($uri));
@@ -564,7 +570,7 @@ class HttpUriTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function castFromStringeReturnsInstance()
+    public function castFromStringeReturnsInstance(): void
     {
         $uri = HttpUri::fromString('http://example.net/');
         assertThat(HttpUri::castFrom('http://example.net/'), equals($uri));
@@ -574,7 +580,7 @@ class HttpUriTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function castFromOtherThrowsIllegalArgumentException()
+    public function castFromOtherThrowsIllegalArgumentException(): void
     {
         expect(function() {
                 HttpUri::castFrom(new \stdClass());
@@ -590,7 +596,7 @@ class HttpUriTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function createFromPartsWithInvalidSchemeThrowsMalformedUri()
+    public function createFromPartsWithInvalidSchemeThrowsMalformedUri(): void
     {
         expect(function() {
                 HttpUri::fromParts('foo', 'localhost');
@@ -601,7 +607,7 @@ class HttpUriTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function createFromPartsWithDefaultPortAndPathAndNoQueryString()
+    public function createFromPartsWithDefaultPortAndPathAndNoQueryString(): void
     {
         assertThat(HttpUri::fromParts('http', 'localhost'), equals('http://localhost/'));
     }
@@ -610,7 +616,7 @@ class HttpUriTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function createFromAllParts()
+    public function createFromAllParts(): void
     {
         assertThat(
                 HttpUri::fromParts('https', 'localhost', 8080, '/index.php', 'foo=bar'),
@@ -621,7 +627,7 @@ class HttpUriTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function fromPartsReturnsInstanceOfHttpUri()
+    public function fromPartsReturnsInstanceOfHttpUri(): void
     {
         assertThat(
                 HttpUri::fromParts('https', 'localhost', 8080, '/index.php', 'foo=bar'),
@@ -633,7 +639,7 @@ class HttpUriTest extends TestCase
      * @test
      * @since  5.5.0
      */
-    public function withPathExchangesPathCompletely()
+    public function withPathExchangesPathCompletely(): void
     {
         assertThat(
                 HttpUri::fromString('http://example.org/foo')->withPath('/bar'),
@@ -645,12 +651,15 @@ class HttpUriTest extends TestCase
      * @test
      * @since  5.5.0
      */
-    public function withPathReturnsNewInstance()
+    public function withPathReturnsNewInstance(): void
     {
         $uri = HttpUri::fromString('http://example.org/foo');
         assertThat($uri->withPath('/bar'), isNotSameAs($uri));
     }
 
+    /**
+     * @return  array<mixed[]>
+     */
     public function invalidValues(): array
     {
         return [[null],
@@ -664,14 +673,18 @@ class HttpUriTest extends TestCase
     }
 
     /**
+     * @param  mixed  $invalid
      * @test
      * @dataProvider  invalidValues
      */
-    public function invalidValueEvaluatesToFalse($invalid)
+    public function invalidValueEvaluatesToFalse($invalid): void
     {
         assertFalse(HttpUri::isValid($invalid));
     }
 
+    /**
+     * @return  array<mixed[]>
+     */
     public function validValues(): array
     {
         return [
@@ -681,14 +694,18 @@ class HttpUriTest extends TestCase
     }
 
     /**
+     * @param  mixed  $value
      * @test
      * @dataProvider  validValues
      */
-    public function validHttpUrlWithDnsEntryEvaluatesToTrue($value)
+    public function validHttpUrlWithDnsEntryEvaluatesToTrue($value): void
     {
         assertTrue(HttpUri::isValid($value));
     }
 
+    /**
+     * @return  array<mixed[]>
+     */
     public function validValuesWithoutDnsEntry(): array
     {
         return [
@@ -698,28 +715,31 @@ class HttpUriTest extends TestCase
     }
 
     /**
+     * @param  mixed  $value
      * @test
      * @dataProvider  validValuesWithoutDnsEntry
      */
-    public function validHttpUrlWithoutDnsEntryEvaluatesToTrue($value)
+    public function validHttpUrlWithoutDnsEntryEvaluatesToTrue($value): void
     {
         assertTrue(HttpUri::isValid($value));
     }
 
     /**
+     * @param  mixed  $invalid
      * @test
      * @dataProvider  invalidValues
      */
-    public function invalidValueEvaluatesToFalseWhenTestedForExistance($invalid)
+    public function invalidValueEvaluatesToFalseWhenTestedForExistance($invalid): void
     {
         assertFalse(HttpUri::exists($invalid));
     }
 
     /**
+     * @param  mixed  $value
      * @test
      * @dataProvider  validValues
      */
-    public function validHttpUrlWithDnsEntryEvaluatesToTrueWhenTestedForExistance($value)
+    public function validHttpUrlWithDnsEntryEvaluatesToTrueWhenTestedForExistance($value): void
     {
         assertTrue(HttpUri::exists($value));
     }
@@ -727,7 +747,7 @@ class HttpUriTest extends TestCase
     /**
      * @test
      */
-    public function validHttpUrlWithoutDnsEntryEvaluatesToFalseWhenTestedForExistance()
+    public function validHttpUrlWithoutDnsEntryEvaluatesToFalseWhenTestedForExistance(): void
     {
         assertFalse(HttpUri::exists(
                 'http://stubbles.doesNotExist/',

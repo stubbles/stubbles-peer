@@ -17,7 +17,7 @@ abstract class Uri
     /**
      * internal representation after parse_url()
      *
-     * @type  \stubbles\peer\ParsedUri
+     * @var  \stubbles\peer\ParsedUri
      */
     protected $parsedUri;
 
@@ -53,8 +53,8 @@ abstract class Uri
             return false;
         }
 
-        if ($this->parsedUri->hasUser()) {
-            if (preg_match('~([@:/])~', $this->parsedUri->user()) != 0) {
+        if (null != $user = $this->parsedUri->user()) {
+            if (preg_match('~([@:/])~', $user) != 0) {
                 return false;
             }
 
@@ -63,12 +63,12 @@ abstract class Uri
             }
         }
 
-        if (!$this->parsedUri->hasHostname() || strlen($this->parsedUri->hostname()) === 0) {
+        $hostname = $this->parsedUri->hostname();
+        if (null === $hostname || strlen($hostname) === 0) {
             return true;
         }
 
-        if ($this->parsedUri->hasHostname()
-          && preg_match('!^([a-zA-Z0-9\.-]+|\[[^\]]+\])(:([0-9]+))?$!', $this->parsedUri->hostname()) != 0) {
+        if (null !== $hostname && preg_match('!^([a-zA-Z0-9\.-]+|\[[^\]]+\])(:([0-9]+))?$!', $hostname) != 0) {
             return true;
         }
 
@@ -272,7 +272,7 @@ abstract class Uri
     /**
      * adds given map of params
      *
-     * @param   array  $params  map of parameters to add
+     * @param   array<string,scalar>  $params  map of parameters to add
      * @return  \stubbles\peer\Uri
      * @since   5.1.2
      */

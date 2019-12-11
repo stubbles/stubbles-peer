@@ -28,7 +28,7 @@ class SocketTest extends TestCase
     /**
      * @test
      */
-    public function createWithEmptyHostThrowsIllegalArgumentException()
+    public function createWithEmptyHostThrowsIllegalArgumentException(): void
     {
         expect(function() { createSocket(''); })
                 ->throws(\InvalidArgumentException::class);
@@ -37,7 +37,7 @@ class SocketTest extends TestCase
     /**
      * @test
      */
-    public function createWithNegativePortThrowsIllegalArgumentException()
+    public function createWithNegativePortThrowsIllegalArgumentException(): void
     {
         expect(function() { createSocket('localhost', -1); })
                 ->throws(\InvalidArgumentException::class);
@@ -46,12 +46,15 @@ class SocketTest extends TestCase
     /**
      * @test
      */
-    public function isNotSecureByDefault()
+    public function isNotSecureByDefault(): void
     {
         $socket = createSocket('example.com');
         assertFalse($socket->usesSsl());
     }
 
+    /**
+     * @return  array<string[]>
+     */
     public function securePrefixes(): array
     {
         return [['ssl://'], ['tls://']];
@@ -61,7 +64,7 @@ class SocketTest extends TestCase
      * @test
      * @dataProvider  securePrefixes
      */
-    public function isSecureWhenCorrectPrefixGiven(string $securePrefix)
+    public function isSecureWhenCorrectPrefixGiven(string $securePrefix): void
     {
         $socket = createSocket('example.com', 443, $securePrefix);
         assertTrue($socket->usesSsl());
@@ -71,7 +74,7 @@ class SocketTest extends TestCase
      * @test
      * @since  6.0.0
      */
-    public function connectReturnsStream()
+    public function connectReturnsStream(): void
     {
         $socket = createSocket('localhost', 80)->openWith(
                 NewCallable::of('fsockopen')->returns(fopen(__FILE__, 'rb'))
@@ -86,7 +89,7 @@ class SocketTest extends TestCase
      * @test
      * @since  6.0.0
      */
-    public function connectThrowsConnectionFailureOnFailure()
+    public function connectThrowsConnectionFailureOnFailure(): void
     {
         $socket = createSocket('localhost', 80)->openWith(
                 NewCallable::of('fsockopen')->returns(false)

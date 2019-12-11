@@ -25,7 +25,7 @@ class HeaderListTest extends TestCase
     /**
      * instance to test
      *
-     * @type  HeaderList
+     * @var  HeaderList
      */
     protected $headerList;
 
@@ -38,7 +38,7 @@ class HeaderListTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function hasNoHeadersByDefault()
+    public function hasNoHeadersByDefault(): void
     {
         assertThat($this->headerList, isOfSize(0));
     }
@@ -47,7 +47,7 @@ class HeaderListTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function containsGivenHeader()
+    public function containsGivenHeader(): void
     {
         $headerList = headers(['Binford' => 6100]);
         assertTrue($headerList->containsKey('Binford'));
@@ -57,7 +57,7 @@ class HeaderListTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function initialSizeEqualsAmountOfGivenHeaders()
+    public function initialSizeEqualsAmountOfGivenHeaders(): void
     {
         $headerList = headers(['Binford' => 6100]);
         assertThat($headerList, isOfSize(1));
@@ -67,7 +67,7 @@ class HeaderListTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function returnsValeOfGivenHeader()
+    public function returnsValeOfGivenHeader(): void
     {
         $headerList = headers(['Binford' => 6100]);
         assertThat($headerList->get('Binford'), equals('6100'));
@@ -76,7 +76,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function addingHeaderIncreasesSize()
+    public function addingHeaderIncreasesSize(): void
     {
         assertThat($this->headerList->put('Binford', 6100), isOfSize(1));
     }
@@ -84,7 +84,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function containsAddedHeader()
+    public function containsAddedHeader(): void
     {
         assertTrue(
                 $this->headerList->put('Binford', 6100)
@@ -95,7 +95,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function returnsValueOfAddedHeader()
+    public function returnsValueOfAddedHeader(): void
     {
         assertThat(
                 $this->headerList->put('Binford', 6100)
@@ -109,7 +109,7 @@ class HeaderListTest extends TestCase
      *
      * @param  \stubbles\peer\HeaderList  $headerList
      */
-    protected function assertBinford(HeaderList $headerList)
+    protected function assertBinford(HeaderList $headerList): void
     {
         assertTrue($headerList->containsKey('Binford'));
         assertTrue($headerList->containsKey('X-Power'));
@@ -121,7 +121,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function containsAllHeadersFromParsedString()
+    public function containsAllHeadersFromParsedString(): void
     {
         $this->assertBinford(parseHeaders("Binford: 6100\r\nX-Power: More power!"));
     }
@@ -130,7 +130,7 @@ class HeaderListTest extends TestCase
      * @since 2.1.2
      * @test
      */
-    public function doubleOccurenceOfColonSplitsOnFirstColon()
+    public function doubleOccurenceOfColonSplitsOnFirstColon(): void
     {
         $headerList = parseHeaders("Binford: 6100\r\nX-Powered-By: Servlet 2.4; JBoss-4.2.2.GA (build: SVNTag=JBoss_4_2_2_GA date=200710231031)/Tomcat-5.5\r\nContent-Type: text/html\r\n");
         assertTrue($headerList->containsKey('Binford'));
@@ -148,18 +148,17 @@ class HeaderListTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function appendingInvalidHeaderStructureThrowsIllegalArgumentException()
+    public function appendingInvalidHeaderStructureThrowsIllegalArgumentException(): void
     {
-        expect(function() {
-                $this->headerList->append(400);
-        })->throws(\InvalidArgumentException::class);
+        expect(function() { $this->headerList->append(400); })
+            ->throws(\InvalidArgumentException::class);
     }
 
     /**
      * @since  2.0.0
      * @test
      */
-    public function appendAddsHeadersFromString()
+    public function appendAddsHeadersFromString(): void
     {
         $this->assertBinford(
                 $this->headerList->put('Binford', '6000')
@@ -171,7 +170,7 @@ class HeaderListTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function appendAddsHeadersFromArray()
+    public function appendAddsHeadersFromArray(): void
     {
         $this->assertBinford(
                 $this->headerList->put('Binford', '6000')
@@ -188,7 +187,7 @@ class HeaderListTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function appendAddsHeadersFromOtherInstance()
+    public function appendAddsHeadersFromOtherInstance(): void
     {
         $this->assertBinford(
                 $this->headerList->put('Binford', '6000')
@@ -206,7 +205,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function putArrayThrowsIllegalArgumentException()
+    public function putArrayThrowsIllegalArgumentException(): void
     {
         expect(function() {
                 $this->headerList->put('Binford', [6100]);
@@ -216,7 +215,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function putObjectThrowsIllegalArgumentException()
+    public function putObjectThrowsIllegalArgumentException(): void
     {
         expect(function() {
                 $this->headerList->put('Binford', new \stdClass());
@@ -226,7 +225,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function remove()
+    public function remove(): void
     {
         assertFalse(
                 $this->headerList->put('Binford', '6100')
@@ -238,7 +237,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function putUserAgent()
+    public function putUserAgent(): void
     {
         assertTrue(
                 $this->headerList->putUserAgent('Binford 6100')
@@ -251,7 +250,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function putReferer()
+    public function putReferer(): void
     {
         assertTrue(
                 $this->headerList->putReferer('http://example.com/')
@@ -267,7 +266,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function putCookie()
+    public function putCookie(): void
     {
         assertTrue(
                 $this->headerList->putCookie(['testcookie1' => 'testvalue1 %&'])
@@ -283,7 +282,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function putAuthorization()
+    public function putAuthorization(): void
     {
         assertTrue(
                 $this->headerList->putAuthorization('user', 'pass')
@@ -298,7 +297,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function hasNoDateByDefault()
+    public function hasNoDateByDefault(): void
     {
         assertFalse($this->headerList->containsKey('Date'));
     }
@@ -306,7 +305,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function putDateWithoutValueGiven()
+    public function putDateWithoutValueGiven(): void
     {
         assertTrue($this->headerList->putDate()->containsKey('Date'));
     }
@@ -314,7 +313,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function putDateWithGivenValue()
+    public function putDateWithGivenValue(): void
     {
         $time = time();
         assertTrue($this->headerList->putDate($time)->containsKey('Date'));
@@ -327,7 +326,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function enablePower()
+    public function enablePower(): void
     {
         assertTrue($this->headerList->enablePower()->containsKey('X-Binford'));
         assertThat($this->headerList->get('X-Binford'), equals('More power!'));
@@ -336,7 +335,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function returnsFalseOnCheckForNonExistingHeader()
+    public function returnsFalseOnCheckForNonExistingHeader(): void
     {
         assertFalse($this->headerList->containsKey('foo'));
     }
@@ -344,7 +343,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function returnsNullForNonExistingHeader()
+    public function returnsNullForNonExistingHeader(): void
     {
         assertNull($this->headerList->get('foo'));
     }
@@ -352,7 +351,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function returnsDefaultValueForNonExistingHeader()
+    public function returnsDefaultValueForNonExistingHeader(): void
     {
         assertThat($this->headerList->get('foo', 'bar'), equals('bar'));
     }
@@ -360,7 +359,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function returnsAddedValueForExistingHeader()
+    public function returnsAddedValueForExistingHeader(): void
     {
         assertThat($this->headerList->put('foo', 'baz')->get('foo'), equals('baz'));
     }
@@ -368,7 +367,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function returnsAddedValueForExistingHeaderWhenDefaultSupplied()
+    public function returnsAddedValueForExistingHeaderWhenDefaultSupplied(): void
     {
         assertThat(
                 $this->headerList->put('foo', 'baz')->get('foo', 'bar'),
@@ -379,7 +378,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function clearRemovesAllHeaders()
+    public function clearRemovesAllHeaders(): void
     {
         assertThat(
                 $this->headerList->putUserAgent('Binford 6100')
@@ -396,7 +395,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function iteratorIsEmptyForDefaultHeaderList()
+    public function iteratorIsEmptyForDefaultHeaderList(): void
     {
         $counter = 0;
         foreach ($this->headerList as $key => $value) {
@@ -409,7 +408,7 @@ class HeaderListTest extends TestCase
     /**
      * @test
      */
-    public function iterableOverAddedHeaders()
+    public function iterableOverAddedHeaders(): void
     {
         $counter = 0;
         $this->headerList->putUserAgent('Binford 6100')
@@ -425,7 +424,7 @@ class HeaderListTest extends TestCase
      * @test
      * @since  7.0.0
      */
-    public function headerListCanBeCastedToString()
+    public function headerListCanBeCastedToString(): void
     {
         $headers = "Binford: 6100\r\nX-Power: More power!";
         assertThat(

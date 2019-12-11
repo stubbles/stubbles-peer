@@ -1,20 +1,28 @@
+includes:
+  - vendor/bovigo/assert/src/main/resources/phpstan/bovigo-assert.neon
 parameters:
-  level: 7
+  inferPrivatePropertyTypeFromConstructor: true
+  level: max
   paths:
     - ./src
   ignoreErrors:
     # Class has dynamicly added methods which are called using __call()
     - '#Call to an undefined method stubbles\\values\\Value#'
     # Prevent errors because of generated mock objects
-    - '#bovigo\\callmap\\ClassProxy given#'
     - '#bovigo\\callmap\\FunctionProxy given#'
     # Explicit tests for those cases
     - '#stubbles\\peer\\Stream constructor expects resource, string given#'
     - '#static method stubbles\\peer\\http\\HttpUri::castFrom\(\) expects string\|stubbles\\peer\\http\\HttpUri, stdClass given#'
-    - '#Parameter \#1 \$resource of class stubbles\\peer\\Stream constructor expects resource, resource\|false given.#'
     # False positive, value of $this->ip is always a valid IP address
     - '#Method stubbles\\peer\\IpAddress::asLong\(\) should return int but returns int\|false#'
-    # False positive, both arrays that are merge are of type array<string>
-    - '#Method stubbles\\peer\\http\\AcceptHeader::sharedAcceptables\(\) should return array<string> but returns array<int, int\|string>#'
-    # False positive, it's not possible implementation wise that null is returned
-    - '#Method stubbles\\peer\\http\\HttpUri::port\(\) should return int but returns int\|null#'
+    -
+        message: '#Unreachable statement - code above always terminates#'
+        path: src/main/php/http/HttpUri.php
+    # Explicit tests for those cases
+    -
+        message: '#method stubbles\\peer\\HeaderList::append\(\) expects array<string, bool|float|int|string>|string|stubbles\\peer\\HeaderList, int given#'
+        path: src/test/php/HeaderListTest.php
+    # phpstan can't cope properly with array result of parse_url()
+    -
+        message: '#queryString of class stubbles\\peer\\QueryString constructor expects string|null, int|string|null given#'
+        path: src/main/php/ParsedUri.php

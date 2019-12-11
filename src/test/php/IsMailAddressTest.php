@@ -19,6 +19,9 @@ use function bovigo\assert\assertTrue;
  */
 class IsMailAddressTest extends TestCase
 {
+    /**
+     * @return  array<string[]>
+     */
     public function validValues(): array
     {
         return [['example@example.org'],
@@ -30,11 +33,14 @@ class IsMailAddressTest extends TestCase
      * @test
      * @dataProvider  validValues
      */
-    public function validValueEvaluatesToTrue(string $value)
+    public function validValueEvaluatesToTrue(string $value): void
     {
         assertTrue(isMailAddress($value));
     }
 
+    /**
+     * @return  array<mixed[]>
+     */
     public function invalidValues(): array
     {
         return [['space in@mailadre.ss'],
@@ -56,11 +62,14 @@ class IsMailAddressTest extends TestCase
      * @test
      * @dataProvider  invalidValues
      */
-    public function invalidValueEvaluatesToFalse($value)
+    public function invalidValueEvaluatesToFalse(?string $value): void
     {
         assertFalse(isMailAddress($value));
     }
 
+    /**
+     * @return  array<string[]>
+     */
     public function mailAddressesWithDifferentCase(): array
     {
         return [
@@ -73,7 +82,7 @@ class IsMailAddressTest extends TestCase
      * @test
      * @dataProvider  mailAddressesWithDifferentCase
      */
-    public function validatesIndependendOfLowerOrUpperCase(string $mailAddress)
+    public function validatesIndependendOfLowerOrUpperCase(string $mailAddress): void
     {
         assertTrue(isMailAddress($mailAddress));
     }

@@ -17,7 +17,7 @@ class AcceptHeader implements \Countable
     /**
      * list of acceptables
      *
-     * @type  array<string, float>
+     * @var  array<string, float>
      */
     private $acceptables = [];
 
@@ -145,7 +145,7 @@ class AcceptHeader implements \Countable
     /**
      * helper method to find the acceptable with the greatest priority from a given list of acceptables
      *
-     * @param   array  $acceptables
+     * @param   array<string,float>  $acceptables
      * @return  string|null
      */
     private function selectAcceptableWithGreatestPriority(array $acceptables): ?string

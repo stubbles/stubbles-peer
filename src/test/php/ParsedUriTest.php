@@ -21,7 +21,7 @@ class ParsedUriTest extends TestCase
     /**
      * @test
      */
-    public function transposeKeepsChangedParameters()
+    public function transposeKeepsChangedParameters(): void
     {
         $parsedUri = new ParsedUri('http://example.com/?foo=bar&baz=303');
         $parsedUri->queryString()->addParam('baz', '313');
@@ -37,7 +37,7 @@ class ParsedUriTest extends TestCase
      * @test
      * @since  7.0.0
      */
-    public function canBeCastedToString()
+    public function canBeCastedToString(): void
     {
         $uri = 'http://example.com/?foo=bar&baz=303';
         $parsedUri = new ParsedUri($uri);

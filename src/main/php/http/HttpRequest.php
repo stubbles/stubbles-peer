@@ -19,13 +19,13 @@ class HttpRequest
     /**
      * the http address to setup a connection to
      *
-     * @type  \stubbles\peer\http\HttpUri
+     * @var  \stubbles\peer\http\HttpUri
      */
     protected $httpUri = null;
     /**
      * contains request headers
      *
-     * @type  \stubbles\peer\HeaderList
+     * @var  \stubbles\peer\HeaderList
      */
     protected $headers = null;
 
@@ -95,7 +95,7 @@ class HttpRequest
      * latter is the case an post form submit content type will be added to the
      * request.
      *
-     * @param   string|array                            $body     post request body
+     * @param   string|array<string,string>             $body     post request body
      * @param   int                                     $timeout  optional  connection timeout, defaults to 30 seconds
      * @param   string|\stubbles\peer\http\HttpVersion  $version  optional  http version, defaults to HTTP/1.1
      * @return  \stubbles\peer\http\HttpResponse

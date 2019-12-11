@@ -17,7 +17,7 @@ class QueryString
     /**
      * parameters for uri
      *
-     * @type  array
+     * @var  array<string,mixed>
      */
     protected $parameters = [];
 

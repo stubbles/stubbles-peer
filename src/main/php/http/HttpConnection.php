@@ -16,17 +16,17 @@ class HttpConnection
     /**
      * request object to open connection
      *
-     * @type  \stubbles\peer\http\HttpUri
+     * @var  \stubbles\peer\http\HttpUri
      */
     private $httpUri = null;
     /**
      * contains request headers
      *
-     * @type  \stubbles\peer\HeaderList
+     * @var  \stubbles\peer\HeaderList
      */
     private $headers = null;
     /**
-     * @type  int
+     * @var  int
      */
     private $timeout = 30;
 
@@ -85,7 +85,7 @@ class HttpConnection
      * add some cookie data to the request
      *
      * @api
-     * @param   array  $cookieValues  list of key-value pairs
+     * @param   array<string,string>  $cookieValues  list of key-value pairs
      * @return  \stubbles\peer\http\HttpConnection
      */
     public function withCookie(array $cookieValues): self
@@ -152,8 +152,8 @@ class HttpConnection
      * returns response object for given URI after POST request
      *
      * @api
-     * @param   string|array  $body
-     * @param   string        $version  optional  http version, defaults to HTTP/1.1
+     * @param   string|array<string,string>  $body
+     * @param   string                       $version  optional  http version, defaults to HTTP/1.1
      * @return  \stubbles\peer\http\HttpResponse
      */
     public function post($body, string $version = HttpVersion::HTTP_1_1): HttpResponse

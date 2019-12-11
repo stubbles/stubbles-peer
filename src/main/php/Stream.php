@@ -18,31 +18,19 @@ class Stream
     /**
      * internal resource pointer
      *
-     * @type  resource
+     * @var  resource
      */
     private $resource;
     /**
-     * @type  bool
+     * @var  bool
      */
     private $usesTls;
     /**
      * timeout
      *
-     * @type  int
+     * @var  float
      */
     private $timeout;
-    /**
-     * input stream to read data from stream with
-     *
-     * @type  \stubbles\streams\InputStream
-     */
-    private $inputStream;
-    /**
-     * output stream to read data from stream with
-     *
-     * @type  \stubbles\streams\OutputStream
-     */
-    private $outputStream;
 
     /**
      * constructor

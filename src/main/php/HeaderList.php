@@ -11,20 +11,21 @@ namespace stubbles\peer;
  * Container for list of headers.
  *
  * @api
+ * @implements \IteratorAggregate<string,scalar>
  */
 class HeaderList implements \IteratorAggregate, \Countable
 {
     /**
      * list of headers
      *
-     * @type  array
+     * @var  array<string,scalar>
      */
     private $headers = [];
 
     /**
      * constructor
      *
-     * @param  array  $headers
+     * @param  array<string,scalar>  $headers
      * @since  2.0.0
      */
     public function __construct(array $headers = [])
@@ -47,7 +48,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      * parses given header string and returns a list of headers
      *
      * @param   string  $headers
-     * @return  array
+     * @return  array<string,scalar>
      */
     private static function parse(string $headers): array
     {
@@ -60,7 +61,7 @@ class HeaderList implements \IteratorAggregate, \Countable
                 PREG_SET_ORDER
         );
         foreach ($matches as $line) {
-            $header[$line[1]] = $line[2];
+            $header[(string) $line[1]] = $line[2];
         }
 
         return $header;
@@ -72,7 +73,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      * If the header to append contain an already set header the existing header
      * value will be overwritten by the new one.
      *
-     * @param   string|array|\stubbles\peer\HeaderList  $headers
+     * @param   string|array<string,scalar>|\stubbles\peer\HeaderList  $headers
      * @return  \stubbles\peer\HeaderList
      * @throws  \InvalidArgumentException
      * @since   2.0.0
@@ -159,7 +160,7 @@ class HeaderList implements \IteratorAggregate, \Countable
     /**
      * creates header for cookie
      *
-     * @param   array  $cookieValues  cookie values
+     * @param   array<string,string>  $cookieValues  cookie values
      * @return  \stubbles\peer\HeaderList
      */
     public function putCookie(array $cookieValues): self
@@ -252,11 +253,11 @@ class HeaderList implements \IteratorAggregate, \Countable
     /**
      * returns an iterator object
      *
-     * @return  \Traversable
+     * @return  \Iterator<string,scalar>
      */
-    public function getIterator(): \Traversable
+    public function getIterator(): \Iterator
     {
-        return new \ArrayObject($this->headers);
+        return new \ArrayIterator($this->headers);
     }
 
     /**

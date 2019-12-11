@@ -27,7 +27,7 @@ namespace stubbles\peer {
     /**
      * creates a list of headers from given map
      *
-     * @param   array  $headers
+     * @param   array<string,scalar>  $headers
      * @return  \stubbles\peer\HeaderList
      * @since   3.1.0
      * @api
@@ -68,11 +68,11 @@ namespace stubbles\peer {
     /**
      * checks if given value is a valid mail address
      *
-     * @param   string  $value
+     * @param   string|null  $value
      * @return  bool
      * @since   7.1.0
      */
-    function isMailAddress($value): bool
+    function isMailAddress(?string $value): bool
     {
         if (null == $value || strlen($value) == 0) {
             return false;

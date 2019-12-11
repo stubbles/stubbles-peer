@@ -31,7 +31,7 @@ class IpAddressTest extends TestCase
      * @test
      * @since  7.1.0
      */
-    public function stringIsNoIpAndEvaluatesToFalse()
+    public function stringIsNoIpAndEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValid('foo'));
     }
@@ -40,7 +40,7 @@ class IpAddressTest extends TestCase
      * @test
      * @since  7.1.0
      */
-    public function emptyStringIsNoIpAndEvaluatesToFalse()
+    public function emptyStringIsNoIpAndEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValid(''));
     }
@@ -49,7 +49,7 @@ class IpAddressTest extends TestCase
      * @test
      * @since  7.1.0
      */
-    public function isValidForIpV4()
+    public function isValidForIpV4(): void
     {
         assertTrue(IpAddress::isValid('127.0.0.1'));
     }
@@ -58,7 +58,7 @@ class IpAddressTest extends TestCase
      * @test
      * @since  7.1.0
      */
-    public function isValidForIpV6()
+    public function isValidForIpV6(): void
     {
         assertTrue(IpAddress::isValid('febc:a574:382b:23c1:aa49:4592:4efe:9982'));
     }
@@ -66,7 +66,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function stringIsNoIpV4AndEvaluatesToFalse()
+    public function stringIsNoIpV4AndEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV4('foo'));
     }
@@ -74,7 +74,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function emptyStringIsNoIpV4AndEvaluatesToFalse()
+    public function emptyStringIsNoIpV4AndEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV4(''));
     }
@@ -82,7 +82,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function invalidIpV4WithMissingPartEvaluatesToFalse()
+    public function invalidIpV4WithMissingPartEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV4('255.55.55'));
     }
@@ -90,7 +90,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function invalidIpV4WithSuperflousPartEvaluatesToFalse()
+    public function invalidIpV4WithSuperflousPartEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV4('111.222.333.444.555'));
     }
@@ -98,7 +98,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function invalidIpV4WithMissingNumberEvaluatesToFalse()
+    public function invalidIpV4WithMissingNumberEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV4('1..3.4'));
     }
@@ -106,7 +106,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function invalidIpV4WithNumberOutOfRangeEvaluatesToFalse()
+    public function invalidIpV4WithNumberOutOfRangeEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV4('1.256.3.4'));
     }
@@ -114,7 +114,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function greatestIpV4EvaluatesToTrue()
+    public function greatestIpV4EvaluatesToTrue(): void
     {
         assertTrue(IpAddress::isValidV4('255.255.255.255'));
     }
@@ -122,7 +122,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function lowestIpV4EvaluatesToTrue()
+    public function lowestIpV4EvaluatesToTrue(): void
     {
         assertTrue(IpAddress::isValidV4('0.0.0.0'));
     }
@@ -130,7 +130,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function correctIpV4EvaluatesToTrue()
+    public function correctIpV4EvaluatesToTrue(): void
     {
         assertTrue(IpAddress::isValidV4('1.2.3.4'));
     }
@@ -138,7 +138,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function stringIsNoIpV6AndEvaluatesToFalse()
+    public function stringIsNoIpV6AndEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV6('foo'));
     }
@@ -146,7 +146,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function emptyStringIsNoIpV6AndEvaluatesToFalse()
+    public function emptyStringIsNoIpV6AndEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV6(''));
     }
@@ -154,7 +154,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function ipv4EvaluatesToFalse()
+    public function ipv4EvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV6('1.2.3.4'));
     }
@@ -162,7 +162,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function invalidIpV6WithMissingPartEvaluatesToFalse()
+    public function invalidIpV6WithMissingPartEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV6(':1'));
     }
@@ -170,7 +170,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function invalidIpV6EvaluatesToFalse()
+    public function invalidIpV6EvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV6('::ffffff:::::a'));
     }
@@ -178,7 +178,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function invalidIpV6WithHexquadAtStartEvaluatesToFalse()
+    public function invalidIpV6WithHexquadAtStartEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV6('XXXX::a574:382b:23c1:aa49:4592:4efe:9982'));
     }
@@ -186,7 +186,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function invalidIpV6WithHexquadAtEndEvaluatesToFalse()
+    public function invalidIpV6WithHexquadAtEndEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV6('9982::a574:382b:23c1:aa49:4592:4efe:XXXX'));
     }
@@ -194,7 +194,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function invalidIpV6WithHexquadEvaluatesToFalse()
+    public function invalidIpV6WithHexquadEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV6('a574::XXXX:382b:23c1:aa49:4592:4efe:9982'));
     }
@@ -202,7 +202,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function invalidIpV6WithHexDigitEvaluatesToFalse()
+    public function invalidIpV6WithHexDigitEvaluatesToFalse(): void
     {
         assertFalse(IpAddress::isValidV6('a574::382X:382b:23c1:aa49:4592:4efe:9982'));
     }
@@ -210,7 +210,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function correctIpV6EvaluatesToTrue()
+    public function correctIpV6EvaluatesToTrue(): void
     {
         assertTrue(IpAddress::isValidV6('febc:a574:382b:23c1:aa49:4592:4efe:9982'));
     }
@@ -218,7 +218,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function localhostIpV6EvaluatesToTrue()
+    public function localhostIpV6EvaluatesToTrue(): void
     {
         assertTrue(IpAddress::isValidV6('::1'));
     }
@@ -226,7 +226,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function shortenedIpV6EvaluatesToTrue()
+    public function shortenedIpV6EvaluatesToTrue(): void
     {
         assertTrue(IpAddress::isValidV6('febc:a574:382b::4592:4efe:9982'));
     }
@@ -234,7 +234,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function evenMoreShortenedIpV6EvaluatesToTrue()
+    public function evenMoreShortenedIpV6EvaluatesToTrue(): void
     {
         assertTrue(IpAddress::isValidV6('febc::23c1:aa49:0:0:9982'));
     }
@@ -242,7 +242,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function singleShortenedIpV6EvaluatesToTrue()
+    public function singleShortenedIpV6EvaluatesToTrue(): void
     {
         assertTrue(IpAddress::isValidV6('febc:a574:2b:23c1:aa49:4592:4efe:9982'));
     }
@@ -250,7 +250,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function shortenedPrefixIpV6EvaluatesToTrue()
+    public function shortenedPrefixIpV6EvaluatesToTrue(): void
     {
         assertTrue(IpAddress::isValidV6('::382b:23c1:aa49:4592:4efe:9982'));
     }
@@ -258,21 +258,25 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function shortenedPostfixIpV6EvaluatesToTrue()
+    public function shortenedPostfixIpV6EvaluatesToTrue(): void
     {
         assertTrue(IpAddress::isValidV6('febc:a574:382b:23c1:aa49::'));
     }
 
+    /**
+     * @return  array<mixed[]>
+     */
     public function invalidValues(): array
     {
         return [['foo'], [-1.5], [true], [false]];
     }
 
     /**
+     * @param  mixed  $invalidValue
      * @test
      * @dataProvider  invalidValues
      */
-    public function constructWithInvalidValueThrowsIllegalArgumentException($invalidValue)
+    public function constructWithInvalidValueThrowsIllegalArgumentException($invalidValue): void
     {
         expect(function() use ($invalidValue) {
                 new IpAddress($invalidValue);
@@ -282,11 +286,14 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function createWithLong()
+    public function createWithLong(): void
     {
         assertThat(new IpAddress(2130706433), equals('127.0.0.1'));
     }
 
+    /**
+     * @return  array<mixed[]>
+     */
     public function validValues(): array
     {
         return [
@@ -299,21 +306,25 @@ class IpAddressTest extends TestCase
     }
 
     /**
+     * @param  mixed   $value
+     * @param  string  $expectedType
      * @test
      * @dataProvider  validValues
      * @since  7.0.0
      */
-    public function typeReturnsInfoBasedOnValue($value, string $expectedType)
+    public function typeReturnsInfoBasedOnValue($value, string $expectedType): void
     {
         assertThat(IpAddress::castFrom($value)->type(), equals($expectedType));
     }
 
     /**
+     * @param  mixed   $value
+     * @param  string  $expectedType
      * @test
      * @dataProvider  validValues
      * @since  7.0.0
      */
-    public function isVxReturnsTrueBasedOnType($value, string $expectedType)
+    public function isVxReturnsTrueBasedOnType($value, string $expectedType): void
     {
         if (IpAddress::V4 === $expectedType) {
             assertTrue(IpAddress::castFrom($value)->isV4());
@@ -323,11 +334,13 @@ class IpAddressTest extends TestCase
     }
 
     /**
+     * @param  mixed   $value
+     * @param  string  $expectedType
      * @test
      * @dataProvider  validValues
      * @since  7.0.0
      */
-    public function isVxReturnsFalseBasedOnType($value, string $expectedType)
+    public function isVxReturnsFalseBasedOnType($value, string $expectedType): void
     {
         if (IpAddress::V4 === $expectedType) {
             assertFalse(IpAddress::castFrom($value)->isV6());
@@ -339,7 +352,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function longNotationIsTransformedIntoStringNotation()
+    public function longNotationIsTransformedIntoStringNotation(): void
     {
         assertThat(IpAddress::castFrom(2130706433), equals('127.0.0.1'));
     }
@@ -347,7 +360,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function castFromCreatesIpAddress()
+    public function castFromCreatesIpAddress(): void
     {
         assertThat(IpAddress::castFrom('127.0.0.1'), equals('127.0.0.1'));
     }
@@ -355,7 +368,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function castFromInstanceReturnsInstance()
+    public function castFromInstanceReturnsInstance(): void
     {
         $ipAddress = new IpAddress('127.0.0.1');
         assertThat(IpAddress::castFrom($ipAddress), isSameAs($ipAddress));
@@ -364,7 +377,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function asLongReturnsLongValueForIpAddress()
+    public function asLongReturnsLongValueForIpAddress(): void
     {
         assertThat(IpAddress::castFrom('127.0.0.1')->asLong(), equals(2130706433));
     }
@@ -372,7 +385,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function createSocketReturnsSocketInstance()
+    public function createSocketReturnsSocketInstance(): void
     {
         assertThat(
                 IpAddress::castFrom('127.0.0.1')->createSocket(80),
@@ -383,7 +396,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function createSecureSocketReturnsSocketInstance()
+    public function createSecureSocketReturnsSocketInstance(): void
     {
         assertThat(
                 IpAddress::castFrom('127.0.0.1')->createSecureSocket(443),
@@ -394,7 +407,7 @@ class IpAddressTest extends TestCase
     /**
      * @test
      */
-    public function createSecureSocketUsesSsl()
+    public function createSecureSocketUsesSsl(): void
     {
         assertTrue(
                 IpAddress::castFrom('127.0.0.1')
@@ -407,7 +420,7 @@ class IpAddressTest extends TestCase
      * @test
      * @since  8.0.0
      */
-    public function openSocketReturnsStreamInstance()
+    public function openSocketReturnsStreamInstance(): void
     {
         $fsockopen = NewCallable::of('fsockopen')->returns(fopen(__FILE__, 'rb'));
         assertThat(
@@ -420,7 +433,7 @@ class IpAddressTest extends TestCase
      * @test
      * @since  8.0.0
      */
-    public function openSocketDoesNotUseTls()
+    public function openSocketDoesNotUseTls(): void
     {
         $fsockopen = NewCallable::of('fsockopen')->returns(fopen(__FILE__, 'rb'));
         assertFalse(
@@ -434,7 +447,7 @@ class IpAddressTest extends TestCase
      * @test
      * @since  8.0.0
      */
-    public function openSecureSocketReturnsStreamInstance()
+    public function openSecureSocketReturnsStreamInstance(): void
     {
         $fsockopen = NewCallable::of('fsockopen')->returns(fopen(__FILE__, 'rb'));
         assertThat(
@@ -447,7 +460,7 @@ class IpAddressTest extends TestCase
      * @test
      * @since  8.0.0
      */
-    public function openSecureSocketUsesTls()
+    public function openSecureSocketUsesTls(): void
     {
         $fsockopen = NewCallable::of('fsockopen')->returns(fopen(__FILE__, 'rb'));
         assertTrue(
@@ -457,6 +470,9 @@ class IpAddressTest extends TestCase
         );
     }
 
+    /**
+     * @return  array<mixed[]>
+     */
     public function containedInCidr(): array
     {
         return [['10.16.0.1', '10.16', '13'],
@@ -474,16 +490,22 @@ class IpAddressTest extends TestCase
     }
 
     /**
+     * @param  string      $ip
+     * @param  string      $cidrIpShort
+     * @param  int|string  $cidrMask
      * @test
      * @dataProvider  containedInCidr
      */
-    public function isInCidrRangeReturnsTrueIfIpIsInRange(string $ip, string $cidrIpShort, $cidrMask)
+    public function isInCidrRangeReturnsTrueIfIpIsInRange(string $ip, string $cidrIpShort, $cidrMask): void
     {
         assertTrue(
                 IpAddress::castFrom($ip)->isInCidrRange($cidrIpShort, $cidrMask)
         );
     }
 
+    /**
+     * @return  array<mixed[]>
+     */
     public function notContainedInCidr(): array
     {
         return [['10.15.0.1', '10.16', '13'],
@@ -497,10 +519,13 @@ class IpAddressTest extends TestCase
     }
 
     /**
+     * @param  string      $ip
+     * @param  string      $cidrIpShort
+     * @param  int|string  $cidrMask
      * @test
      * @dataProvider  notContainedInCidr
      */
-    public function isInCidrRangeReturnsFalseIfIpIsNotInRange(string $ip, string $cidrIpShort, $cidrMask)
+    public function isInCidrRangeReturnsFalseIfIpIsNotInRange(string $ip, string $cidrIpShort, $cidrMask): void
     {
         assertFalse(
                 IpAddress::castFrom($ip)->isInCidrRange($cidrIpShort, $cidrMask)
@@ -511,7 +536,7 @@ class IpAddressTest extends TestCase
      * @test
      * @since  8.0.0
      */
-    public function isInCidrRangeThrowsWhenCidrMaskNoValidInteger()
+    public function isInCidrRangeThrowsWhenCidrMaskNoValidInteger(): void
     {
         $ip = new IpAddress('172.19.14.1');
         expect(function() use ($ip) { $ip->isInCidrRange('172.19.13', 'invalid'); })

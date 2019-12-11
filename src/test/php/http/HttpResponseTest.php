@@ -50,7 +50,7 @@ class HttpResponseTest extends TestCase
     /**
      * @test
      */
-    public function chunkedResponseCanBeRead()
+    public function chunkedResponseCanBeRead(): void
     {
         $httpResponse = $this->createResponse(Http::lines(
                 'HTTP/1.1 200 OK',
@@ -73,7 +73,7 @@ class HttpResponseTest extends TestCase
     /**
      * @test
      */
-    public function nonChunkedResponseWithoutContentLengthHeaderCanBeRead()
+    public function nonChunkedResponseWithoutContentLengthHeaderCanBeRead(): void
     {
         $httpResponse = $this->createResponse(Http::lines(
                 'HTTP/1.1 200 OK',
@@ -89,7 +89,7 @@ class HttpResponseTest extends TestCase
     /**
      * @test
      */
-    public function nonChunkedResponseWithContentLengthHeaderCanBeRead()
+    public function nonChunkedResponseWithContentLengthHeaderCanBeRead(): void
     {
         $httpResponse = $this->createResponse(Http::lines(
                 'HTTP/1.1 200 OK',
@@ -107,7 +107,7 @@ class HttpResponseTest extends TestCase
     /**
      * @test
      */
-    public function canReadResponseTwice()
+    public function canReadResponseTwice(): void
     {
         $httpResponse = $this->createResponse(Http::lines(
                 'HTTP/1.1 200 OK',
@@ -123,7 +123,7 @@ class HttpResponseTest extends TestCase
     /**
      * @test
      */
-    public function continuesOnStatusCode100()
+    public function continuesOnStatusCode100(): void
     {
         $httpResponse = $this->createResponse(
                 Http::line('HTTP/1.0 100 Continue')
@@ -148,7 +148,7 @@ class HttpResponseTest extends TestCase
     /**
      * @test
      */
-    public function continuesOnStatusCode102()
+    public function continuesOnStatusCode102(): void
     {
         $httpResponse = $this->createResponse(
                 Http::line('HTTP/1.0 102 Processing')
@@ -172,6 +172,7 @@ class HttpResponseTest extends TestCase
 
     /**
      * @since  8.0.0
+     * @return  array<string[]>
      */
     public function responseInstanceMethods(): array
     {
@@ -190,7 +191,7 @@ class HttpResponseTest extends TestCase
      * @test
      * @dataProvider  responseInstanceMethods
      */
-    public function illegalStatusLineLeadsToProtocolViolation($method)
+    public function illegalStatusLineLeadsToProtocolViolation(string $method): void
     {
         $httpResponse = $this->createResponse(Http::lines(
                 "Illegal Response containing \36 dangerous \0 characters",
@@ -211,7 +212,7 @@ class HttpResponseTest extends TestCase
      * @dataProvider  responseInstanceMethods
      * @since  4.0.0
      */
-    public function statusLineWithInvalidHttpVersionLeadsToProtocolViolation($method)
+    public function statusLineWithInvalidHttpVersionLeadsToProtocolViolation(string $method): void
     {
         $httpResponse = $this->createResponse(Http::lines(
                 'HTTP/400 102 Processing',

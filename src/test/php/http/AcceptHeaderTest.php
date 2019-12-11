@@ -28,7 +28,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * instance to test
      *
-     * @type  AcceptHeader
+     * @var  AcceptHeader
      */
     protected $acceptHeader;
 
@@ -41,7 +41,7 @@ class AcceptHeaderTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function emptyAcceptHeaderReturnsInstanceWithoutAcceptables()
+    public function emptyAcceptHeaderReturnsInstanceWithoutAcceptables(): void
     {
         assertEmpty(emptyAcceptHeader());
     }
@@ -49,11 +49,14 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function addAcceptableIncreasesCount()
+    public function addAcceptableIncreasesCount(): void
     {
         assertThat($this->acceptHeader->addAcceptable('text/plain'), isOfSize(1));
     }
 
+    /**
+     * @return  array<mixed[]>
+     */
     public function provider(): array
     {
         return [['text/plain;q=0.5',
@@ -109,10 +112,12 @@ class AcceptHeaderTest extends TestCase
     }
 
     /**
+     * @param  string        $parseValue
+     * @param  array<mixed>  $expectedList
      * @test
      * @dataProvider  provider
      */
-    public function parseYieldsCorrectValues(string $parseValue, array $expectedList)
+    public function parseYieldsCorrectValues(string $parseValue, array $expectedList): void
     {
         $acceptHeader = AcceptHeader::parse($parseValue);
         foreach ($expectedList as $mimeType => $priority) {
@@ -122,6 +127,8 @@ class AcceptHeaderTest extends TestCase
     }
 
     /**
+     * @param  string        $parseValue
+     * @param  array<mixed>  $expectedList
      * @test
      * @dataProvider  provider
      */
@@ -129,7 +136,7 @@ class AcceptHeaderTest extends TestCase
             string $parseValue,
             array $expectedList,
             string $expectedString
-    ) {
+    ): void {
         assertThat(
                 (string) AcceptHeader::parse($parseValue),
                 equals($expectedString)
@@ -139,7 +146,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function addAcceptableWithPriorityLowerThan0ThrowsIllegalArgumentException()
+    public function addAcceptableWithPriorityLowerThan0ThrowsIllegalArgumentException(): void
     {
         expect(function() {
                 $this->acceptHeader->addAcceptable('text/html', -0.1);
@@ -149,7 +156,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function addAcceptableWithPriorityGreaterThan1ThrowsIllegalArgumentException()
+    public function addAcceptableWithPriorityGreaterThan1ThrowsIllegalArgumentException(): void
     {
         expect(function() {
                 $this->acceptHeader->addAcceptable('text/html', 1.1);
@@ -159,7 +166,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function priorityOnEmptyListReturnsPriorityOf1ForEachAcceptable()
+    public function priorityOnEmptyListReturnsPriorityOf1ForEachAcceptable(): void
     {
         assertThat($this->acceptHeader->priorityFor('text/html'), equals(1.0));
     }
@@ -167,7 +174,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function priorityForNonExistingAcceptableReturns0()
+    public function priorityForNonExistingAcceptableReturns0(): void
     {
         assertThat(
                 $this->acceptHeader->addAcceptable('text/plain')
@@ -179,7 +186,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function priorityForNonExistingAcceptableReturnsPriorityForGeneralAcceptableIfThisIsInList()
+    public function priorityForNonExistingAcceptableReturnsPriorityForGeneralAcceptableIfThisIsInList(): void
     {
         assertThat(
                 $this->acceptHeader->addAcceptable('*/*')
@@ -191,7 +198,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function priorityForNonExistingAcceptableReturnsPriorityForMainTypeAcceptableIfThisIsInList()
+    public function priorityForNonExistingAcceptableReturnsPriorityForMainTypeAcceptableIfThisIsInList(): void
     {
         assertThat(
                 $this->acceptHeader->addAcceptable('text/plain')
@@ -204,7 +211,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function priorityForExistingAcceptableReturnsItsPriority()
+    public function priorityForExistingAcceptableReturnsItsPriority(): void
     {
         assertThat(
                 $this->acceptHeader->addAcceptable('text/html')
@@ -217,7 +224,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function findAcceptableWithGreatestPriorityForEmptyListReturnsNull()
+    public function findAcceptableWithGreatestPriorityForEmptyListReturnsNull(): void
     {
         assertNull($this->acceptHeader->findAcceptableWithGreatestPriority());
     }
@@ -225,7 +232,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function findAcceptableWithGreatestPriority()
+    public function findAcceptableWithGreatestPriority(): void
     {
         $this->acceptHeader->addAcceptable('text/plain', 0.2);
         assertThat(
@@ -244,6 +251,9 @@ class AcceptHeaderTest extends TestCase
         );
     }
 
+    /**
+     * @return  array<string, mixed[]>
+     */
     public function acceptedMimetypes(): array
     {
         return [
@@ -253,28 +263,31 @@ class AcceptHeaderTest extends TestCase
     }
 
     /**
+     * @param  string[]  $accepted
      * @test
      * @dataProvider  acceptedMimetypes
      */
-    public function doesNotHaveSharedAcceptablesForEmptyList(array $accepted)
+    public function doesNotHaveSharedAcceptablesForEmptyList(array $accepted): void
     {
         assertFalse($this->acceptHeader->hasSharedAcceptables($accepted));
     }
 
     /**
+     * @param  string[]  $accepted
      * @test
      * @dataProvider  acceptedMimetypes
      */
-    public function sharedAcceptablesForEmptyListReturnsEmptyArray(array $accepted)
+    public function sharedAcceptablesForEmptyListReturnsEmptyArray(array $accepted): void
     {
         assertEmptyArray($this->acceptHeader->sharedAcceptables($accepted));
     }
 
     /**
+     * @param  string[]  $accepted
      * @test
      * @dataProvider  acceptedMimetypes
      */
-    public function doesNotHaveSharedAcceptablesForNonEqualLists(array $accepted)
+    public function doesNotHaveSharedAcceptablesForNonEqualLists(array $accepted): void
     {
         assertFalse(
                 $this->acceptHeader->addAcceptable('text/html')
@@ -283,10 +296,11 @@ class AcceptHeaderTest extends TestCase
     }
 
     /**
+     * @param  string[]  $accepted
      * @test
      * @dataProvider  acceptedMimetypes
      */
-    public function sharedAcceptablesForNonEqualListsReturnsEmptyArray(array $accepted)
+    public function sharedAcceptablesForNonEqualListsReturnsEmptyArray(array $accepted): void
     {
         assertEmptyArray(
                 $this->acceptHeader->addAcceptable('text/html')
@@ -297,7 +311,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function hasSharedAcceptablesForCommonLists()
+    public function hasSharedAcceptablesForCommonLists(): void
     {
         assertTrue(
                 $this->acceptHeader->addAcceptable('text/plain', 0.2)
@@ -308,7 +322,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function sharedAcceptablesForCommonListsReturnsArrayWithSharedOnes()
+    public function sharedAcceptablesForCommonListsReturnsArrayWithSharedOnes(): void
     {
         assertThat(
                 $this->acceptHeader->addAcceptable('text/plain', 0.2)
@@ -320,7 +334,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function findMatchWithGreatestPriorityFromEmptyListReturnsNull()
+    public function findMatchWithGreatestPriorityFromEmptyListReturnsNull(): void
     {
         assertNull(
                 $this->acceptHeader->findMatchWithGreatestPriority([
@@ -333,7 +347,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function findMatchWithGreatestPriorityFromAcceptedEmptyListReturnsNull()
+    public function findMatchWithGreatestPriorityFromAcceptedEmptyListReturnsNull(): void
     {
         assertNull(
                 $this->acceptHeader->addAcceptable('text/plain', 0.2)
@@ -345,7 +359,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function findMatchWithGreatestPriorityForNonMatchingListsReturnsNull()
+    public function findMatchWithGreatestPriorityForNonMatchingListsReturnsNull(): void
     {
         assertNull(
                 $this->acceptHeader->addAcceptable('text/plain', 0.2)
@@ -357,7 +371,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function findMatchWithGreatestPriorityForMatchingListsAcceptableWithGreatestPriority()
+    public function findMatchWithGreatestPriorityForMatchingListsAcceptableWithGreatestPriority(): void
     {
         assertThat(
                 $this->acceptHeader->addAcceptable('text/plain', 0.2)
@@ -370,7 +384,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function findMatchWithGreatestPriorityWithNonSharedAcceptablesButGeneralAllowedAcceptable()
+    public function findMatchWithGreatestPriorityWithNonSharedAcceptablesButGeneralAllowedAcceptable(): void
     {
         assertThat(
                 $this->acceptHeader->addAcceptable('*/*', 0.2)
@@ -386,7 +400,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @test
      */
-    public function findMatchWithGreatestPriorityWithNonSharedAcceptablesButMainTypeAllowedAcceptable()
+    public function findMatchWithGreatestPriorityWithNonSharedAcceptablesButMainTypeAllowedAcceptable(): void
     {
         assertThat(
                 $this->acceptHeader->addAcceptable('text/*', 0.2)

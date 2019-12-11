@@ -26,13 +26,13 @@ class HttpVersion
     /**
      * major http version
      *
-     * @type  int
+     * @var  int
      */
     private $major;
     /**
      * minor http version
      *
-     * @type  int
+     * @var  int
      */
     private $minor;
 

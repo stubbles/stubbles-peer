@@ -252,11 +252,16 @@ abstract class HttpUri extends Uri
      */
     public function port(int $defaultPort = null): int
     {
-        if ($this->isHttp()) {
-            return parent::port(Http::PORT);
+        $port = parent::port();
+        if (null !== $port) {
+            return $port;
         }
 
-        return parent::port(Http::PORT_SSL);
+        if ($this->isHttp()) {
+            return Http::PORT;
+        }
+
+        return Http::PORT_SSL;
     }
 
     /**

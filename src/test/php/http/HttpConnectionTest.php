@@ -28,11 +28,11 @@ class HttpConnectionTest extends TestCase
     /**
      * instance to test
      *
-     * @type  \stubbles\peer\http\HttpConnection
+     * @var  \stubbles\peer\http\HttpConnection
      */
     private $httpConnection;
     /**
-     * @type  string
+     * @var  string
      */
     private $memory;
 
@@ -56,7 +56,7 @@ class HttpConnectionTest extends TestCase
     /**
      * @test
      */
-    public function getReturnsHttpResponse()
+    public function getReturnsHttpResponse(): void
     {
         assertThat(
                 $this->httpConnection->timeout(2)
@@ -73,7 +73,7 @@ class HttpConnectionTest extends TestCase
     /**
      * @test
      */
-    public function getWritesProperRequestLines()
+    public function getWritesProperRequestLines(): void
     {
         $this->httpConnection->timeout(2)
                 ->asUserAgent('Stubbles HTTP Client')
@@ -100,7 +100,7 @@ class HttpConnectionTest extends TestCase
     /**
      * @test
      */
-    public function headReturnsHttpResponse()
+    public function headReturnsHttpResponse(): void
     {
         assertThat(
                 $this->httpConnection->timeout(2)
@@ -117,7 +117,7 @@ class HttpConnectionTest extends TestCase
     /**
      * @test
      */
-    public function headWritesProperRequestLines()
+    public function headWritesProperRequestLines(): void
     {
         $this->httpConnection->timeout(2)
                     ->asUserAgent('Stubbles HTTP Client')
@@ -145,7 +145,7 @@ class HttpConnectionTest extends TestCase
     /**
      * @test
      */
-    public function postReturnsHttpResponse()
+    public function postReturnsHttpResponse(): void
     {
         assertThat(
                 $this->httpConnection->timeout(2)
@@ -162,7 +162,7 @@ class HttpConnectionTest extends TestCase
     /**
      * @test
      */
-    public function postWritesProperHttpRequestLinesWithRequestBody()
+    public function postWritesProperHttpRequestLinesWithRequestBody(): void
     {
         $this->httpConnection->timeout(2)
                 ->asUserAgent('Stubbles HTTP Client')
@@ -191,7 +191,7 @@ class HttpConnectionTest extends TestCase
     /**
      * @test
      */
-    public function postWritesProperHttpRequestLinesWithRequestValues()
+    public function postWritesProperHttpRequestLinesWithRequestValues(): void
     {
         $this->httpConnection->timeout(2)
                 ->asUserAgent('Stubbles HTTP Client')
@@ -222,7 +222,7 @@ class HttpConnectionTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function putReturnsHttpResponse()
+    public function putReturnsHttpResponse(): void
     {
         assertThat(
                 $this->httpConnection->timeout(2)
@@ -240,7 +240,7 @@ class HttpConnectionTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function putWritesProperHttpRequestLines()
+    public function putWritesProperHttpRequestLines(): void
     {
         $this->httpConnection->timeout(2)
                 ->asUserAgent('Stubbles HTTP Client')
@@ -270,7 +270,7 @@ class HttpConnectionTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function deleteReturnsHttpResponse()
+    public function deleteReturnsHttpResponse(): void
     {
         assertThat(
                 $this->httpConnection->timeout(2)
@@ -288,7 +288,7 @@ class HttpConnectionTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function deleteWritesProperHttpRequestLines()
+    public function deleteWritesProperHttpRequestLines(): void
     {
         $this->httpConnection->timeout(2)
                 ->asUserAgent('Stubbles HTTP Client')
@@ -316,7 +316,7 @@ class HttpConnectionTest extends TestCase
      * @since  3.1.0
      * @test
      */
-    public function functionShortcut()
+    public function functionShortcut(): void
     {
         assertThat(
                 \stubbles\peer\http('http://example.net/'),

@@ -14,6 +14,7 @@ use function bovigo\assert\assertThat;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
 use function bovigo\assert\expect;
+use function bovigo\assert\fail;
 use function bovigo\assert\predicate\equals;
 /**
  * Test for stubbles\peer\Stream.
@@ -24,15 +25,15 @@ use function bovigo\assert\predicate\equals;
 class StreamTest extends TestCase
 {
     /**
-     * @type  org\bovigo\vfs\vfsStreamFile
+     * @var  \org\bovigo\vfs\vfsStreamFile
      */
     private $file;
     /**
-     * @type  resource
+     * @var  resource
      */
     private $underlyingStream;
     /**
-     * @type  \stubbles\peer\Stream
+     * @var  \stubbles\peer\Stream
      */
     private $stream;
 
@@ -42,14 +43,19 @@ class StreamTest extends TestCase
         $this->file = vfsStream::newFile('foo.txt')
                 ->withContent("bar\nbaz")
                 ->at($root);
-        $this->underlyingStream = fopen($this->file->url(), 'rb+');
+        $handle = fopen($this->file->url(), 'rb+');
+        if (false === $handle) {
+            fail('Could not open vfsStream url');
+        }
+
+        $this->underlyingStream = $handle;
         $this->stream = new Stream($this->underlyingStream);
     }
 
     /**
      * @test
      */
-    public function createWithInvalidResourceThrowsIllegalArgumentException()
+    public function createWithInvalidResourceThrowsIllegalArgumentException(): void
     {
         expect(function() { new Stream('foo'); })
                 ->throws(\InvalidArgumentException::class);
@@ -58,7 +64,7 @@ class StreamTest extends TestCase
     /**
      * @test
      */
-    public function readReturnsDataOfFirstLine()
+    public function readReturnsDataOfFirstLine(): void
     {
         assertThat($this->stream->read(), equals("bar\n"));
     }
@@ -66,7 +72,7 @@ class StreamTest extends TestCase
     /**
      * @test
      */
-    public function readLineReturnsTrimmedDataOfFirstLine()
+    public function readLineReturnsTrimmedDataOfFirstLine(): void
     {
         assertThat($this->stream->readLine(), equals('bar'));
     }
@@ -74,7 +80,7 @@ class StreamTest extends TestCase
     /**
      * @test
      */
-    public function readBinaryReturnsData()
+    public function readBinaryReturnsData(): void
     {
         assertThat($this->stream->readBinary(), equals("bar\nbaz"));
     }
@@ -82,7 +88,7 @@ class StreamTest extends TestCase
     /**
      * @test
      */
-    public function writesToResource()
+    public function writesToResource(): void
     {
         assertThat($this->stream->write('yoyoyoyo'), equals(8));
         assertThat($this->file->getContent(), equals('yoyoyoyo'));
@@ -91,7 +97,7 @@ class StreamTest extends TestCase
     /**
      * @test
      */
-    public function eofReturnsTrueWhenNotAtEnd()
+    public function eofReturnsTrueWhenNotAtEnd(): void
     {
         assertFalse($this->stream->eof());
     }
@@ -99,7 +105,7 @@ class StreamTest extends TestCase
     /**
      * @test
      */
-    public function eofReturnsTrueWhenAtEnd()
+    public function eofReturnsTrueWhenAtEnd(): void
     {
         $this->stream->readBinary();
         assertTrue($this->stream->eof());
@@ -108,9 +114,10 @@ class StreamTest extends TestCase
     /**
      * @test
      */
-    public function nullingTheStreamClosesTheResource()
+    public function nullingTheStreamClosesTheResource(): void
     {
-        $this->stream = null;
+        $stream = new Stream($this->underlyingStream);
+        $stream = null;
         assertFalse(is_resource($this->underlyingStream));
     }
 }

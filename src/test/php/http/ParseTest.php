@@ -21,7 +21,7 @@ class ParseTest extends TestCase
     /**
      * @test
      */
-    public function parseRecognizesHttpUris()
+    public function parseRecognizesHttpUris(): void
     {
         assertThat(
                 Parse::toType('http://example.net/'),
@@ -32,7 +32,7 @@ class ParseTest extends TestCase
     /**
      * @test
      */
-    public function parseRecognizesHttpsUris()
+    public function parseRecognizesHttpsUris(): void
     {
         assertThat(
                 Parse::toType('https://example.net/'),

@@ -27,7 +27,7 @@ class HttpRequestTest extends TestCase
     /**
      * memory to write http request to
      *
-     * @type  string
+     * @var  string
      */
     private $memory;
 
@@ -69,7 +69,7 @@ class HttpRequestTest extends TestCase
     /**
      * @test
      */
-    public function getWritesCorrectRequest()
+    public function getWritesCorrectRequest(): void
     {
         $this->createHttpRequest()->get();
         assertThat(
@@ -87,7 +87,7 @@ class HttpRequestTest extends TestCase
      * @since   2.1.2
      * @test
      */
-    public function getWritesCorrectRequestWithQueryString()
+    public function getWritesCorrectRequestWithQueryString(): void
     {
         $this->createHttpRequest('foo=bar&baz=1')->get();
         assertThat(
@@ -104,7 +104,7 @@ class HttpRequestTest extends TestCase
     /**
      * @test
      */
-    public function getWritesCorrectRequestWithVersion()
+    public function getWritesCorrectRequestWithVersion(): void
     {
         $this->createHttpRequest()->get(5, HttpVersion::HTTP_1_0);
         assertThat(
@@ -119,7 +119,8 @@ class HttpRequestTest extends TestCase
     }
 
     /**
-     * @since  8.0.0
+     * @since   8.0.0
+     * @return  array<mixed[]>
      */
     public function invalidHttpVersions(): array
     {
@@ -127,10 +128,11 @@ class HttpRequestTest extends TestCase
     }
 
     /**
+     * @param  mixed  $httpVersion
      * @test
      * @dataProvider  invalidHttpVersions
      */
-    public function getWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion)
+    public function getWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion): void
     {
         expect(function() use ($httpVersion) {
                 $this->createHttpRequest()->get(5, $httpVersion);
@@ -140,7 +142,7 @@ class HttpRequestTest extends TestCase
     /**
      * @test
      */
-    public function headWritesCorrectRequest()
+    public function headWritesCorrectRequest(): void
     {
         $this->createHttpRequest()->head();
         assertThat(
@@ -159,7 +161,7 @@ class HttpRequestTest extends TestCase
      * @since   2.1.2
      * @test
      */
-    public function headWritesCorrectRequestWithQueryString()
+    public function headWritesCorrectRequestWithQueryString(): void
     {
         $this->createHttpRequest('foo=bar&baz=1')->head();
         assertThat(
@@ -177,7 +179,7 @@ class HttpRequestTest extends TestCase
     /**
      * @test
      */
-    public function headWritesCorrectRequestWithVersion()
+    public function headWritesCorrectRequestWithVersion(): void
     {
         $this->createHttpRequest()->head(5, HttpVersion::HTTP_1_0);
         assertThat(
@@ -193,10 +195,11 @@ class HttpRequestTest extends TestCase
     }
 
     /**
+     * @param  mixed  $httpVersion
      * @test
      * @dataProvider  invalidHttpVersions
      */
-    public function headWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion)
+    public function headWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion): void
     {
         expect(function() use ($httpVersion) {
                 $this->createHttpRequest()->head(5, $httpVersion);
@@ -206,7 +209,7 @@ class HttpRequestTest extends TestCase
     /**
      * @test
      */
-    public function postWritesCorrectRequest()
+    public function postWritesCorrectRequest(): void
     {
         $this->createHttpRequest()->post('foobar');
         assertThat(
@@ -226,7 +229,7 @@ class HttpRequestTest extends TestCase
      * @since   2.1.2
      * @test
      */
-    public function postIgnoresQueryString()
+    public function postIgnoresQueryString(): void
     {
         $this->createHttpRequest('foo=bar&baz=1')->post('foobar');
         assertThat(
@@ -245,7 +248,7 @@ class HttpRequestTest extends TestCase
     /**
      * @test
      */
-    public function postWritesCorrectRequestWithVersion()
+    public function postWritesCorrectRequestWithVersion(): void
     {
         $this->createHttpRequest()->post('foobar', 5, HttpVersion::HTTP_1_0);
         assertThat(
@@ -264,7 +267,7 @@ class HttpRequestTest extends TestCase
     /**
      * @test
      */
-    public function postWritesCorrectRequestUsingEmptyPostValues()
+    public function postWritesCorrectRequestUsingEmptyPostValues(): void
     {
         $this->createHttpRequest()->post([]);
         assertThat(
@@ -283,7 +286,7 @@ class HttpRequestTest extends TestCase
     /**
      * @test
      */
-    public function postWritesCorrectRequestUsingPostValues()
+    public function postWritesCorrectRequestUsingPostValues(): void
     {
         $this->createHttpRequest()->post(['foo' => 'bar', 'ba z' => 'dum my']);
         assertThat(
@@ -303,7 +306,7 @@ class HttpRequestTest extends TestCase
     /**
      * @test
      */
-    public function postWritesCorrectRequestUsingPostValuesWithVersion()
+    public function postWritesCorrectRequestUsingPostValuesWithVersion(): void
     {
         $this->createHttpRequest()->post(
                 ['foo' => 'bar', 'ba z' => 'dum my'],
@@ -325,10 +328,11 @@ class HttpRequestTest extends TestCase
     }
 
     /**
+     * @param  mixed  $httpVersion
      * @test
      * @dataProvider  invalidHttpVersions
      */
-    public function postWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion)
+    public function postWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion): void
     {
         expect(function() use ($httpVersion) {
                 $this->createHttpRequest()->post('foobar', 5, $httpVersion);
@@ -339,7 +343,7 @@ class HttpRequestTest extends TestCase
      * @since   2.0.0
      * @test
      */
-    public function putWritesCorrectRequest()
+    public function putWritesCorrectRequest(): void
     {
         $this->createHttpRequest()->put('foobar');
         assertThat(
@@ -359,7 +363,7 @@ class HttpRequestTest extends TestCase
      * @since   2.1.2
      * @test
      */
-    public function putIgnoresQueryString()
+    public function putIgnoresQueryString(): void
     {
         $this->createHttpRequest('foo=bar&baz=1')->put('foobar');
         assertThat(
@@ -379,7 +383,7 @@ class HttpRequestTest extends TestCase
      * @since   2.0.0
      * @test
      */
-    public function putWritesCorrectRequestWithVersion()
+    public function putWritesCorrectRequestWithVersion(): void
     {
         $this->createHttpRequest()->put('foobar', 5, HttpVersion::HTTP_1_0);
         assertThat(
@@ -399,7 +403,7 @@ class HttpRequestTest extends TestCase
      * @since   2.0.0
      * @test
      */
-    public function putWithInvalidHttpVersionThrowsIllegalArgumentException()
+    public function putWithInvalidHttpVersionThrowsIllegalArgumentException(): void
     {
         expect(function() {
                 $this->createHttpRequest()->put('foobar', 5, 'invalid');
@@ -410,7 +414,7 @@ class HttpRequestTest extends TestCase
      * @since   2.0.0
      * @test
      */
-    public function deleteWritesCorrectRequest()
+    public function deleteWritesCorrectRequest(): void
     {
         $this->createHttpRequest()->delete();
         assertThat(
@@ -428,7 +432,7 @@ class HttpRequestTest extends TestCase
      * @since   2.1.2
      * @test
      */
-    public function deleteIgnoresQueryString()
+    public function deleteIgnoresQueryString(): void
     {
         $this->createHttpRequest('foo=bar&baz=1')->delete();
         assertThat(
@@ -446,7 +450,7 @@ class HttpRequestTest extends TestCase
      * @since   2.0.0
      * @test
      */
-    public function deleteWritesCorrectRequestWithVersion()
+    public function deleteWritesCorrectRequestWithVersion(): void
     {
         $this->createHttpRequest()->delete(5, HttpVersion::HTTP_1_0);
         assertThat(
@@ -461,11 +465,12 @@ class HttpRequestTest extends TestCase
     }
 
     /**
-     * @since   2.0.0
+     * @param  mixed  $httpVersion
+     * @since  2.0.0
      * @test
      * @dataProvider  invalidHttpVersions
      */
-    public function deleteWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion)
+    public function deleteWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion): void
     {
         expect(function() use ($httpVersion) {
                 $this->createHttpRequest()->delete(5, $httpVersion);

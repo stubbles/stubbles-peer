@@ -104,7 +104,7 @@ class Http
     /**
      * map of status code classes
      *
-     * @type array<int,string>
+     * @var array<int,string>
      */
     private static $statusClass     = [
             0 => Http::STATUS_CLASS_UNKNOWN,
@@ -117,7 +117,7 @@ class Http
     /**
      * map of status codes to reason phrases
      *
-     * @type  array<int,string>
+     * @var  array<int,string>
      */
     private static $reasonPhrases   = [
             100 => 'Continue',

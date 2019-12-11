@@ -17,7 +17,7 @@ class ParsedUri
     /**
      * list of hostnames that are localhost
      *
-     * @type  array
+     * @var  array<string,string>
      */
     const LOCALHOSTNAMES = [
             'localhost' => 'localhost',
@@ -27,13 +27,13 @@ class ParsedUri
     /**
      * internal representation after parse_url()
      *
-     * @type  array
+     * @var  array<string,int|string>
      */
     private $uri         = [];
     /**
      * query string of uri
      *
-     * @type  \stubbles\peer\QueryString
+     * @var  \stubbles\peer\QueryString
      */
     private $queryString;
 
@@ -42,23 +42,24 @@ class ParsedUri
      *
      * Passing a query string will omit any query string already present in $uri.
      *
-     * @param   string|array                $uri          uri to parse
-     * @param   \stubbles\peer\QueryString  $queryString  optional  parameters when not in uri
+     * @param   string|array<string,int|string>  $uri          uri to parse
+     * @param   \stubbles\peer\QueryString   $queryString  optional  parameters when not in uri
      * @throws  \stubbles\peer\MalformedUri
      */
     public function __construct($uri, QueryString $queryString = null)
     {
-        $this->uri = !is_array($uri) ? parse_url($uri): $uri;
-        if (!is_array($this->uri)) {
-            throw new MalformedUri('Given URI ' . (is_string($uri) ? $uri : '') . ' is not a valid URI');
+        $parsedUri = !\is_array($uri) ? \parse_url($uri): $uri;
+        if (!\is_array($parsedUri)) {
+            throw new MalformedUri('Given URI ' . (\is_string($uri) ? $uri : '') . ' is not a valid URI');
         }
 
+        $this->uri = $parsedUri;
         if (!isset($this->uri['scheme'])) {
-            throw new MalformedUri('Given URI ' . (is_string($uri) ? $uri : '') . ' is missing a scheme.');
+            throw new MalformedUri('Given URI ' . (\is_string($uri) ? $uri : '') . ' is missing a scheme.');
         }
 
         if (isset($this->uri['host'])) {
-            $this->uri['host'] = strtolower($this->uri['host']);
+            $this->uri['host'] = strtolower((string) $this->uri['host']);
         }
 
         if (!isset($this->uri['path'])) {
@@ -93,7 +94,7 @@ class ParsedUri
      * The return value is a new instance with the named parts changed to the
      * new values.
      *
-     * @param   array  $changedUri
+     * @param   array<string,int|string|null>  $changedUri
      * @return  \stubbles\peer\ParsedUri
      */
     public function transpose(array $changedUri): self

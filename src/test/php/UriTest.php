@@ -31,7 +31,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function canNotCreateUriWithoutScheme()
+    public function canNotCreateUriWithoutScheme(): void
     {
         expect(function() { Uri::fromString('stubbles.net'); })
                 ->throws(MalformedUri::class);
@@ -40,7 +40,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function canNotCreateUriWithInvalidScheme()
+    public function canNotCreateUriWithInvalidScheme(): void
     {
         expect(function() {
                 Uri::fromString('404://stubbles.net');
@@ -50,7 +50,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function canNotCreateUriWithInvalidUser()
+    public function canNotCreateUriWithInvalidUser(): void
     {
         expect(function() {
                 Uri::fromString('http://mi@ss@stubbles.net');
@@ -60,7 +60,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function canNotCreateUriWithInvalidPassword()
+    public function canNotCreateUriWithInvalidPassword(): void
     {
         expect(function() {
                 Uri::fromString('http://mi:s@s@stubbles.net');
@@ -70,7 +70,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function canNotCreateUriWithInvalidHost()
+    public function canNotCreateUriWithInvalidHost(): void
     {
         expect(function() {
                 Uri::fromString('http://_:80');
@@ -80,7 +80,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function createFromEmptyStringThrowsMalformedUri()
+    public function createFromEmptyStringThrowsMalformedUri(): void
     {
         expect(function() { Uri::fromString(''); })
                 ->throws(MalformedUri::class);
@@ -89,7 +89,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function schemeIsRecognized()
+    public function schemeIsRecognized(): void
     {
         assertThat(Uri::fromString('http://stubbles.net/')->scheme(), equals('http'));
     }
@@ -97,7 +97,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function schemeIsRecognizedForIpAddresses()
+    public function schemeIsRecognizedForIpAddresses(): void
     {
         assertThat(Uri::fromString('http://127.0.0.1')->scheme(), equals('http'));
     }
@@ -105,7 +105,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function schemeIsRecognizedIfHostIsMissing()
+    public function schemeIsRecognizedIfHostIsMissing(): void
     {
         assertThat(Uri::fromString('file:///home')->scheme(), equals('file'));
     }
@@ -113,7 +113,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasDefaultPortReturnsFalseWhenPortSpecified()
+    public function hasDefaultPortReturnsFalseWhenPortSpecified(): void
     {
         assertFalse(
                 Uri::fromString('http://stubbles.net:80/')->hasDefaultPort()
@@ -124,7 +124,7 @@ class UriTest extends TestCase
      * @test
      * @since  8.0.0
      */
-    public function hasDefaultPortReturnsTrueWhenNoPortSpecified()
+    public function hasDefaultPortReturnsTrueWhenNoPortSpecified(): void
     {
         assertTrue(
                 Uri::fromString('http://stubbles.net/')->hasDefaultPort()
@@ -134,7 +134,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasNoUserIfNoUserGiven()
+    public function hasNoUserIfNoUserGiven(): void
     {
         assertNull(Uri::fromString('ftp://stubbles.net')->user());
     }
@@ -142,7 +142,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasDefaultUserIfNoUserGiven()
+    public function hasDefaultUserIfNoUserGiven(): void
     {
         assertThat(
                 Uri::fromString('ftp://stubbles.net')->user('mikey'),
@@ -153,7 +153,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasGivenUser()
+    public function hasGivenUser(): void
     {
         assertThat(
                 Uri::fromString('ftp://mikey@stubbles.net')->user(),
@@ -164,7 +164,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasGivenUserEvenIfDefaultChanged()
+    public function hasGivenUserEvenIfDefaultChanged(): void
     {
         assertThat(
                 Uri::fromString('ftp://mikey@stubbles.net')->user('other'),
@@ -175,7 +175,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasEmptyUser()
+    public function hasEmptyUser(): void
     {
         assertEmptyString(Uri::fromString('ftp://@stubbles.net')->user());
     }
@@ -183,7 +183,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasEmptyUserEvenIfDefaultChanged()
+    public function hasEmptyUserEvenIfDefaultChanged(): void
     {
         assertEmptyString(Uri::fromString('ftp://@stubbles.net')->user('other'));
     }
@@ -192,7 +192,7 @@ class UriTest extends TestCase
      * @test
      * @deprecated  since 8.0.0, will be removed with 9.0.0
      */
-    public function hasNoPasswordIfNoUserGiven()
+    public function hasNoPasswordIfNoUserGiven(): void
     {
         assertNull(Uri::fromString('ftp://stubbles.net')->password());
     }
@@ -201,7 +201,7 @@ class UriTest extends TestCase
      * @test
      * @deprecated  since 8.0.0, will be removed with 9.0.0
      */
-    public function hasNoDefaultPasswordIfNoUserGiven()
+    public function hasNoDefaultPasswordIfNoUserGiven(): void
     {
         assertNull(Uri::fromString('ftp://stubbles.net')->password('secret'));
     }
@@ -210,7 +210,7 @@ class UriTest extends TestCase
      * @test
      * @deprecated  since 8.0.0, will be removed with 9.0.0
      */
-    public function hasDefaultPasswordIfUserButNoPasswordGiven()
+    public function hasDefaultPasswordIfUserButNoPasswordGiven(): void
     {
         assertThat(
                 Uri::fromString('ftp://mikey@stubbles.net')->password('secret'),
@@ -222,7 +222,7 @@ class UriTest extends TestCase
      * @test
      * @deprecated  since 8.0.0, will be removed with 9.0.0
      */
-    public function hasGivenPassword()
+    public function hasGivenPassword(): void
     {
         assertThat(
                 Uri::fromString('ftp://mikey:secret@stubbles.net')->password(),
@@ -234,7 +234,7 @@ class UriTest extends TestCase
      * @test
      * @deprecated  since 8.0.0, will be removed with 9.0.0
      */
-    public function hasGivenPasswordEvenIfDefaultChanged()
+    public function hasGivenPasswordEvenIfDefaultChanged(): void
     {
         assertThat(
                 Uri::fromString('ftp://mikey:secret@stubbles.net')->password('other'),
@@ -246,7 +246,7 @@ class UriTest extends TestCase
      * @test
      * @deprecated  since 8.0.0, will be removed with 9.0.0
      */
-    public function hasEmptyPassword()
+    public function hasEmptyPassword(): void
     {
         assertEmptyString(
                 Uri::fromString('ftp://mikey:@stubbles.net')->password()
@@ -257,7 +257,7 @@ class UriTest extends TestCase
      * @test
      * @deprecated  since 8.0.0, will be removed with 9.0.0
      */
-    public function hasEmptyPasswordEvenIfDefaultChanged()
+    public function hasEmptyPasswordEvenIfDefaultChanged(): void
     {
         assertEmptyString(
                 Uri::fromString('ftp://mikey:@stubbles.net')->password('other')
@@ -267,7 +267,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasHostFromGivenUri()
+    public function hasHostFromGivenUri(): void
     {
         assertThat(
                 Uri::fromString('ftp://stubbles.net:21')->hostname(),
@@ -278,7 +278,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hostIsTransformedToLowercase()
+    public function hostIsTransformedToLowercase(): void
     {
         assertThat(
                 Uri::fromString('ftp://stUBBles.net:21')->hostname(),
@@ -289,7 +289,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasNoHostIfUriDoesNotContainHost()
+    public function hasNoHostIfUriDoesNotContainHost(): void
     {
         assertNull(Uri::fromString('file:///home')->hostname());
     }
@@ -297,7 +297,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function getHostReturnsIpv4()
+    public function getHostReturnsIpv4(): void
     {
         assertThat(
                 Uri::fromString('http://127.0.0.1/')->hostname(),
@@ -309,7 +309,7 @@ class UriTest extends TestCase
      * @test
      * @group  bug258
      */
-    public function getHostReturnsIpv6ShortNotation()
+    public function getHostReturnsIpv6ShortNotation(): void
     {
         assertThat(
                 Uri::fromString('http://[2001:db8:12:34::1]/')->hostname(),
@@ -321,7 +321,7 @@ class UriTest extends TestCase
      * @test
      * @group  bug258
      */
-    public function getHostReturnsIpv6LongNotation()
+    public function getHostReturnsIpv6LongNotation(): void
     {
         assertThat(
                 Uri::fromString('http://[2001:8d8f:1fe:5:abba:dbff:fefe:7755]:80/')
@@ -333,7 +333,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasNoPortIfNoPortGiven()
+    public function hasNoPortIfNoPortGiven(): void
     {
         assertNull(Uri::fromString('ftp://stubbles.net')->port());
     }
@@ -341,7 +341,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasDefaultValueIfNoPortGiven()
+    public function hasDefaultValueIfNoPortGiven(): void
     {
         assertThat(Uri::fromString('ftp://stubbles.net')->port(303), equals(303));
     }
@@ -349,7 +349,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasGivenPortIfPortGiven()
+    public function hasGivenPortIfPortGiven(): void
     {
         assertThat(Uri::fromString('ftp://stubbles.net:21')->port(), equals(21));
     }
@@ -357,7 +357,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasGivenPortFromIpv4Adress()
+    public function hasGivenPortFromIpv4Adress(): void
     {
         assertThat(Uri::fromString('ftp://127.0.01:21')->port(), equals(21));
     }
@@ -366,7 +366,7 @@ class UriTest extends TestCase
      * @test
      * @group  bug258
      */
-    public function hasGivenPortFromIpv6AdressShortNotation()
+    public function hasGivenPortFromIpv6AdressShortNotation(): void
     {
         assertThat(Uri::fromString('ftp://[2001:db8:12:34::1]:21')->port(), equals(21));
     }
@@ -375,7 +375,7 @@ class UriTest extends TestCase
      * @test
      * @group  bug258
      */
-    public function hasGivenPortFromIpv6AdressLongNotation()
+    public function hasGivenPortFromIpv6AdressLongNotation(): void
     {
         assertThat(
                 Uri::fromString('ftp://[2001:8d8f:1fe:5:abba:dbff:fefe:7755]:21')->port(),
@@ -386,7 +386,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasGivenPortEvenIfDefaultChanged()
+    public function hasGivenPortEvenIfDefaultChanged(): void
     {
         assertThat(Uri::fromString('ftp://stubbles.net:21')->port(303), equals(21));
     }
@@ -394,7 +394,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function getPathReturnsEmptyStringIfNoPathInGivenUri()
+    public function getPathReturnsEmptyStringIfNoPathInGivenUri(): void
     {
         assertEmptyString(Uri::fromString('http://stubbles.net')->path());
     }
@@ -402,7 +402,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function getPathReturnsGivenPath()
+    public function getPathReturnsGivenPath(): void
     {
         assertThat(
                 Uri::fromString('http://stubbles.net/index.php?foo=bar#baz')->path(),
@@ -413,7 +413,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function getPathReturnsPathEvenIfNoHostPresent()
+    public function getPathReturnsPathEvenIfNoHostPresent(): void
     {
         assertThat(Uri::fromString('file:///home')->path(), equals('/home'));
     }
@@ -421,7 +421,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasNoQueryStringIfNoneInOriginalUri()
+    public function hasNoQueryStringIfNoneInOriginalUri(): void
     {
         assertFalse(
                 Uri::fromString('http://stubbles.net:80/')->hasQueryString()
@@ -431,7 +431,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasQueryStringIfInOriginalUri()
+    public function hasQueryStringIfInOriginalUri(): void
     {
         assertTrue(
                 Uri::fromString('http://stubbles.net:80/?foo=bar')->hasQueryString()
@@ -441,7 +441,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasNoDnsRecordWithoutHost()
+    public function hasNoDnsRecordWithoutHost(): void
     {
         $checkdnsrr = NewCallable::of('checkdnsrr');
         assertFalse(Uri::fromString('file:///home/test.txt')->hasDnsRecord($checkdnsrr));
@@ -451,7 +451,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasDnsRecordForLocalhost()
+    public function hasDnsRecordForLocalhost(): void
     {
         $checkdnsrr = NewCallable::of('checkdnsrr');
         assertTrue(Uri::fromString('http://localhost')->hasDnsRecord($checkdnsrr));
@@ -461,7 +461,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasDnsRecordForIpv4Localhost()
+    public function hasDnsRecordForIpv4Localhost(): void
     {
         $checkdnsrr = NewCallable::of('checkdnsrr');
         assertTrue(Uri::fromString('http://127.0.0.1')->hasDnsRecord($checkdnsrr));
@@ -472,7 +472,7 @@ class UriTest extends TestCase
      * @test
      * @group  bug258
      */
-    public function hasDnsRecordForIpv6Localhost()
+    public function hasDnsRecordForIpv6Localhost(): void
     {
         $checkdnsrr = NewCallable::of('checkdnsrr');
         assertTrue(Uri::fromString('http://[::1]')->hasDnsRecord($checkdnsrr));
@@ -483,7 +483,7 @@ class UriTest extends TestCase
      * @test
      * @since  8.0.0
      */
-    public function hasNoDnsRecordForNonExistingHost()
+    public function hasNoDnsRecordForNonExistingHost(): void
     {
         assertFalse(
                 Uri::fromString('http://foobar')->hasDnsRecord(
@@ -496,7 +496,7 @@ class UriTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function canBeCastedToString()
+    public function canBeCastedToString(): void
     {
         assertThat(
                 (string) Uri::fromString('http://stubbles.net:80/index.php?content=features#top'),
@@ -507,7 +507,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function asStringReturnsOriginalGivenUri()
+    public function asStringReturnsOriginalGivenUri(): void
     {
         assertThat(
                 Uri::fromString('http://stubbles.net:80/index.php?content=features#top')
@@ -519,7 +519,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function asStringWithoutPortReturnsOriginalGivenUriButWithoutPort()
+    public function asStringWithoutPortReturnsOriginalGivenUriButWithoutPort(): void
     {
         assertThat(
                 Uri::fromString('http://stubbles.net:80/index.php?content=features#top')
@@ -531,7 +531,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithPort()
+    public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithPort(): void
     {
         assertThat(
                 Uri::fromString('http://stubbles.net:80/index.php?content=features#top')
@@ -543,7 +543,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithoutPort()
+    public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithoutPort(): void
     {
         assertThat(
                 Uri::fromString('http://stubbles.net/index.php?content=features#top')
@@ -555,7 +555,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function asStringReturnsOriginalGivenUriWithUsernameAndPassword()
+    public function asStringReturnsOriginalGivenUriWithUsernameAndPassword(): void
     {
         assertThat(
                 Uri::fromString('http://mikey:secret@stubbles.net:80/index.php?content=features#top')
@@ -567,7 +567,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function asStringWithoutPortReturnsOriginalGivenUriWithUsernameAndPasswordWithoutPort()
+    public function asStringWithoutPortReturnsOriginalGivenUriWithUsernameAndPasswordWithoutPort(): void
     {
         assertThat(
                 Uri::fromString('http://mikey:secret@stubbles.net:80/index.php?content=features#top')
@@ -579,7 +579,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function asStringReturnsOriginalGivenUriWithUsername()
+    public function asStringReturnsOriginalGivenUriWithUsername(): void
     {
         assertThat(
                 Uri::fromString('http://mikey@stubbles.net:80/index.php?content=features#top')
@@ -591,7 +591,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function asStringWithoutPortReturnsOriginalGivenUriWithUsernameWithoutPort()
+    public function asStringWithoutPortReturnsOriginalGivenUriWithUsernameWithoutPort(): void
     {
         assertThat(
                 Uri::fromString('http://mikey@stubbles.net:80/index.php?content=features#top')
@@ -603,7 +603,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function asStringReturnsOriginalGivenUriWithUsernameAndEmptyPassword()
+    public function asStringReturnsOriginalGivenUriWithUsernameAndEmptyPassword(): void
     {
         assertThat(
                 Uri::fromString('http://mikey:@stubbles.net:80/index.php?content=features#top')
@@ -615,7 +615,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function asStringWithoutPortReturnsOriginalGivenUriWithUsernameAndEmptyPasswordWithoutPort()
+    public function asStringWithoutPortReturnsOriginalGivenUriWithUsernameAndEmptyPasswordWithoutPort(): void
     {
         assertThat(
                 Uri::fromString('http://mikey:@stubbles.net:80/index.php?content=features#top')
@@ -627,7 +627,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function asStringReturnsOriginalGivenUriWithIpv4Address()
+    public function asStringReturnsOriginalGivenUriWithIpv4Address(): void
     {
         assertThat(
                 Uri::fromString('http://127.0.0.1:80/index.php?content=features#top')
@@ -639,7 +639,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function asStringWithoutPortReturnsOriginalGivenUriButWithoutPortWithIpv4Address()
+    public function asStringWithoutPortReturnsOriginalGivenUriButWithoutPortWithIpv4Address(): void
     {
         assertThat(
                 Uri::fromString('http://127.0.0.1:80/index.php?content=features#top')
@@ -651,7 +651,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithIpv4Address()
+    public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithIpv4Address(): void
     {
         assertThat(
                 Uri::fromString('http://127.0.0.1:80/index.php?content=features#top')
@@ -664,7 +664,7 @@ class UriTest extends TestCase
      * @test
      * @group  bug258
      */
-    public function asStringReturnsOriginalGivenUriWithIpv6AddressShortNotation()
+    public function asStringReturnsOriginalGivenUriWithIpv6AddressShortNotation(): void
     {
         assertThat(
                 Uri::fromString('http://[2001:db8:12:34::1]:80/index.php?content=features#top')
@@ -677,7 +677,7 @@ class UriTest extends TestCase
      * @test
      * @group  bug258
      */
-    public function asStringWithoutPortReturnsOriginalGivenUriButWithoutPortWithIpv6AddressShortNotation()
+    public function asStringWithoutPortReturnsOriginalGivenUriButWithoutPortWithIpv6AddressShortNotation(): void
     {
         assertThat(
                 Uri::fromString('http://[2001:db8:12:34::1]:80/index.php?content=features#top')
@@ -690,7 +690,7 @@ class UriTest extends TestCase
      * @test
      * @group  bug258
      */
-    public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithIpv6AddressShortNotation()
+    public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithIpv6AddressShortNotation(): void
     {
         assertThat(
                 Uri::fromString('http://[2001:db8:12:34::1]:80/index.php?content=features#top')
@@ -703,7 +703,7 @@ class UriTest extends TestCase
      * @test
      * @group  bug258
      */
-    public function asStringReturnsOriginalGivenUriWithIpv6AddressLongNotation()
+    public function asStringReturnsOriginalGivenUriWithIpv6AddressLongNotation(): void
     {
         assertThat(
                 Uri::fromString('http://[2001:8d8f:1fe:5:abba:dbff:fefe:7755]:80/index.php?content=features#top')
@@ -716,7 +716,7 @@ class UriTest extends TestCase
      * @test
      * @group  bug258
      */
-    public function asStringWithoutPortReturnsOriginalGivenUriButWithoutPortWithIpv6AddressLongNotation()
+    public function asStringWithoutPortReturnsOriginalGivenUriButWithoutPortWithIpv6AddressLongNotation(): void
     {
         assertThat(
                 Uri::fromString('http://[2001:8d8f:1fe:5:abba:dbff:fefe:7755]:80/index.php?content=features#top')
@@ -729,7 +729,7 @@ class UriTest extends TestCase
      * @test
      * @group  bug258
      */
-    public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithIpv6AddressLongNotation()
+    public function asStringWithNonDefaultPortReturnsOriginalGivenUriWithIpv6AddressLongNotation(): void
     {
         assertThat(
                 Uri::fromString('http://[2001:8d8f:1fe:5:abba:dbff:fefe:7755]:80/index.php?content=features#top')
@@ -741,7 +741,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function wrongParams()
+    public function wrongParams(): void
     {
         expect(function() {
                 Uri::fromString('http://example.org/')
@@ -752,7 +752,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function paramWithoutValue()
+    public function paramWithoutValue(): void
     {
         assertThat(
                 Uri::fromString('http://example.org/?wsdl')->asStringWithoutPort(),
@@ -763,7 +763,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasParamReturnsTrueIfParamPresent()
+    public function hasParamReturnsTrueIfParamPresent(): void
     {
         assertTrue(
                 Uri::fromString('http://example.org/?wsdl')->hasParam('wsdl')
@@ -773,7 +773,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function hasParamReturnsFalseIfParamNotPresent()
+    public function hasParamReturnsFalseIfParamNotPresent(): void
     {
         assertFalse(
                 Uri::fromString('http://example.org/?wsdl')->hasParam('doesNotExist')
@@ -783,7 +783,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function getParamReturnsNullIfParamNotSet()
+    public function getParamReturnsNullIfParamNotSet(): void
     {
         assertNull(
                 Uri::fromString('http://example.org/?foo=bar')->param('bar')
@@ -793,7 +793,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function getParamReturnsDefaultValueIfParamNotSet()
+    public function getParamReturnsDefaultValueIfParamNotSet(): void
     {
         assertThat(
                 Uri::fromString('http://example.org/?foo=bar')->param('bar', 'baz'),
@@ -804,7 +804,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function getParamReturnsValueIfParamSet()
+    public function getParamReturnsValueIfParamSet(): void
     {
         assertThat(
                 Uri::fromString('http://example.org/?foo=bar')->param('foo'),
@@ -815,7 +815,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function removeNonExistingParamChangesNothing()
+    public function removeNonExistingParamChangesNothing(): void
     {
         assertThat(
                 Uri::fromString('http://example.org/?wsdl')
@@ -828,7 +828,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function removeExistingParamChangesQueryString()
+    public function removeExistingParamChangesQueryString(): void
     {
         assertThat(
                 Uri::fromString('http://example.org/?wsdl&foo=bar')
@@ -842,7 +842,7 @@ class UriTest extends TestCase
      * @test
      * @since  5.1.2
      */
-    public function addParamsChangesQueryString()
+    public function addParamsChangesQueryString(): void
     {
         assertThat(
                 Uri::fromString('http://example.org/?wsdl')
@@ -855,7 +855,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function addParamChangesQueryString()
+    public function addParamChangesQueryString(): void
     {
         assertThat(
                 Uri::fromString('http://example.org/?wsdl')
@@ -868,7 +868,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function fragmentIsNullIfNotInUri()
+    public function fragmentIsNullIfNotInUri(): void
     {
         assertNull(Uri::fromString('http://example.org/?wsdl')->fragment());
     }
@@ -876,7 +876,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function fragmentFromUriIsReturned()
+    public function fragmentFromUriIsReturned(): void
     {
         assertThat(
                 Uri::fromString('http://example.org/?wsdl#top')->fragment(),
@@ -887,7 +887,7 @@ class UriTest extends TestCase
     /**
      * @test
      */
-    public function parsedUriReturnsNullIfNoSchemeInUri()
+    public function parsedUriReturnsNullIfNoSchemeInUri(): void
     {
         expect(function() { new ParsedUri('://example.org/?wsdl#top'); })
                 ->throws(MalformedUri::class);
@@ -897,7 +897,7 @@ class UriTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function schemeEqualsOnlyOriginalScheme()
+    public function schemeEqualsOnlyOriginalScheme(): void
     {
         $parsedUri = new ParsedUri('foo://example.org/?wsdl#top');
         assertFalse($parsedUri->schemeEquals('bar'));
@@ -908,7 +908,7 @@ class UriTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function emptyPortEqualsNull()
+    public function emptyPortEqualsNull(): void
     {
         $parsedUri = new ParsedUri('foo://example.org/?wsdl#top');
         assertTrue($parsedUri->portEquals(null));
@@ -918,7 +918,7 @@ class UriTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function portEqualsOnlyOriginalPort()
+    public function portEqualsOnlyOriginalPort(): void
     {
         $parsedUri = new ParsedUri('foo://example.org:77/?wsdl#top');
         assertTrue($parsedUri->portEquals(77));
@@ -929,7 +929,7 @@ class UriTest extends TestCase
      * @since  2.1.2
      * @test
      */
-    public function hasNoQueryStringIfNoneGiven()
+    public function hasNoQueryStringIfNoneGiven(): void
     {
         assertFalse(
                 Uri::fromString('http://example.org/foo')->hasQueryString()
@@ -940,7 +940,7 @@ class UriTest extends TestCase
      * @since  2.1.2
      * @test
      */
-    public function hasQueryStringIfGiven()
+    public function hasQueryStringIfGiven(): void
     {
         assertTrue(
                 Uri::fromString('http://example.org/?foo=bar&baz=true')->hasQueryString()
@@ -951,7 +951,7 @@ class UriTest extends TestCase
      * @since  2.1.2
      * @test
      */
-    public function hasQueryStringIfParamAdded()
+    public function hasQueryStringIfParamAdded(): void
     {
         assertTrue(
                 Uri::fromString('http://example.org/')
@@ -964,7 +964,7 @@ class UriTest extends TestCase
      * @since  2.1.2
      * @test
      */
-    public function queryStringIsEmptyIfNoneGiven()
+    public function queryStringIsEmptyIfNoneGiven(): void
     {
         assertEmptyString(
                 Uri::fromString('http://example.org/foo')->queryString()
@@ -975,7 +975,7 @@ class UriTest extends TestCase
      * @since  2.1.2
      * @test
      */
-    public function queryStringEqualsGivenQueryString()
+    public function queryStringEqualsGivenQueryString(): void
     {
         assertThat(
                 Uri::fromString('http://example.org/?foo=bar&baz=true')
@@ -988,7 +988,7 @@ class UriTest extends TestCase
      * @since  2.1.2
      * @test
      */
-    public function queryStringEqualsAddedParameters()
+    public function queryStringEqualsAddedParameters(): void
     {
         assertThat(
                 Uri::fromString('http://example.org/')
@@ -1003,7 +1003,7 @@ class UriTest extends TestCase
      * @test
      * @group  issue_119
      */
-    public function illegalArgumentExceptionFromUnbalancedQueryStringTurnedIntoMalformedUri()
+    public function illegalArgumentExceptionFromUnbalancedQueryStringTurnedIntoMalformedUri(): void
     {
         expect(function() {
                 Uri::fromString('http://example.org/?foo[bar=300&baz=200');
@@ -1014,7 +1014,7 @@ class UriTest extends TestCase
      * @test
      * @since  5.5.0
      */
-    public function withPathExchangesPathCompletely()
+    public function withPathExchangesPathCompletely(): void
     {
         assertThat(
                 Uri::fromString('http://example.org/foo')->withPath('/bar'),
@@ -1026,7 +1026,7 @@ class UriTest extends TestCase
      * @test
      * @since  5.5.0
      */
-    public function withPathReturnsNewInstance()
+    public function withPathReturnsNewInstance(): void
     {
         $uri = Uri::fromString('http://example.org/foo');
         assertThat($uri->withPath('/bar'), isNotSameAs($uri));

@@ -24,6 +24,9 @@ use function bovigo\assert\predicate\isNotOfSize;
  */
 class HttpTest extends TestCase
 {
+    /**
+     * @return  array<mixed[]>
+     */
     public function statusCodeClassTuples(): array
     {
         return [[100, Http::STATUS_CLASS_INFO],
@@ -90,7 +93,7 @@ class HttpTest extends TestCase
      * @test
      * @dataProvider  statusCodeClassTuples
      */
-    public function detectCorrectStatusClass(int $statusCode, string $statusClass)
+    public function detectCorrectStatusClass(int $statusCode, string $statusClass): void
     {
         assertThat(Http::statusClassFor($statusCode), equals($statusClass));
     }
@@ -98,11 +101,14 @@ class HttpTest extends TestCase
     /**
      * @test
      */
-    public function returnsListOfStatusCodes()
+    public function returnsListOfStatusCodes(): void
     {
         assertThat(Http::statusCodes(), isNotOfSize(0));
     }
 
+    /**
+     * @return  array<mixed[]>
+     */
     public function statusCodeReasonPhraseTuples(): array
     {
         $tuples = [];
@@ -119,7 +125,7 @@ class HttpTest extends TestCase
      * @test
      * @dataProvider  statusCodeReasonPhraseTuples
      */
-    public function returnsCorrectReasonPhrase(int $statusCode, string $reasonPhrase)
+    public function returnsCorrectReasonPhrase(int $statusCode, string $reasonPhrase): void
     {
         assertThat(Http::reasonPhraseFor($statusCode), equals($reasonPhrase));
     }
@@ -127,7 +133,7 @@ class HttpTest extends TestCase
     /**
      * @test
      */
-    public function getReasonPhraseForUnknownStatusCodeThrowsIllegalArgumentException()
+    public function getReasonPhraseForUnknownStatusCodeThrowsIllegalArgumentException(): void
     {
         expect(function() {
                 Http::reasonPhraseFor(1);
@@ -137,7 +143,7 @@ class HttpTest extends TestCase
     /**
      * @test
      */
-    public function addsLineEnding()
+    public function addsLineEnding(): void
     {
         assertThat(Http::line('foo'), equals('foo' . Http::END_OF_LINE));
     }
@@ -145,7 +151,7 @@ class HttpTest extends TestCase
     /**
      * @test
      */
-    public function emptyLineReturnsLineEndingOnly()
+    public function emptyLineReturnsLineEndingOnly(): void
     {
         assertThat(Http::emptyLine(), equals(Http::END_OF_LINE));
     }
@@ -154,7 +160,7 @@ class HttpTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function linesConvertsAllLines()
+    public function linesConvertsAllLines(): void
     {
         assertThat(
                 Http::lines(
@@ -178,6 +184,7 @@ class HttpTest extends TestCase
 
     /**
      * @since  8.0.0
+     * @return  array<string[]>
      */
     public function validRfcs(): array
     {
@@ -189,7 +196,7 @@ class HttpTest extends TestCase
      * @dataProvider  validRfcs
      * @since  8.0.0
      */
-    public function validRfcsAreValid($rfc)
+    public function validRfcsAreValid(string $rfc): void
     {
         assertTrue(Http::isValidRfc($rfc));
     }
@@ -198,7 +205,7 @@ class HttpTest extends TestCase
      * @test
      * @since  8.0.0
      */
-    public function invalidRfcsAreInvalid()
+    public function invalidRfcsAreInvalid(): void
     {
         assertFalse(Http::isValidRfc('RFC 0815'));
     }

@@ -11,7 +11,7 @@
         "phpunit/phpunit": "^8.4",
         "mikey179/vfsstream": "^1.6.7",
         "bovigo/assert": "^5.1.1",
-        "bovigo/callmap": "^5.2",
+        "bovigo/callmap": "^5.2.1",
         "stubbles/values": "^9.0"
     },
     "suggest": {

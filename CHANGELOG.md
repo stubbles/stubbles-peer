@@ -1,5 +1,9 @@
 # Changelog
 
+## 9.0.1 (2019-12-12)
+
+* minor fixes through improved type hinting and type checks
+
 ## 9.0.0 (2019-10-30)
 
 ### BC breaks

@@ -33,20 +33,20 @@ class QueryString
     public function __construct(string $queryString = null)
     {
         if (!empty($queryString)) {
-            foreach (explode('&', $queryString) as $param) {
+            foreach (\explode('&', $queryString) as $param) {
                 $name = $value = null;
-                sscanf($param, "%[^=]=%[^\r]", $name, $value);
-                if (null === $value && substr($param, -1) == '=') {
+                \sscanf($param, "%[^=]=%[^\r]", $name, $value);
+                if (null === $value && \substr($param, -1) == '=') {
                     $value = '';
                 }
 
-                $name = urldecode($name);
-                if (substr_count($name, '[') !== substr_count($name, ']')) {
+                $name = \urldecode($name);
+                if (\substr_count($name, '[') !== \substr_count($name, ']')) {
                     throw new \InvalidArgumentException('Unbalanced [] in query string');
                 }
                 
-                if ($start = strpos($name, '[')) {
-                  $base = substr($name, 0, $start);
+                if ($start = \strpos($name, '[')) {
+                  $base = \substr($name, 0, $start);
                   if (!isset($this->parameters[$base])) {
                       $this->parameters[$base] = [];
                   }
@@ -54,16 +54,16 @@ class QueryString
                   $ptr    = &$this->parameters[$base];
                   $offset = 0;
                   do {
-                    $end = strpos($name, ']', $offset);
+                    $end = \strpos($name, ']', $offset);
                     if ($start === $end - 1) {
                       $ptr = &$ptr[];
                     } else {
-                      $end += substr_count($name, '[', $start + 1, $end - $start - 1);
-                      $ptr  = &$ptr[substr($name, $start + 1, $end - $start - 1)];
+                      $end += \substr_count($name, '[', $start + 1, $end - $start - 1);
+                      $ptr  = &$ptr[\substr($name, $start + 1, $end - $start - 1)];
                     }
 
                     $offset = $end + 1;
-                  } while ($start = strpos($name, '[', $offset));
+                  } while ($start = \strpos($name, '[', $offset));
 
                   if (null !== $value) {
                       $value = \urldecode($value);
@@ -71,7 +71,7 @@ class QueryString
 
                   $ptr = $value;
                 } elseif (null !== $value) {
-                    $this->parameters[$name] = urldecode($value);
+                    $this->parameters[$name] = \urldecode($value);
                 } else {
                     $this->parameters[$name] = null;
                 }
@@ -86,7 +86,7 @@ class QueryString
      */
     public function build(): string
     {
-        if (count($this->parameters) === 0) {
+        if (\count($this->parameters) === 0) {
             return '';
         }
 
@@ -95,7 +95,7 @@ class QueryString
             $queryString .= $this->buildQuery($name, $value);
         }
 
-        return substr($queryString, 1);
+        return \substr($queryString, 1);
     }
 
     /**
@@ -109,22 +109,22 @@ class QueryString
     protected function buildQuery(string $name, $value, string $postfix= ''): string
     {
         $query = '';
-        if (is_array($value)) {
+        if (\is_array($value)) {
             foreach ($value as $k => $v) {
-                if (is_int($k)) {
+                if (\is_int($k)) {
                     $query .= $this->buildQuery('', $v, $postfix . $name .'[]');
                 } else {
                     $query .= $this->buildQuery('', $v, $postfix . $name . '[' . $k . ']');
                 }
             }
         } elseif (null === $value) {
-            $query .= '&' . urlencode($name) . $postfix;
+            $query .= '&' . \urlencode($name) . $postfix;
         } elseif (false === $value) {
-            $query .= '&' . urlencode($name) . $postfix . '=0';
+            $query .= '&' . \urlencode($name) . $postfix . '=0';
         } elseif (true === $value) {
-            $query .= '&' . urlencode($name) . $postfix . '=1';
+            $query .= '&' . \urlencode($name) . $postfix . '=1';
         } else {
-            $query .= '&' . urlencode($name) . $postfix . '=' . urlencode($value);
+            $query .= '&' . \urlencode($name) . $postfix . '=' . \urlencode($value);
         }
 
         return $query;
@@ -137,7 +137,7 @@ class QueryString
      */
     public function hasParams(): bool
     {
-        return (count($this->parameters) > 0);
+        return (\count($this->parameters) > 0);
     }
 
     /**
@@ -150,8 +150,8 @@ class QueryString
      */
     public function addParam(string $name, $value): self
     {
-        if (!is_array($value) && !is_scalar($value) && null !== $value) {
-            if (is_object($value) && method_exists($value, '__toString')) {
+        if (!\is_array($value) && !\is_scalar($value) && null !== $value) {
+            if (\is_object($value) && \method_exists($value, '__toString')) {
                 $value = (string) $value;
             } else {
                 throw new \InvalidArgumentException(
@@ -174,7 +174,7 @@ class QueryString
      */
     public function removeParam(string $name): self
     {
-        if (array_key_exists($name, $this->parameters)) {
+        if (\array_key_exists($name, $this->parameters)) {
             unset($this->parameters[$name]);
         }
 
@@ -189,7 +189,7 @@ class QueryString
      */
     public function containsParam(string $name): bool
     {
-        return array_key_exists($name, $this->parameters);
+        return \array_key_exists($name, $this->parameters);
     }
 
     /**
@@ -201,7 +201,7 @@ class QueryString
      */
     public function param(string $name, $defaultValue = null)
     {
-        if (array_key_exists($name, $this->parameters)) {
+        if (\array_key_exists($name, $this->parameters)) {
             return $this->parameters[$name];
         }
 

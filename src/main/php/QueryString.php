@@ -44,7 +44,7 @@ class QueryString
                 if (substr_count($name, '[') !== substr_count($name, ']')) {
                     throw new \InvalidArgumentException('Unbalanced [] in query string');
                 }
-
+                
                 if ($start = strpos($name, '[')) {
                   $base = substr($name, 0, $start);
                   if (!isset($this->parameters[$base])) {
@@ -65,7 +65,11 @@ class QueryString
                     $offset = $end + 1;
                   } while ($start = strpos($name, '[', $offset));
 
-                  $ptr = urldecode($value);
+                  if (null !== $value) {
+                      $value = \urldecode($value);
+                  }
+
+                  $ptr = $value;
                 } elseif (null !== $value) {
                     $this->parameters[$name] = urldecode($value);
                 } else {

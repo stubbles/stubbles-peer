@@ -322,4 +322,16 @@ class QueryStringTest extends TestCase
                 equals('foo.hm=bar&baz[dummy]=blubb&baz[]=more&empty=&set')
         );
     }
+
+    /**
+     * @test
+     * @since  9.0.2
+     * @group  typeerror_urldecode
+     */
+    public function weirdQueryStringDoesNotThrowErrors(): void
+    {
+        expect(function() {
+            new QueryString('/core.users.UserLogin/PHPSESSID/3685f296713d2352ba34f3bab22d9cee/redirect%5B%5D/users/redirect%5B%5D/1');
+        })->doesNotThrow();
+    }
 }

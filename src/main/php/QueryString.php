@@ -45,31 +45,34 @@ class QueryString
                     throw new \InvalidArgumentException('Unbalanced [] in query string');
                 }
                 
-                if ($start = \strpos($name, '[')) {
-                  $base = \substr($name, 0, $start);
-                  if (!isset($this->parameters[$base])) {
-                      $this->parameters[$base] = [];
-                  }
-
-                  $ptr    = &$this->parameters[$base];
-                  $offset = 0;
-                  do {
-                    $end = \strpos($name, ']', $offset);
-                    if ($start === $end - 1) {
-                      $ptr = &$ptr[];
-                    } else {
-                      $end += \substr_count($name, '[', $start + 1, $end - $start - 1);
-                      $ptr  = &$ptr[\substr($name, $start + 1, $end - $start - 1)];
+                $end = \strpos($name, ']', -1);
+                // is the last character of name a closing parenthesis, and do we have at least one
+                // opening parenthesis?
+                if (false !== $end && $end === \strlen($name) - 1 && $start = \strpos($name, '[')) {
+                    $base = \substr($name, 0, $start);
+                    if (!isset($this->parameters[$base])) {
+                        $this->parameters[$base] = [];
                     }
 
-                    $offset = $end + 1;
-                  } while ($start = \strpos($name, '[', $offset));
+                    $ptr    = &$this->parameters[$base];
+                    $offset = 0;
+                    do {
+                        $end = \strpos($name, ']', $offset);
+                        if ($start === $end - 1) {
+                            $ptr = &$ptr[];
+                        } else {
+                            $end += \substr_count($name, '[', $start + 1, $end - $start - 1);
+                            $ptr  = &$ptr[\substr($name, $start + 1, $end - $start - 1)];
+                        }
 
-                  if (null !== $value) {
-                      $value = \urldecode($value);
-                  }
+                        $offset = $end + 1;
+                    } while ($start = \strpos($name, '[', $offset));
 
-                  $ptr = $value;
+                    if (null !== $value) {
+                        $value = \urldecode($value);
+                    }
+
+                    $ptr = $value;
                 } elseif (null !== $value) {
                     $this->parameters[$name] = \urldecode($value);
                 } else {

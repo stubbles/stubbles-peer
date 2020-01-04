@@ -1,5 +1,9 @@
 # Changelog
 
+## 9.0.2 (2020-01-04)
+
+* fixed type error in `stubbles\peer\QueryString` with weird query strings
+
 ## 9.0.1 (2019-12-12)
 
 * minor fixes through improved type hinting and type checks

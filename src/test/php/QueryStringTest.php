@@ -334,4 +334,18 @@ class QueryStringTest extends TestCase
             new QueryString('/core.users.UserLogin/PHPSESSID/3685f296713d2352ba34f3bab22d9cee/redirect%5B%5D/users/redirect%5B%5D/1');
         })->doesNotThrow();
     }
+
+    /**
+     * @test
+     * @since  9.0.2
+     * @group  typeerror_urldecode
+     */
+    public function weirdQueryStringIsNotBrokenIntoArrayDespiteArraySyntaxInString(): void
+    {
+        $q = new QueryString('/core.users.UserLogin/PHPSESSID/3685f296713d2352ba34f3bab22d9cee/redirect%5B%5D/users/redirect%5B%5D/1');
+        assertThat(
+            (string) $q,
+            equals('%2Fcore.users.UserLogin%2FPHPSESSID%2F3685f296713d2352ba34f3bab22d9cee%2Fredirect%5B%5D%2Fusers%2Fredirect%5B%5D%2F1')
+        );
+    }
 }

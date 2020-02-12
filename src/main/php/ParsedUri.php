@@ -25,17 +25,39 @@ class ParsedUri
             '[::1]'     => '[::1]'
     ];
     /**
-     * internal representation after parse_url()
-     *
-     * @var  array<string,int|string>
+     * @var  string
      */
-    private $uri         = [];
+    private $scheme;
+    /**
+     * @var  string
+     */
+    private $host;
+    /**
+     * @var  int
+     */
+    private $port;
+    /**
+     * @var  string
+     */
+    private $path;
+    /**
+     * @var  string
+     */
+    private $user;
+    /**
+     * @var  string
+     */
+    private $pass;
     /**
      * query string of uri
      *
      * @var  \stubbles\peer\QueryString
      */
     private $queryString;
+    /**
+     * @var  string
+     */
+    private $fragment;
 
     /**
      * constructor
@@ -53,34 +75,44 @@ class ParsedUri
             throw new MalformedUri('Given URI ' . (\is_string($uri) ? $uri : '') . ' is not a valid URI');
         }
 
-        $this->uri = $parsedUri;
-        if (!isset($this->uri['scheme'])) {
+        if (!isset($parsedUri['scheme'])) {
             throw new MalformedUri('Given URI ' . (\is_string($uri) ? $uri : '') . ' is missing a scheme.');
         }
 
-        if (isset($this->uri['host'])) {
-            $this->uri['host'] = strtolower((string) $this->uri['host']);
+        $this->scheme = (string) $parsedUri['scheme'];
+        if (isset($parsedUri['host'])) {
+            $this->host = strtolower((string) $parsedUri['host']);
         }
 
-        if (!isset($this->uri['path'])) {
-            $this->uri['path'] = '';
+        if (isset($parsedUri['port'])) {
+            $this->port = (int) $parsedUri['port'];
         }
 
+        $this->path = (string) ($parsedUri['path'] ?? '');
         if (null !== $queryString) {
             $this->queryString = $queryString;
         } else {
             try {
-                $this->queryString = new QueryString($this->uri['query'] ?? null);
+                $this->queryString = new QueryString($parsedUri['query'] ?? null);
             } catch (\InvalidArgumentException $iae) {
                 throw new MalformedUri($iae->getMessage(), $iae);
             }
         }
 
+        if (isset($parsedUri['fragment'])) {
+            $this->fragment = (string) $parsedUri['fragment'];
+        }
+
         // bugfix for a PHP issue: ftp://user:@auxiliary.kl-s.com/
-        // will lead to an unset $this->uri['pass'] which is wrong
+        // will lead to an unset $parsedUri['pass'] which is wrong
         // due to RFC1738 3.1, it has to be an empty string
-        if (isset($this->uri['user']) && !isset($this->uri['pass']) && $this->asString() !== $uri) {
-            $this->uri['pass'] = '';
+        if (isset($parsedUri['user'])) {
+            $this->user = (string) $parsedUri['user'];
+            if (!isset($parsedUri['pass']) && $this->asString() !== $uri) {
+                $this->pass = '';
+            } elseif (isset($parsedUri['pass'])) {
+                $this->pass = (string) $parsedUri['pass'];
+            }
         }
     }
 
@@ -99,7 +131,17 @@ class ParsedUri
      */
     public function transpose(array $changedUri): self
     {
-        return new self(array_merge($this->uri, $changedUri), $this->queryString);
+        return new self(array_filter(array_merge([
+                'scheme'   => $this->scheme,
+                'host'     => $this->host,
+                'port'     => $this->port,
+                'path'     => $this->path,
+                'user'     => $this->user,
+                'pass'     => $this->pass,
+                'fragment' => $this->fragment
+            ], $changedUri), function($val) { return null !== $val; }),
+            $this->queryString
+        );
     }
 
     /**
@@ -170,7 +212,7 @@ class ParsedUri
      */
     public function hasScheme(): bool
     {
-        return isset($this->uri['scheme']);
+        return null !== $this->scheme;
     }
 
     /**
@@ -192,7 +234,7 @@ class ParsedUri
      */
     public function scheme(): string
     {
-        return $this->uri['scheme'];
+        return $this->scheme;
     }
 
     /**
@@ -202,7 +244,7 @@ class ParsedUri
      */
     public function hasUser(): bool
     {
-        return isset($this->uri['user']);
+        return null !== $this->user;
     }
 
     /**
@@ -213,7 +255,7 @@ class ParsedUri
      */
     public function user(string $defaultUser = null): ?string
     {
-        return $this->uri['user'] ?? $defaultUser;
+        return null !== $this->user ? $this->user : $defaultUser;
     }
 
     /**
@@ -224,7 +266,7 @@ class ParsedUri
      */
     public function hasPassword(): bool
     {
-        return isset($this->uri['pass']);
+        return null !== $this->pass;
     }
 
     /**
@@ -235,7 +277,7 @@ class ParsedUri
      */
     public function password(): ?string
     {
-        return $this->uri['pass'] ?? null;
+        return null !== $this->pass ? $this->pass : null;
     }
 
     /**
@@ -245,7 +287,7 @@ class ParsedUri
      */
     public function hasHostname(): bool
     {
-        return isset($this->uri['host']);
+        return null !== $this->host;
     }
 
     /**
@@ -255,7 +297,7 @@ class ParsedUri
      */
     public function isLocalHost(): bool
     {
-        return isset(self::LOCALHOSTNAMES[$this->uri['host']]);
+        return isset(self::LOCALHOSTNAMES[$this->host]);
     }
 
     /**
@@ -265,7 +307,7 @@ class ParsedUri
      */
     public function hostname(): ?string
     {
-        return $this->uri['host'] ?? null;
+        return $this->host;
     }
 
     /**
@@ -275,7 +317,7 @@ class ParsedUri
      */
     public function hasPort(): bool
     {
-        return isset($this->uri['port']);
+        return null !== $this->port;
     }
 
     /**
@@ -297,8 +339,8 @@ class ParsedUri
      */
     public function port(): ?int
     {
-        if (isset($this->uri['port'])) {
-            return (int) $this->uri['port'];
+        if (null !== $this->port) {
+            return $this->port;
         }
 
         return null;
@@ -313,7 +355,7 @@ class ParsedUri
      */
     public function hasPath(): bool
     {
-        return isset($this->uri['path']);
+        return null !== $this->path;
     }
 
     /**
@@ -323,7 +365,7 @@ class ParsedUri
      */
     public function path(): string
     {
-        return $this->uri['path'];
+        return $this->path;
     }
 
     /**
@@ -343,7 +385,7 @@ class ParsedUri
      */
     public function hasFragment(): bool
     {
-        return isset($this->uri['fragment']);
+        return null !== $this->fragment;
     }
 
     /**
@@ -353,7 +395,7 @@ class ParsedUri
      */
     public function fragment(): ?string
     {
-        return $this->uri['fragment'] ?? null;
+        return $this->fragment;
     }
 
     /**

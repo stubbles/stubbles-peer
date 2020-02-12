@@ -18,9 +18,15 @@ parameters:
         path: src/main/php/http/HttpUri.php
     # Explicit tests for those cases
     -
-        message: '#method stubbles\\peer\\HeaderList::append\(\) expects array<string, bool|float|int|string>|string|stubbles\\peer\\HeaderList, int given#'
+        message: '#method stubbles\\peer\\HeaderList::put\(\) expects bool\|float\|int\|string, array<int, int> given#'
+        path: src/test/php/HeaderListTest.php
+    -
+        message: '#method stubbles\\peer\\HeaderList::put\(\) expects bool\|float\|int\|string, stdClass given#'
+        path: src/test/php/HeaderListTest.php
+    -
+        message: '#method stubbles\\peer\\HeaderList::append\(\) expects array<string, bool\|float\|int\|string>\|string\|stubbles\\peer\\HeaderList, int given#'
         path: src/test/php/HeaderListTest.php
     # phpstan can't cope properly with array result of parse_url()
     -
-        message: '#queryString of class stubbles\\peer\\QueryString constructor expects string|null, int|string|null given#'
+        message: '#queryString of class stubbles\\peer\\QueryString constructor expects string\|null, int\|string\|null given#'
         path: src/main/php/ParsedUri.php

@@ -7,7 +7,7 @@ Help with socket operations.
 Build status
 ------------
 
-[![Build Status](https://secure.travis-ci.org/stubbles/stubbles-peer.png)](http://travis-ci.org/stubbles/stubbles-peer) [![Coverage Status](https://coveralls.io/repos/github/stubbles/stubbles-peer/badge.svg?branch=master)](https://coveralls.io/github/stubbles/stubbles-peer?branch=master)
+![Tests](https://github.com/stubbles/stubbles-peer/workflows/Tests/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/stubbles/stubbles-peer/badge.svg?branch=master)](https://coveralls.io/github/stubbles/stubbles-peer?branch=master)
 
 [![Latest Stable Version](https://poser.pugx.org/stubbles/peer/version.png)](https://packagist.org/packages/stubbles/peer) [![Latest Unstable Version](https://poser.pugx.org/stubbles/peer/v/unstable.png)](//packagist.org/packages/stubbles/peer)
 

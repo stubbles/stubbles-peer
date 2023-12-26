@@ -18,14 +18,10 @@ use LogicException;
  */
 class IpAddress
 {
-    /**
-     * type IPv4
-     */
-    const V4 = 'IPv4';
-    /**
-     * type IPv6
-     */
-    const V6 = 'IPv6';
+    /** @internal */
+    public const V4 = 'IPv4';
+    /** @internal */
+    public const V6 = 'IPv6';
     private string $ip;
     private string $type;
 

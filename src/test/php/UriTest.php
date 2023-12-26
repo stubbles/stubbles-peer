@@ -158,7 +158,7 @@ class UriTest extends TestCase
     }
 
     /**
-     * @deprecated  since 8.0.0, will be removed with 9.0.0
+     * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure
      */
     #[Test]
     public function hasNoPasswordIfNoUserGiven(): void
@@ -167,7 +167,7 @@ class UriTest extends TestCase
     }
 
     /**
-     * @deprecated  since 8.0.0, will be removed with 9.0.0
+     * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure
      */
     #[Test]
     public function hasNoDefaultPasswordIfNoUserGiven(): void
@@ -176,7 +176,7 @@ class UriTest extends TestCase
     }
 
     /**
-     * @deprecated  since 8.0.0, will be removed with 9.0.0
+     * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure
      */
     #[Test]
     public function hasDefaultPasswordIfUserButNoPasswordGiven(): void
@@ -188,7 +188,7 @@ class UriTest extends TestCase
     }
 
     /**
-     * @deprecated  since 8.0.0, will be removed with 9.0.0
+     * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure
      */
     #[Test]
     public function hasGivenPassword(): void
@@ -200,7 +200,7 @@ class UriTest extends TestCase
     }
 
     /**
-     * @deprecated  since 8.0.0, will be removed with 9.0.0
+     * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure
      */
     #[Test]
     public function hasGivenPasswordEvenIfDefaultChanged(): void
@@ -212,7 +212,7 @@ class UriTest extends TestCase
     }
 
     /**
-     * @deprecated  since 8.0.0, will be removed with 9.0.0
+     * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure
      */
     #[Test]
     public function hasEmptyPassword(): void
@@ -223,7 +223,7 @@ class UriTest extends TestCase
     }
 
     /**
-     * @deprecated  since 8.0.0, will be removed with 9.0.0
+     * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure
      */
     #[Test]
     public function hasEmptyPasswordEvenIfDefaultChanged(): void

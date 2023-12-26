@@ -151,9 +151,7 @@ class AcceptHeader implements \Countable
     private function selectAcceptableWithGreatestPriority(array $acceptables): ?string
     {
         arsort($acceptables);
-        // use temp var to prevent error "Only variables should be passed by reference"
-        $acceptableKeys = array_keys($acceptables);
-        return array_shift($acceptableKeys);
+        return array_key_first($acceptables);
     }
 
     /**
@@ -176,7 +174,7 @@ class AcceptHeader implements \Countable
      */
     public function hasSharedAcceptables(array $acceptables): bool
     {
-        return (count($this->sharedAcceptables($acceptables)) > 0);
+        return count($this->sharedAcceptables($acceptables)) > 0;
     }
 
     /**

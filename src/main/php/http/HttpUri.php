@@ -95,7 +95,7 @@ abstract class HttpUri extends Uri
 
         throw new \InvalidArgumentException(
                 $name . ' must be a string containing a HTTP URI or an instance of '
-                . get_class() . ', but was '
+                . static::class . ', but was '
                 . (is_object($value) ? get_class($value) : gettype($value))
         );
     }

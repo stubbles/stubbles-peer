@@ -122,7 +122,7 @@ class HttpRequestTest extends TestCase
      * @since   8.0.0
      * @return  array<mixed[]>
      */
-    public function invalidHttpVersions(): array
+    public static function invalidHttpVersions(): array
     {
         return [['invalid'], [new HttpVersion(10, 9)]];
     }

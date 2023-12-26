@@ -266,7 +266,7 @@ class IpAddressTest extends TestCase
     /**
      * @return  array<mixed[]>
      */
-    public function invalidValues(): array
+    public static function invalidValues(): array
     {
         return [['foo'], [-1.5], [true], [false]];
     }
@@ -294,7 +294,7 @@ class IpAddressTest extends TestCase
     /**
      * @return  array<mixed[]>
      */
-    public function validValues(): array
+    public static function validValues(): array
     {
         return [
                 [2130706433, IpAddress::V4],
@@ -473,7 +473,7 @@ class IpAddressTest extends TestCase
     /**
      * @return  array<mixed[]>
      */
-    public function containedInCidr(): array
+    public static function containedInCidr(): array
     {
         return [['10.16.0.1', '10.16', '13'],
                 ['10.23.255.253', '10.16', 13],
@@ -506,7 +506,7 @@ class IpAddressTest extends TestCase
     /**
      * @return  array<mixed[]>
      */
-    public function notContainedInCidr(): array
+    public static function notContainedInCidr(): array
     {
         return [['10.15.0.1', '10.16', '13'],
                 ['10.24.0.1', '10.16', 13],

@@ -55,7 +55,7 @@ class SocketTest extends TestCase
     /**
      * @return  array<string[]>
      */
-    public function securePrefixes(): array
+    public static function securePrefixes(): array
     {
         return [['ssl://'], ['tls://']];
     }

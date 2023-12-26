@@ -27,7 +27,7 @@ class HttpVersionTest extends TestCase
     /**
      * @return  array<mixed[]>
      */
-    public function emptyVersions(): array
+    public static function emptyVersions(): array
     {
         return [[''], [null]];
     }

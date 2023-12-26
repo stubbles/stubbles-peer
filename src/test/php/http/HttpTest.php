@@ -27,7 +27,7 @@ class HttpTest extends TestCase
     /**
      * @return  array<mixed[]>
      */
-    public function statusCodeClassTuples(): array
+    public static function statusCodeClassTuples(): array
     {
         return [[100, Http::STATUS_CLASS_INFO],
                 [101, Http::STATUS_CLASS_INFO],
@@ -109,7 +109,7 @@ class HttpTest extends TestCase
     /**
      * @return  array<mixed[]>
      */
-    public function statusCodeReasonPhraseTuples(): array
+    public static function statusCodeReasonPhraseTuples(): array
     {
         $tuples = [];
         foreach (Http::statusCodes() as $statusCode => $reasonPhrase) {
@@ -186,7 +186,7 @@ class HttpTest extends TestCase
      * @since  8.0.0
      * @return  array<string[]>
      */
-    public function validRfcs(): array
+    public static function validRfcs(): array
     {
         return [[Http::RFC_2616], [Http::RFC_7230]];
     }

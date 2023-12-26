@@ -174,7 +174,7 @@ class HttpResponseTest extends TestCase
      * @since  8.0.0
      * @return  array<string[]>
      */
-    public function responseInstanceMethods(): array
+    public static function responseInstanceMethods(): array
     {
         return [
                 ['statusLine'],

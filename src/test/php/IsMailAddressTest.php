@@ -22,7 +22,7 @@ class IsMailAddressTest extends TestCase
     /**
      * @return  array<string[]>
      */
-    public function validValues(): array
+    public static function validValues(): array
     {
         return [['example@example.org'],
                 ['example.foo.bar@example.org']
@@ -41,7 +41,7 @@ class IsMailAddressTest extends TestCase
     /**
      * @return  array<mixed[]>
      */
-    public function invalidValues(): array
+    public static function invalidValues(): array
     {
         return [['space in@mailadre.ss'],
                 ['fäö@mailadre.ss'],
@@ -70,7 +70,7 @@ class IsMailAddressTest extends TestCase
     /**
      * @return  array<string[]>
      */
-    public function mailAddressesWithDifferentCase(): array
+    public static function mailAddressesWithDifferentCase(): array
     {
         return [
             ['Example@example.ORG'],

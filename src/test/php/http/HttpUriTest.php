@@ -68,7 +68,7 @@ class HttpUriTest extends TestCase
      * @since   8.0.0
      * @return  array<string[]>
      */
-    public function urisWithEmptyHost(): array
+    public static function urisWithEmptyHost(): array
     {
         return [['http:///foobar.html'], ['http:///'], ['http://?foo=bar']];
     }
@@ -660,7 +660,7 @@ class HttpUriTest extends TestCase
     /**
      * @return  array<mixed[]>
      */
-    public function invalidValues(): array
+    public static function invalidValues(): array
     {
         return [[null],
                 [303],
@@ -685,7 +685,7 @@ class HttpUriTest extends TestCase
     /**
      * @return  array<mixed[]>
      */
-    public function validValues(): array
+    public static function validValues(): array
     {
         return [
             ['http://localhost/'],
@@ -706,7 +706,7 @@ class HttpUriTest extends TestCase
     /**
      * @return  array<mixed[]>
      */
-    public function validValuesWithoutDnsEntry(): array
+    public static function validValuesWithoutDnsEntry(): array
     {
         return [
             ['http://stubbles.doesNotExist/'],

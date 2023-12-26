@@ -57,7 +57,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @return  array<mixed[]>
      */
-    public function provider(): array
+    public static function provider(): array
     {
         return [['text/plain;q=0.5',
                  ['text/plain' => 0.5],
@@ -255,7 +255,7 @@ class AcceptHeaderTest extends TestCase
     /**
      * @return  array<string, mixed[]>
      */
-    public function acceptedMimetypes(): array
+    public static function acceptedMimetypes(): array
     {
         return [
                 'empty list'  => [[]],

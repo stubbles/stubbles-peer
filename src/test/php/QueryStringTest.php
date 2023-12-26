@@ -72,7 +72,7 @@ class QueryStringTest extends TestCase
     /**
      * @return  array<array<mixed>>
      */
-    public function parsedParameters(): array
+    public static function parsedParameters(): array
     {
         return [
                 ['foo.hm', 'bar'],

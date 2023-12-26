@@ -93,7 +93,7 @@ class IpAddress
      */
     public function __construct($ip)
     {
-        if (\ctype_digit($ip)) {
+        if ((is_string($ip) && ctype_digit($ip)) || is_int($ip)) {
             $ip = \long2ip((int) $ip);
         } elseif (!\is_string($ip)) {
             throw new \InvalidArgumentException(

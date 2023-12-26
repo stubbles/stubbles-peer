@@ -7,81 +7,50 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer;
+
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use function bovigo\assert\assertFalse;
 use function bovigo\assert\assertTrue;
 /**
  * Tests for stubbles\peer\isMailAddress().
  *
- * @group  peer
- * @group  mail
  * @since  7.1.0
  */
+#[Group('peer')]
+#[Group('mail')]
 class IsMailAddressTest extends TestCase
 {
-    /**
-     * @return  array<string[]>
-     */
-    public static function validValues(): array
-    {
-        return [['example@example.org'],
-                ['example.foo.bar@example.org']
-        ];
-    }
-
-    /**
-     * @test
-     * @dataProvider  validValues
-     */
+    #[Test]
+    #[TestWith(['example@example.org'])]
+    #[TestWith(['example.foo.bar@example.org'])]
     public function validValueEvaluatesToTrue(string $value): void
     {
         assertTrue(isMailAddress($value));
     }
 
-    /**
-     * @return  array<mixed[]>
-     */
-    public static function invalidValues(): array
-    {
-        return [['space in@mailadre.ss'],
-                ['fäö@mailadre.ss'],
-                ['foo@bar@mailadre.ss'],
-                ['foo..bar@mailadre.ss'],
-                [null],
-                [''],
-                ['xcdsfad'],
-                ['.foo.bar@example.org'],
-                ['example@example.org\n'],
-                ['example@exa"mple.org'],
-                ['example@example.org\nBcc: example@example.com']
-        ];
-    }
-
-    /**
-     * @param  string  $value
-     * @test
-     * @dataProvider  invalidValues
-     */
+    #[Test]
+    #[TestWith(['space in@mailadre.ss'])]
+    #[TestWith(['fäö@mailadre.ss'])]
+    #[TestWith(['foo@bar@mailadre.ss'])]
+    #[TestWith(['foo..bar@mailadre.ss'])]
+    #[TestWith([null])]
+    #[TestWith([''])]
+    #[TestWith(['xcdsfad'])]
+    #[TestWith(['.foo.bar@example.org'])]
+    #[TestWith(['example@example.org\n'])]
+    #[TestWith(['example@exa"mple.org'])]
+    #[TestWith(['example@example.org\nBcc: example@example.com'])]
     public function invalidValueEvaluatesToFalse(?string $value): void
     {
         assertFalse(isMailAddress($value));
     }
 
-    /**
-     * @return  array<string[]>
-     */
-    public static function mailAddressesWithDifferentCase(): array
-    {
-        return [
-            ['Example@example.ORG'],
-            ['Example.Foo.Bar@EXAMPLE.org']
-        ];
-    }
-
-    /**
-     * @test
-     * @dataProvider  mailAddressesWithDifferentCase
-     */
+    #[Test]
+    #[TestWith(['Example@example.ORG'])]
+    #[TestWith(['Example.Foo.Bar@EXAMPLE.org'])]
     public function validatesIndependendOfLowerOrUpperCase(string $mailAddress): void
     {
         assertTrue(isMailAddress($mailAddress));

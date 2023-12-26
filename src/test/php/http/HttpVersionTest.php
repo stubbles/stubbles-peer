@@ -7,6 +7,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer\http;
+
+use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 use function bovigo\assert\assertThat;
@@ -19,126 +23,102 @@ use function bovigo\assert\predicate\isSameAs;
  * Test for stubbles\peer\http\HttpVersion.
  *
  * @since  4.0.0
- * @group  peer
- * @group  peer_http
  */
+#[Group('peer')]
+#[Group('peer_http')]
 class HttpVersionTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function parseFromEmptyStringThrowsIllegalArgumentException(): void
     {
         expect(function() {
-                HttpVersion::fromString('');
+            HttpVersion::fromString('');
         })
-        ->throws(\InvalidArgumentException::class)
-        ->withMessage('Given HTTP version is empty');
+            ->throws(InvalidArgumentException::class)
+            ->withMessage('Given HTTP version is empty');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function parseFromStringThrowsIllegalArgumentExceptionWhenParsingFails(): void
     {
         expect(function() {
-                HttpVersion::fromString('invalid');
+            HttpVersion::fromString('invalid');
         })
-        ->throws(\InvalidArgumentException::class)
-        ->withMessage('Given HTTP version "invalid" can not be parsed');
+            ->throws(InvalidArgumentException::class)
+            ->withMessage('Given HTTP version "invalid" can not be parsed');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function fromStringDetectsCorrectMajorVersion(): void
     {
         assertThat(HttpVersion::fromString('HTTP/1.2')->major(), equals(1));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function fromStringDetectsCorrectMinorVersion(): void
     {
         assertThat(HttpVersion::fromString('HTTP/1.2')->minor(), equals(2));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function constructWithInvalidMajorArgumentThrowsIllegalArgumentException(): void
     {
         expect(function() { new HttpVersion('foo', 1); })
-            ->throws(\InvalidArgumentException::class)
+            ->throws(InvalidArgumentException::class)
             ->withMessage('Given major version "foo" is not an integer.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function constructWithInvalidMinorArgumentThrowsIllegalArgumentException(): void
     {
         expect(function() { new HttpVersion(1, 'foo'); })
-            ->throws(\InvalidArgumentException::class)
+            ->throws(InvalidArgumentException::class)
             ->withMessage('Given minor version "foo" is not an integer.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function constructWithNegativeMajorVersionThrowsIllegalArgumentException(): void
     {
         expect(function() { new HttpVersion(-2, 1); })
-            ->throws(\InvalidArgumentException::class)
+            ->throws(InvalidArgumentException::class)
             ->withMessage('Major version can not be negative.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function parseFromStringWithNegativeMajorNumberThrowsIllegalArgumentExceptionWhenParsingFails(): void
     {
         expect(function() { HttpVersion::fromString('HTTP/-2.1'); })
-          ->throws(\InvalidArgumentException::class)
+          ->throws(InvalidArgumentException::class)
           ->withMessage('Major version can not be negative.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function constructWithNegativeMinorVersionThrowsIllegalArgumentException(): void
     {
         expect(function() { new HttpVersion(1, -2); })
-            ->throws(\InvalidArgumentException::class)
+            ->throws(InvalidArgumentException::class)
             ->withMessage('Minor version can not be negative.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function parseFromStringWithNegativeMinorNumberThrowsIllegalArgumentExceptionWhenParsingFails(): void
     {
         expect(function() { HttpVersion::fromString('HTTP/2.-1'); })
-            ->throws(\InvalidArgumentException::class)
+            ->throws(InvalidArgumentException::class)
             ->withMessage('Minor version can not be negative.');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function castToStringReturnsCorrectVersionString(): void
     {
         $versionString = 'HTTP/1.1';
         assertThat(
-                (string) HttpVersion::fromString($versionString),
-                equals($versionString)
+            (string) HttpVersion::fromString($versionString),
+            equals($versionString)
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function castFromEmptyWithoutDefaultThrowsIllegalArgumentException(): void
     {
         expect(function() { HttpVersion::castFrom(''); })
@@ -146,72 +126,58 @@ class HttpVersionTest extends TestCase
             ->withMessage('Given HTTP version is empty');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function castFromInstanceReturnsInstance(): void
     {
         $httpVersion = new HttpVersion(1, 1);
         assertThat(HttpVersion::castFrom($httpVersion), isSameAs($httpVersion));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function castFromStringReturnsInstance(): void
     {
         assertThat(HttpVersion::castFrom('HTTP/1.1'), equals(new HttpVersion(1, 1)));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function doesNotEqualEmptyVersion(): void
     {
         assertFalse(HttpVersion::fromString(HttpVersion::HTTP_1_1)->equals(''));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function doesNotEqualInvalidVersion(): void
     {
         assertFalse(
-                HttpVersion::fromString(HttpVersion::HTTP_1_1)
-                        ->equals('HTTP/404')
+            HttpVersion::fromString(HttpVersion::HTTP_1_1)
+                ->equals('HTTP/404')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function doesNotEqualWhenMajorVersionDiffers(): void
     {
         assertFalse(
-                HttpVersion::fromString(HttpVersion::HTTP_1_1)
-                        ->equals('HTTP/2.0')
+            HttpVersion::fromString(HttpVersion::HTTP_1_1)
+                ->equals('HTTP/2.0')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function doesNotEqualWhenMinorVersionDiffers(): void
     {
         assertFalse(
-                HttpVersion::fromString(HttpVersion::HTTP_1_1)
-                        ->equals(HttpVersion::HTTP_1_0)
+            HttpVersion::fromString(HttpVersion::HTTP_1_1)
+                ->equals(HttpVersion::HTTP_1_0)
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isEqualWhenMajorAndMinorVersionEqual(): void
     {
         assertTrue(
-                HttpVersion::fromString(HttpVersion::HTTP_1_1)
-                        ->equals(HttpVersion::HTTP_1_1)
+            HttpVersion::fromString(HttpVersion::HTTP_1_1)
+                ->equals(HttpVersion::HTTP_1_1)
         );
     }
 }

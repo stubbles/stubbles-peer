@@ -7,7 +7,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer;
+
+use InvalidArgumentException;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamFile;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 use function bovigo\assert\assertThat;
@@ -19,30 +24,22 @@ use function bovigo\assert\predicate\equals;
 /**
  * Test for stubbles\peer\Stream.
  *
- * @group  peer
  * @since  6.0.0
  */
+#[Group('peer')]
 class StreamTest extends TestCase
 {
-    /**
-     * @var  \org\bovigo\vfs\vfsStreamFile
-     */
-    private $file;
-    /**
-     * @var  resource
-     */
+    private vfsStreamFile $file;
+    /** @var  resource */
     private $underlyingStream;
-    /**
-     * @var  \stubbles\peer\Stream
-     */
-    private $stream;
+    private Stream $stream;
 
     protected function setUp(): void
     {
         $root = vfsStream::setup();
         $this->file = vfsStream::newFile('foo.txt')
-                ->withContent("bar\nbaz")
-                ->at($root);
+            ->withContent("bar\nbaz")
+            ->at($root);
         $handle = fopen($this->file->url(), 'rb+');
         if (false === $handle) {
             fail('Could not open vfsStream url');
@@ -52,71 +49,56 @@ class StreamTest extends TestCase
         $this->stream = new Stream($this->underlyingStream);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createWithInvalidResourceThrowsIllegalArgumentException(): void
     {
-        expect(function() { new Stream('foo'); })
-                ->throws(\InvalidArgumentException::class);
+        expect(fn() => new Stream('foo'))
+            ->throws(InvalidArgumentException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function readReturnsDataOfFirstLine(): void
     {
         assertThat($this->stream->read(), equals("bar\n"));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function readLineReturnsTrimmedDataOfFirstLine(): void
     {
         assertThat($this->stream->readLine(), equals('bar'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function readBinaryReturnsData(): void
     {
         assertThat($this->stream->readBinary(), equals("bar\nbaz"));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function writesToResource(): void
     {
         assertThat($this->stream->write('yoyoyoyo'), equals(8));
         assertThat($this->file->getContent(), equals('yoyoyoyo'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function eofReturnsTrueWhenNotAtEnd(): void
     {
         assertFalse($this->stream->eof());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function eofReturnsTrueWhenAtEnd(): void
     {
         $this->stream->readBinary();
         assertTrue($this->stream->eof());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function nullingTheStreamClosesTheResource(): void
     {
         $stream = new Stream($this->underlyingStream);
+        $stream->write('foo');
         $stream = null;
         assertFalse(is_resource($this->underlyingStream));
     }

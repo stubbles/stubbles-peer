@@ -8,6 +8,8 @@ declare(strict_types=1);
  */
 namespace stubbles\peer\http;
 use bovigo\callmap\NewInstance;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stubbles\peer\Stream;
 use stubbles\peer\http\HttpConnection;
@@ -19,28 +21,19 @@ use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isInstanceOf;
 /**
  * Test for stubbles\peer\http\HttpConnection.
- *
- * @group  peer
- * @group  peer_http
  */
+#[Group('peer')]
+#[Group('peer_http')]
 class HttpConnectionTest extends TestCase
 {
-    /**
-     * instance to test
-     *
-     * @var  \stubbles\peer\http\HttpConnection
-     */
-    private $httpConnection;
-    /**
-     * @var  string
-     */
-    private $memory;
+    private HttpConnection $httpConnection;
+    private string $memory;
 
     protected function setUp(): void
     {
         $this->memory = '';
         $socket       = NewInstance::stub(Stream::class)->returns([
-                'write' => function(string $line) { $this->memory .= $line; return strlen($line); }
+                'write' => function(string $line): int { $this->memory .= $line; return strlen($line); }
         ]);
         $httpUri      = NewInstance::stub(HttpUri::class)->returns([
                 'openSocket'     => $socket,
@@ -53,9 +46,7 @@ class HttpConnectionTest extends TestCase
         $this->httpConnection = new HttpConnection($httpUri);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getReturnsHttpResponse(): void
     {
         assertThat(
@@ -70,9 +61,7 @@ class HttpConnectionTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getWritesProperRequestLines(): void
     {
         $this->httpConnection->timeout(2)
@@ -97,9 +86,7 @@ class HttpConnectionTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function headReturnsHttpResponse(): void
     {
         assertThat(
@@ -114,9 +101,7 @@ class HttpConnectionTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function headWritesProperRequestLines(): void
     {
         $this->httpConnection->timeout(2)
@@ -142,9 +127,7 @@ class HttpConnectionTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function postReturnsHttpResponse(): void
     {
         assertThat(
@@ -159,9 +142,7 @@ class HttpConnectionTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function postWritesProperHttpRequestLinesWithRequestBody(): void
     {
         $this->httpConnection->timeout(2)
@@ -188,9 +169,7 @@ class HttpConnectionTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function postWritesProperHttpRequestLinesWithRequestValues(): void
     {
         $this->httpConnection->timeout(2)
@@ -220,8 +199,8 @@ class HttpConnectionTest extends TestCase
 
     /**
      * @since  2.0.0
-     * @test
      */
+    #[Test]
     public function putReturnsHttpResponse(): void
     {
         assertThat(
@@ -238,8 +217,8 @@ class HttpConnectionTest extends TestCase
 
     /**
      * @since  2.0.0
-     * @test
      */
+    #[Test]
     public function putWritesProperHttpRequestLines(): void
     {
         $this->httpConnection->timeout(2)
@@ -268,8 +247,8 @@ class HttpConnectionTest extends TestCase
 
     /**
      * @since  2.0.0
-     * @test
      */
+    #[Test]
     public function deleteReturnsHttpResponse(): void
     {
         assertThat(
@@ -286,8 +265,8 @@ class HttpConnectionTest extends TestCase
 
     /**
      * @since  2.0.0
-     * @test
      */
+    #[Test]
     public function deleteWritesProperHttpRequestLines(): void
     {
         $this->httpConnection->timeout(2)
@@ -314,8 +293,8 @@ class HttpConnectionTest extends TestCase
 
     /**
      * @since  3.1.0
-     * @test
      */
+    #[Test]
     public function functionShortcut(): void
     {
         assertThat(

@@ -7,36 +7,35 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer\http;
+
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stubbles\values\Parse;
 
 use function bovigo\assert\assertThat;
 use function bovigo\assert\predicate\equals;
-/**
- * @group  peer
- * @group  peer_http
- */
+
+
+#[Group('peer')]
+#[Group('peer_http')]
 class ParseTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function parseRecognizesHttpUris(): void
     {
         assertThat(
-                Parse::toType('http://example.net/'),
-                equals(HttpUri::fromString('http://example.net/'))
+            Parse::toType('http://example.net/'),
+            equals(HttpUri::fromString('http://example.net/'))
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function parseRecognizesHttpsUris(): void
     {
         assertThat(
-                Parse::toType('https://example.net/'),
-                equals(HttpUri::fromString('https://example.net/'))
+            Parse::toType('https://example.net/'),
+            equals(HttpUri::fromString('https://example.net/'))
         );
     }
 }

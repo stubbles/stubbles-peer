@@ -8,6 +8,9 @@ declare(strict_types=1);
  */
 namespace stubbles\peer\http;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stubbles\peer\ProtocolViolation;
 use stubbles\peer\Stream;
@@ -22,18 +25,11 @@ use function bovigo\assert\{
 };
 /**
  * Test for stubbles\peer\http\HttpResponse.
- *
- * @group  peer
- * @group  peer_http
  */
+#[Group('peer')]
+#[Group('peer_http')]
 class HttpResponseTest extends TestCase
 {
-    /**
-     * creates instance to test
-     *
-     * @param   string  $response  content of response
-     * @return  HttpResponse
-     */
     private function createResponse(string $response): HttpResponse
     {
         $file = vfsStream::newFile('response')
@@ -47,9 +43,7 @@ class HttpResponseTest extends TestCase
         return HttpResponse::create(new Stream($fp));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function chunkedResponseCanBeRead(): void
     {
         $httpResponse = $this->createResponse(Http::lines(
@@ -70,9 +64,7 @@ class HttpResponseTest extends TestCase
 
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function nonChunkedResponseWithoutContentLengthHeaderCanBeRead(): void
     {
         $httpResponse = $this->createResponse(Http::lines(
@@ -86,9 +78,7 @@ class HttpResponseTest extends TestCase
         assertThat($httpResponse->body(), equals('foobar'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function nonChunkedResponseWithContentLengthHeaderCanBeRead(): void
     {
         $httpResponse = $this->createResponse(Http::lines(
@@ -104,9 +94,7 @@ class HttpResponseTest extends TestCase
         assertThat($httpResponse->body(), equals('foobar'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function canReadResponseTwice(): void
     {
         $httpResponse = $this->createResponse(Http::lines(
@@ -120,9 +108,7 @@ class HttpResponseTest extends TestCase
         assertThat($httpResponse->body(), equals('foobar'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function continuesOnStatusCode100(): void
     {
         $httpResponse = $this->createResponse(
@@ -145,9 +131,7 @@ class HttpResponseTest extends TestCase
         assertThat($httpResponse->body(), equals('foobar'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function continuesOnStatusCode102(): void
     {
         $httpResponse = $this->createResponse(
@@ -187,10 +171,8 @@ class HttpResponseTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider  responseInstanceMethods
-     */
+    #[Test]
+    #[DataProvider('responseInstanceMethods')]
     public function illegalStatusLineLeadsToProtocolViolation(string $method): void
     {
         $httpResponse = $this->createResponse(Http::lines(
@@ -208,10 +190,10 @@ class HttpResponseTest extends TestCase
     }
 
     /**
-     * @test
-     * @dataProvider  responseInstanceMethods
      * @since  4.0.0
      */
+    #[Test]
+    #[DataProvider('responseInstanceMethods')]
     public function statusLineWithInvalidHttpVersionLeadsToProtocolViolation(string $method): void
     {
         $httpResponse = $this->createResponse(Http::lines(

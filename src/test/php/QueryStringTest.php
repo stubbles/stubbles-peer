@@ -7,6 +7,11 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer;
+
+use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use function bovigo\assert\assertThat;
 use function bovigo\assert\assertEmptyString;
@@ -17,53 +22,36 @@ use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 /**
  * Test for stubbles\peer\QueryString.
- *
- * @group  peer
  */
+#[Group('peer')]
 class QueryStringTest extends TestCase
 {
-    /**
-     * empty instance to test
-     *
-     * @var  QueryString
-     */
-    protected $emptyQueryString;
-    /**
-     * prefilled instance to test
-     *
-     * @var  QueryString
-     */
-    protected $prefilledQueryString;
+    private QueryString $emptyQueryString;
+    private QueryString $prefilledQueryString;
 
     protected function setUp(): void
     {
         $this->emptyQueryString     = new QueryString();
         $this->prefilledQueryString = new QueryString(
-                'foo.hm=bar&baz[dummy]=blubb&baz[]=more&empty=&set'
+            'foo.hm=bar&baz[dummy]=blubb&baz[]=more&empty=&set'
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function constructorThrowsIllegalArgumentExceptionIfQueryStringContainsErrors(): void
     {
-        expect(function() {
-                new QueryString('foo.hm=bar&baz[dummy]=blubb&baz[=more&empty=&set');
-        })->throws(\InvalidArgumentException::class);
+        expect(function(): never {
+            new QueryString('foo.hm=bar&baz[dummy]=blubb&baz[=more&empty=&set');
+        })->throws(InvalidArgumentException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function emptyHasNoParametersByDefault(): void
     {
         assertFalse($this->emptyQueryString->hasParams());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function prefilledHasParametersFromInitialQueryString(): void
     {
         assertTrue($this->prefilledQueryString->hasParams());
@@ -82,31 +70,23 @@ class QueryStringTest extends TestCase
         ];
     }
 
-    /**
-     * @param  string  $paramName
-     * @param  mixed   $expectedValue
-     * @test
-     * @dataProvider  parsedParameters
-     */
-    public function parsedParametersAreCorrect(string $paramName, $expectedValue): void
+    #[Test]
+    #[DataProvider('parsedParameters')]
+    public function parsedParametersAreCorrect(string $paramName, mixed $expectedValue): void
     {
         assertThat(
-                $this->prefilledQueryString->param($paramName),
-                equals($expectedValue)
+            $this->prefilledQueryString->param($paramName),
+            equals($expectedValue)
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function buildEmptQueryStringReturnsEmptyString(): void
     {
         assertEmptyString($this->emptyQueryString->build());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function buildNonEmptQueryStringReturnsString(): void
     {
         assertThat(
@@ -115,219 +95,183 @@ class QueryStringTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkForNonExistingParamReturnsFalse(): void
     {
         assertFalse($this->emptyQueryString->containsParam('doesNotExist'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkForExistingParamReturnsTrue(): void
     {
         assertTrue($this->prefilledQueryString->containsParam('foo.hm'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkForExistingEmptyParamReturnsTrue(): void
     {
         assertTrue($this->prefilledQueryString->containsParam('empty'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function checkForExistingNullValueParamReturnsTrue(): void
     {
         assertTrue($this->prefilledQueryString->containsParam('set'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getNonExistingParamReturnsNullByDefault(): void
     {
         assertNull($this->emptyQueryString->param('doesNotExist'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getNonExistingParamReturnsDefaultValue(): void
     {
         assertThat(
-                $this->emptyQueryString->param('doesNotExist', 'example'),
-                equals('example')
+            $this->emptyQueryString->param('doesNotExist', 'example'),
+            equals('example')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getExistingParamReturnsValue(): void
     {
         assertThat($this->prefilledQueryString->param('foo.hm'), equals('bar'));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeNonExistingParamDoesNothing(): void
     {
         assertThat(
-                $this->prefilledQueryString->removeParam('doesNotExist')->build(),
-                equals('foo.hm=bar&baz[dummy]=blubb&baz[]=more&empty=&set')
+            $this->prefilledQueryString->removeParam('doesNotExist')->build(),
+            equals('foo.hm=bar&baz[dummy]=blubb&baz[]=more&empty=&set')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeExistingEmptyParam(): void
     {
         assertThat(
-                $this->prefilledQueryString->removeParam('empty')->build(),
-                equals('foo.hm=bar&baz[dummy]=blubb&baz[]=more&set')
+            $this->prefilledQueryString->removeParam('empty')->build(),
+            equals('foo.hm=bar&baz[dummy]=blubb&baz[]=more&set')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeExistingNullValueParam(): void
     {
         assertThat(
-                $this->prefilledQueryString->removeParam('set')->build(),
-                equals('foo.hm=bar&baz[dummy]=blubb&baz[]=more&empty=')
+            $this->prefilledQueryString->removeParam('set')->build(),
+            equals('foo.hm=bar&baz[dummy]=blubb&baz[]=more&empty=')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function removeExistingArrayParam(): void
     {
         assertThat(
-                $this->prefilledQueryString->removeParam('baz')->build(),
-                equals('foo.hm=bar&empty=&set')
+            $this->prefilledQueryString->removeParam('baz')->build(),
+            equals('foo.hm=bar&empty=&set')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addIllegalParamThrowsIllegalArgumentException(): void
     {
-        expect(function() {
-                $this->emptyQueryString->addParam('some', new \stdClass());
-        })->throws(\InvalidArgumentException::class);
+        expect(function(): never {
+            $this->emptyQueryString->addParam('some', new \stdClass());
+        })->throws(InvalidArgumentException::class);
     }
 
     /**
-     * @test
      * @since  5.3.1
      */
+    #[Test]
     public function allowsToAddObjectWithToStringMethodAsParam(): void
     {
         assertThat(
-                $this->emptyQueryString->addParam(
-                        'some',
-                        new IpAddress('127.0.0.1')
-                )->build(),
-                equals('some=127.0.0.1')
+            $this->emptyQueryString->addParam(
+                'some',
+                new IpAddress('127.0.0.1')
+            )->build(),
+            equals('some=127.0.0.1')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addNullValueAddsParamNameOnly(): void
     {
         assertThat(
-                $this->emptyQueryString->addParam('some', null)->build(),
-                equals('some')
+            $this->emptyQueryString->addParam('some', null)->build(),
+            equals('some')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addEmptyValueAddsParamNameAndEqualsign(): void
     {
         assertThat(
-                $this->emptyQueryString->addParam('some', '')->build(),
-                equals('some=')
+            $this->emptyQueryString->addParam('some', '')->build(),
+            equals('some=')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addValueAddsParamNameWithValue(): void
     {
         assertThat(
-                $this->emptyQueryString->addParam('some', 'bar')->build(),
-                equals('some=bar')
+            $this->emptyQueryString->addParam('some', 'bar')->build(),
+            equals('some=bar')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addArrayAddsParam(): void
     {
         assertThat(
-                $this->emptyQueryString->addParam(
-                        'some', ['foo' => 'bar', 'baz']
-                )->build(),
-                equals('some[foo]=bar&some[]=baz')
+            $this->emptyQueryString->addParam(
+                'some', ['foo' => 'bar', 'baz']
+            )->build(),
+            equals('some[foo]=bar&some[]=baz')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addFalseValueTranslatesFalseTo0(): void
     {
         assertThat(
-                $this->emptyQueryString->addParam('some', false)->build(),
-                equals('some=0')
+            $this->emptyQueryString->addParam('some', false)->build(),
+            equals('some=0')
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addTrueValueTranslatesFalseTo1(): void
     {
         assertThat(
-                $this->emptyQueryString->addParam('some', true)->build(),
-                equals('some=1')
+            $this->emptyQueryString->addParam('some', true)->build(),
+            equals('some=1')
         );
     }
 
     /**
-     * @test
      * @since  7.0.0
      */
+    #[Test]
     public function canBeCastedToString(): void
     {
         assertThat(
-                (string) $this->prefilledQueryString,
-                equals('foo.hm=bar&baz[dummy]=blubb&baz[]=more&empty=&set')
+            (string) $this->prefilledQueryString,
+            equals('foo.hm=bar&baz[dummy]=blubb&baz[]=more&empty=&set')
         );
     }
 
     /**
-     * @test
      * @since  9.0.2
-     * @group  typeerror_urldecode
      */
+    #[Test]
+    #[Group('typeerror_urldecode')]
     public function weirdQueryStringDoesNotThrowErrors(): void
     {
         expect(function() {
@@ -336,10 +280,10 @@ class QueryStringTest extends TestCase
     }
 
     /**
-     * @test
      * @since  9.0.2
-     * @group  typeerror_urldecode
      */
+    #[Test]
+    #[Group('typeerror_urldecode')]
     public function weirdQueryStringIsNotBrokenIntoArrayDespiteArraySyntaxInString(): void
     {
         $q = new QueryString('/core.users.UserLogin/PHPSESSID/3685f296713d2352ba34f3bab22d9cee/redirect%5B%5D/users/redirect%5B%5D/1');

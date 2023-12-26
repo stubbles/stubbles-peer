@@ -7,6 +7,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer\http;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 use function bovigo\assert\assertThat;
@@ -19,9 +23,9 @@ use function bovigo\assert\predicate\isNotOfSize;
  * Test for stubbles\peer\http\Http.
  *
  * @since  2.0.0
- * @group  peer
- * @group  peer_http
  */
+#[Group('peer')]
+#[Group('peer_http')]
 class HttpTest extends TestCase
 {
     /**
@@ -87,20 +91,14 @@ class HttpTest extends TestCase
         ];
     }
 
-    /**
-     * @param  int     $statusCode
-     * @param  string  $statusClass
-     * @test
-     * @dataProvider  statusCodeClassTuples
-     */
+    #[Test]
+    #[DataProvider('statusCodeClassTuples')]
     public function detectCorrectStatusClass(int $statusCode, string $statusClass): void
     {
         assertThat(Http::statusClassFor($statusCode), equals($statusClass));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function returnsListOfStatusCodes(): void
     {
         assertThat(Http::statusCodes(), isNotOfSize(0));
@@ -119,20 +117,14 @@ class HttpTest extends TestCase
         return $tuples;
     }
 
-    /**
-     * @param  int     $statusCode
-     * @param  string  $reasonPhrase
-     * @test
-     * @dataProvider  statusCodeReasonPhraseTuples
-     */
+    #[Test]
+    #[DataProvider('statusCodeReasonPhraseTuples')]
     public function returnsCorrectReasonPhrase(int $statusCode, string $reasonPhrase): void
     {
         assertThat(Http::reasonPhraseFor($statusCode), equals($reasonPhrase));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getReasonPhraseForUnknownStatusCodeThrowsIllegalArgumentException(): void
     {
         expect(function() {
@@ -140,26 +132,22 @@ class HttpTest extends TestCase
         })->throws(\InvalidArgumentException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addsLineEnding(): void
     {
         assertThat(Http::line('foo'), equals('foo' . Http::END_OF_LINE));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function emptyLineReturnsLineEndingOnly(): void
     {
         assertThat(Http::emptyLine(), equals(Http::END_OF_LINE));
     }
 
     /**
-     * @test
      * @since  4.0.0
      */
+    #[Test]
     public function linesConvertsAllLines(): void
     {
         assertThat(
@@ -192,19 +180,19 @@ class HttpTest extends TestCase
     }
 
     /**
-     * @test
-     * @dataProvider  validRfcs
      * @since  8.0.0
      */
+    #[Test]
+    #[DataProvider('validRfcs')]
     public function validRfcsAreValid(string $rfc): void
     {
         assertTrue(Http::isValidRfc($rfc));
     }
 
     /**
-     * @test
      * @since  8.0.0
      */
+    #[Test]
     public function invalidRfcsAreInvalid(): void
     {
         assertFalse(Http::isValidRfc('RFC 0815'));

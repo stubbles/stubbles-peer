@@ -8,6 +8,10 @@ declare(strict_types=1);
  */
 namespace stubbles\peer;
 use bovigo\callmap\NewCallable;
+use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 use function bovigo\assert\{
@@ -19,51 +23,35 @@ use function bovigo\assert\{
 };
 /**
  * Test for stubbles\peer\Socket.
- *
- * @group  peer
- * @group  socket
  */
+#[Group('peer')]
+#[Group('socket')]
 class SocketTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function createWithEmptyHostThrowsIllegalArgumentException(): void
     {
-        expect(function() { createSocket(''); })
-                ->throws(\InvalidArgumentException::class);
+        expect(function(): never { createSocket(''); })
+            ->throws(InvalidArgumentException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createWithNegativePortThrowsIllegalArgumentException(): void
     {
-        expect(function() { createSocket('localhost', -1); })
-                ->throws(\InvalidArgumentException::class);
+        expect(function(): never { createSocket('localhost', -1); })
+            ->throws(InvalidArgumentException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isNotSecureByDefault(): void
     {
         $socket = createSocket('example.com');
         assertFalse($socket->usesSsl());
     }
 
-    /**
-     * @return  array<string[]>
-     */
-    public static function securePrefixes(): array
-    {
-        return [['ssl://'], ['tls://']];
-    }
-
-    /**
-     * @test
-     * @dataProvider  securePrefixes
-     */
+    #[Test]
+    #[TestWith(['ssl://'])]
+    #[TestWith(['tls://'])]
     public function isSecureWhenCorrectPrefixGiven(string $securePrefix): void
     {
         $socket = createSocket('example.com', 443, $securePrefix);
@@ -71,30 +59,30 @@ class SocketTest extends TestCase
     }
 
     /**
-     * @test
      * @since  6.0.0
      */
+    #[Test]
     public function connectReturnsStream(): void
     {
         $socket = createSocket('localhost', 80)->openWith(
-                NewCallable::of('fsockopen')->returns(fopen(__FILE__, 'rb'))
+            NewCallable::of('fsockopen')->returns(fopen(__FILE__, 'rb'))
         );
         assertThat(
-                $socket->connect(),
-                isInstanceOf(Stream::class)
+            $socket->connect(),
+            isInstanceOf(Stream::class)
         );
     }
 
     /**
-     * @test
      * @since  6.0.0
      */
+    #[Test]
     public function connectThrowsConnectionFailureOnFailure(): void
     {
         $socket = createSocket('localhost', 80)->openWith(
-                NewCallable::of('fsockopen')->returns(false)
+            fn(): bool => false
         );
-        expect(function() use ($socket) { $socket->connect(); })
-                ->throws(ConnectionFailure::class);
+        expect(fn(): never => $socket->connect())
+            ->throws(ConnectionFailure::class);
     }
 }

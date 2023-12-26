@@ -8,6 +8,11 @@ declare(strict_types=1);
  */
 namespace stubbles\peer\http;
 use bovigo\callmap\NewInstance;
+use Generator;
+use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use stubbles\peer\HeaderList;
 use stubbles\peer\Stream;
@@ -18,34 +23,22 @@ use function bovigo\assert\expect;
 use function bovigo\assert\predicate\equals;
 /**
  * Test for stubbles\peer\http\HttpRequest.
- *
- * @group  peer
- * @group  peer_http
  */
+#[Group('peer')]
+#[Group('peer_http')]
 class HttpRequestTest extends TestCase
 {
-    /**
-     * memory to write http request to
-     *
-     * @var  string
-     */
-    private $memory;
+    private string $memory;
 
     protected function setUp(): void
     {
         $this->memory = '';
     }
 
-    /**
-     * creates instance to test
-     *
-     * @param   string  $queryString
-     * @return  HttpRequest
-     */
     private function createHttpRequest(string $queryString = null): HttpRequest
     {
-        $socket   = NewInstance::stub(Stream::class)->returns([
-                'write' => function(string $line) { $this->memory .= $line; return strlen($line); }
+        $socket = NewInstance::stub(Stream::class)->returns([
+                'write' => function(string $line): int { $this->memory .= $line; return strlen($line); }
         ]);
 
         $uriCalls = [
@@ -66,9 +59,7 @@ class HttpRequestTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getWritesCorrectRequest(): void
     {
         $this->createHttpRequest()->get();
@@ -85,8 +76,8 @@ class HttpRequestTest extends TestCase
 
     /**
      * @since   2.1.2
-     * @test
      */
+    #[Test]
     public function getWritesCorrectRequestWithQueryString(): void
     {
         $this->createHttpRequest('foo=bar&baz=1')->get();
@@ -101,9 +92,7 @@ class HttpRequestTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function getWritesCorrectRequestWithVersion(): void
     {
         $this->createHttpRequest()->get(5, HttpVersion::HTTP_1_0);
@@ -120,28 +109,24 @@ class HttpRequestTest extends TestCase
 
     /**
      * @since   8.0.0
-     * @return  array<mixed[]>
      */
-    public static function invalidHttpVersions(): array
+    public static function invalidHttpVersions(): Generator
     {
-        return [['invalid'], [new HttpVersion(10, 9)]];
+        yield ['invalid'];
+        yield [new HttpVersion(10, 9)];
     }
 
-    /**
-     * @param  mixed  $httpVersion
-     * @test
-     * @dataProvider  invalidHttpVersions
-     */
-    public function getWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion): void
+
+    #[Test]
+    #[DataProvider('invalidHttpVersions')]
+    public function getWithInvalidHttpVersionThrowsIllegalArgumentException(string|HttpVersion $httpVersion): void
     {
         expect(function() use ($httpVersion) {
                 $this->createHttpRequest()->get(5, $httpVersion);
-        })->throws(\InvalidArgumentException::class);
+        })->throws(InvalidArgumentException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function headWritesCorrectRequest(): void
     {
         $this->createHttpRequest()->head();
@@ -159,8 +144,8 @@ class HttpRequestTest extends TestCase
 
     /**
      * @since   2.1.2
-     * @test
      */
+    #[Test]
     public function headWritesCorrectRequestWithQueryString(): void
     {
         $this->createHttpRequest('foo=bar&baz=1')->head();
@@ -176,9 +161,7 @@ class HttpRequestTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function headWritesCorrectRequestWithVersion(): void
     {
         $this->createHttpRequest()->head(5, HttpVersion::HTTP_1_0);
@@ -194,21 +177,16 @@ class HttpRequestTest extends TestCase
         );
     }
 
-    /**
-     * @param  mixed  $httpVersion
-     * @test
-     * @dataProvider  invalidHttpVersions
-     */
-    public function headWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion): void
+    #[Test]
+    #[DataProvider('invalidHttpVersions')]
+    public function headWithInvalidHttpVersionThrowsIllegalArgumentException(string|HttpVersion $httpVersion): void
     {
         expect(function() use ($httpVersion) {
                 $this->createHttpRequest()->head(5, $httpVersion);
-        })->throws(\InvalidArgumentException::class);
+        })->throws(InvalidArgumentException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function postWritesCorrectRequest(): void
     {
         $this->createHttpRequest()->post('foobar');
@@ -227,8 +205,8 @@ class HttpRequestTest extends TestCase
 
     /**
      * @since   2.1.2
-     * @test
      */
+    #[Test]
     public function postIgnoresQueryString(): void
     {
         $this->createHttpRequest('foo=bar&baz=1')->post('foobar');
@@ -245,9 +223,7 @@ class HttpRequestTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function postWritesCorrectRequestWithVersion(): void
     {
         $this->createHttpRequest()->post('foobar', 5, HttpVersion::HTTP_1_0);
@@ -264,9 +240,7 @@ class HttpRequestTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function postWritesCorrectRequestUsingEmptyPostValues(): void
     {
         $this->createHttpRequest()->post([]);
@@ -283,9 +257,7 @@ class HttpRequestTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function postWritesCorrectRequestUsingPostValues(): void
     {
         $this->createHttpRequest()->post(['foo' => 'bar', 'ba z' => 'dum my']);
@@ -303,9 +275,7 @@ class HttpRequestTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function postWritesCorrectRequestUsingPostValuesWithVersion(): void
     {
         $this->createHttpRequest()->post(
@@ -327,22 +297,19 @@ class HttpRequestTest extends TestCase
         );
     }
 
-    /**
-     * @param  mixed  $httpVersion
-     * @test
-     * @dataProvider  invalidHttpVersions
-     */
-    public function postWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion): void
+    #[Test]
+    #[DataProvider('invalidHttpVersions')]
+    public function postWithInvalidHttpVersionThrowsIllegalArgumentException(string|HttpVersion $httpVersion): void
     {
         expect(function() use ($httpVersion) {
                 $this->createHttpRequest()->post('foobar', 5, $httpVersion);
-        })->throws(\InvalidArgumentException::class);
+        })->throws(InvalidArgumentException::class);
     }
 
     /**
      * @since   2.0.0
-     * @test
      */
+    #[Test]
     public function putWritesCorrectRequest(): void
     {
         $this->createHttpRequest()->put('foobar');
@@ -361,8 +328,8 @@ class HttpRequestTest extends TestCase
 
     /**
      * @since   2.1.2
-     * @test
      */
+    #[Test]
     public function putIgnoresQueryString(): void
     {
         $this->createHttpRequest('foo=bar&baz=1')->put('foobar');
@@ -381,8 +348,8 @@ class HttpRequestTest extends TestCase
 
     /**
      * @since   2.0.0
-     * @test
      */
+    #[Test]
     public function putWritesCorrectRequestWithVersion(): void
     {
         $this->createHttpRequest()->put('foobar', 5, HttpVersion::HTTP_1_0);
@@ -401,19 +368,19 @@ class HttpRequestTest extends TestCase
 
     /**
      * @since   2.0.0
-     * @test
      */
+    #[Test]
     public function putWithInvalidHttpVersionThrowsIllegalArgumentException(): void
     {
         expect(function() {
                 $this->createHttpRequest()->put('foobar', 5, 'invalid');
-        })->throws(\InvalidArgumentException::class);
+        })->throws(InvalidArgumentException::class);
     }
 
     /**
      * @since   2.0.0
-     * @test
      */
+    #[Test]
     public function deleteWritesCorrectRequest(): void
     {
         $this->createHttpRequest()->delete();
@@ -430,8 +397,8 @@ class HttpRequestTest extends TestCase
 
     /**
      * @since   2.1.2
-     * @test
      */
+    #[Test]
     public function deleteIgnoresQueryString(): void
     {
         $this->createHttpRequest('foo=bar&baz=1')->delete();
@@ -448,8 +415,8 @@ class HttpRequestTest extends TestCase
 
     /**
      * @since   2.0.0
-     * @test
      */
+    #[Test]
     public function deleteWritesCorrectRequestWithVersion(): void
     {
         $this->createHttpRequest()->delete(5, HttpVersion::HTTP_1_0);
@@ -464,16 +431,12 @@ class HttpRequestTest extends TestCase
         );
     }
 
-    /**
-     * @param  mixed  $httpVersion
-     * @since  2.0.0
-     * @test
-     * @dataProvider  invalidHttpVersions
-     */
-    public function deleteWithInvalidHttpVersionThrowsIllegalArgumentException($httpVersion): void
+    #[Test]
+    #[DataProvider('invalidHttpVersions')]
+    public function deleteWithInvalidHttpVersionThrowsIllegalArgumentException(string|HttpVersion $httpVersion): void
     {
         expect(function() use ($httpVersion) {
                 $this->createHttpRequest()->delete(5, $httpVersion);
-        })->throws(\InvalidArgumentException::class);
+        })->throws(InvalidArgumentException::class);
     }
 }

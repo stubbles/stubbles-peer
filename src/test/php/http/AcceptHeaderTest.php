@@ -7,6 +7,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer\http;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use function bovigo\assert\assertThat;
 use function bovigo\assert\assertEmpty;
@@ -19,18 +23,12 @@ use function bovigo\assert\predicate\equals;
 use function bovigo\assert\predicate\isOfSize;
 /**
  * Test for stubbles\peer\http\AcceptHeader.
- *
- * @group  peer
- * @group  peer_http
  */
+#[Group('peer')]
+#[Group('peer_http')]
 class AcceptHeaderTest extends TestCase
 {
-    /**
-     * instance to test
-     *
-     * @var  AcceptHeader
-     */
-    protected $acceptHeader;
+    private AcceptHeader $acceptHeader;
 
     protected function setUp(): void
     {
@@ -38,17 +36,15 @@ class AcceptHeaderTest extends TestCase
     }
 
     /**
-     * @test
      * @since  4.0.0
      */
+    #[Test]
     public function emptyAcceptHeaderReturnsInstanceWithoutAcceptables(): void
     {
         assertEmpty(emptyAcceptHeader());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addAcceptableIncreasesCount(): void
     {
         assertThat($this->acceptHeader->addAcceptable('text/plain'), isOfSize(1));
@@ -112,11 +108,10 @@ class AcceptHeaderTest extends TestCase
     }
 
     /**
-     * @param  string        $parseValue
      * @param  array<mixed>  $expectedList
-     * @test
-     * @dataProvider  provider
      */
+    #[Test]
+    #[DataProvider('provider')]
     public function parseYieldsCorrectValues(string $parseValue, array $expectedList): void
     {
         $acceptHeader = AcceptHeader::parse($parseValue);
@@ -127,11 +122,10 @@ class AcceptHeaderTest extends TestCase
     }
 
     /**
-     * @param  string        $parseValue
      * @param  array<mixed>  $expectedList
-     * @test
-     * @dataProvider  provider
      */
+    #[Test]
+    #[DataProvider('provider')]
     public function parsedStringCanBeRecreated(
             string $parseValue,
             array $expectedList,
@@ -143,9 +137,7 @@ class AcceptHeaderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addAcceptableWithPriorityLowerThan0ThrowsIllegalArgumentException(): void
     {
         expect(function() {
@@ -153,9 +145,7 @@ class AcceptHeaderTest extends TestCase
         })->throws(\InvalidArgumentException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function addAcceptableWithPriorityGreaterThan1ThrowsIllegalArgumentException(): void
     {
         expect(function() {
@@ -163,17 +153,13 @@ class AcceptHeaderTest extends TestCase
         })->throws(\InvalidArgumentException::class);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function priorityOnEmptyListReturnsPriorityOf1ForEachAcceptable(): void
     {
         assertThat($this->acceptHeader->priorityFor('text/html'), equals(1.0));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function priorityForNonExistingAcceptableReturns0(): void
     {
         assertThat(
@@ -183,9 +169,7 @@ class AcceptHeaderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function priorityForNonExistingAcceptableReturnsPriorityForGeneralAcceptableIfThisIsInList(): void
     {
         assertThat(
@@ -195,9 +179,7 @@ class AcceptHeaderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function priorityForNonExistingAcceptableReturnsPriorityForMainTypeAcceptableIfThisIsInList(): void
     {
         assertThat(
@@ -208,9 +190,7 @@ class AcceptHeaderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function priorityForExistingAcceptableReturnsItsPriority(): void
     {
         assertThat(
@@ -221,18 +201,13 @@ class AcceptHeaderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function findAcceptableWithGreatestPriorityForEmptyListReturnsNull(): void
     {
         assertNull($this->acceptHeader->findAcceptableWithGreatestPriority());
     }
 
-    /**
-     * @test
-     * @group foo
-     */
+    #[Test]
     public function findAcceptableWithGreatestPriority(): void
     {
         $this->acceptHeader->addAcceptable('text/plain', 0.2);
@@ -265,9 +240,9 @@ class AcceptHeaderTest extends TestCase
 
     /**
      * @param  string[]  $accepted
-     * @test
-     * @dataProvider  acceptedMimetypes
      */
+    #[Test]
+    #[DataProvider('acceptedMimetypes')]
     public function doesNotHaveSharedAcceptablesForEmptyList(array $accepted): void
     {
         assertFalse($this->acceptHeader->hasSharedAcceptables($accepted));
@@ -275,9 +250,9 @@ class AcceptHeaderTest extends TestCase
 
     /**
      * @param  string[]  $accepted
-     * @test
-     * @dataProvider  acceptedMimetypes
      */
+    #[Test]
+    #[DataProvider('acceptedMimetypes')]
     public function sharedAcceptablesForEmptyListReturnsEmptyArray(array $accepted): void
     {
         assertEmptyArray($this->acceptHeader->sharedAcceptables($accepted));
@@ -285,9 +260,9 @@ class AcceptHeaderTest extends TestCase
 
     /**
      * @param  string[]  $accepted
-     * @test
-     * @dataProvider  acceptedMimetypes
      */
+    #[Test]
+    #[DataProvider('acceptedMimetypes')]
     public function doesNotHaveSharedAcceptablesForNonEqualLists(array $accepted): void
     {
         assertFalse(
@@ -298,9 +273,9 @@ class AcceptHeaderTest extends TestCase
 
     /**
      * @param  string[]  $accepted
-     * @test
-     * @dataProvider  acceptedMimetypes
      */
+    #[Test]
+    #[DataProvider('acceptedMimetypes')]
     public function sharedAcceptablesForNonEqualListsReturnsEmptyArray(array $accepted): void
     {
         assertEmptyArray(
@@ -309,9 +284,7 @@ class AcceptHeaderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasSharedAcceptablesForCommonLists(): void
     {
         assertTrue(
@@ -320,9 +293,7 @@ class AcceptHeaderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function sharedAcceptablesForCommonListsReturnsArrayWithSharedOnes(): void
     {
         assertThat(
@@ -332,9 +303,7 @@ class AcceptHeaderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function findMatchWithGreatestPriorityFromEmptyListReturnsNull(): void
     {
         assertNull(
@@ -345,9 +314,7 @@ class AcceptHeaderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function findMatchWithGreatestPriorityFromAcceptedEmptyListReturnsNull(): void
     {
         assertNull(
@@ -357,9 +324,7 @@ class AcceptHeaderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function findMatchWithGreatestPriorityForNonMatchingListsReturnsNull(): void
     {
         assertNull(
@@ -369,9 +334,7 @@ class AcceptHeaderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function findMatchWithGreatestPriorityForMatchingListsAcceptableWithGreatestPriority(): void
     {
         assertThat(
@@ -382,9 +345,7 @@ class AcceptHeaderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function findMatchWithGreatestPriorityWithNonSharedAcceptablesButGeneralAllowedAcceptable(): void
     {
         assertThat(
@@ -398,9 +359,7 @@ class AcceptHeaderTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function findMatchWithGreatestPriorityWithNonSharedAcceptablesButMainTypeAllowedAcceptable(): void
     {
         assertThat(

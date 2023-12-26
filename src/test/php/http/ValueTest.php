@@ -7,29 +7,27 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer\http;
+
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 use function bovigo\assert\assertTrue;
 use function stubbles\values\value;
 /**
  * Checks integration with stubbles/values.
- *
- * @group  peer
- * @group  peer_http
  */
+#[Group('peer')]
+#[Group('peer_http')]
 class ValueTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function valueCanBeValidatedAsHttpUri(): void
     {
         assertTrue(value('http://example.net/')->isHttpUri());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function valueCanBeValidatedAsExistingHttpUri(): void
     {
         assertTrue(value('http://localhost/')->isExistingHttpUri());

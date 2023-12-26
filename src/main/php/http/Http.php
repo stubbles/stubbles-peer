@@ -7,6 +7,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer\http;
+
+use InvalidArgumentException;
+
 /**
  * Container for http constants.
  *
@@ -106,7 +109,7 @@ class Http
      *
      * @var array<int,string>
      */
-    private static $statusClass     = [
+    private static array $statusClass     = [
             0 => Http::STATUS_CLASS_UNKNOWN,
             1 => Http::STATUS_CLASS_INFO,
             2 => Http::STATUS_CLASS_SUCCESS,
@@ -119,7 +122,7 @@ class Http
      *
      * @var  array<int,string>
      */
-    private static $reasonPhrases   = [
+    private static array $reasonPhrases   = [
             100 => 'Continue',
             101 => 'Switching Protocols',
             102 => 'Processing',
@@ -182,9 +185,7 @@ class Http
      * Returns null if given status code is empty.
      *
      * @api
-     * @param   int  $statusCode
-     * @return  string
-     * @since   4.0.0
+     * @since  4.0.0
      */
     public static function statusClassFor(int $statusCode): string
     {
@@ -208,9 +209,7 @@ class Http
      * returns reason phrase for given status code
      *
      * @api
-     * @param   int  $statusCode
-     * @return  string
-     * @throws  \InvalidArgumentException
+     * @throws  InvalidArgumentException
      * @since   4.0.0
      */
     public static function reasonPhraseFor(int $statusCode): string
@@ -219,16 +218,13 @@ class Http
             return self::$reasonPhrases[$statusCode];
         }
 
-        throw new \InvalidArgumentException(
+        throw new InvalidArgumentException(
                 'Invalid or unknown HTTP status code ' . $statusCode
         );
     }
 
     /**
      * creates valid http line
-     *
-     * @param   string  $line
-     * @return  string
      */
     public static function line(string $line): string
     {
@@ -241,9 +237,7 @@ class Http
      * If the array contains an empty line all lines after this empty line are
      * considered to belong to the body and will be returned as they are.
      *
-     * @param   array<int, string>  $lines
-     * @return  string
-     * @since   4.0.0
+     * @since  4.0.0
      */
     public static function lines(string ...$lines): string
     {
@@ -271,8 +265,6 @@ class Http
 
     /**
      * creates empty http line
-     *
-     * @return  string
      */
     public static function emptyLine(): string
     {
@@ -281,12 +273,9 @@ class Http
 
     /**
      * checks if given RFC is a valid and known RFC
-     *
-     * @param   string  $rfc
-     * @return  bool
      */
     public static function isValidRfc(string $rfc): bool
     {
-        return in_array($rfc, [self::RFC_2616, self::RFC_7230]);
+        return in_array($rfc, [self::RFC_2616, self::RFC_7230], true);
     }
 }

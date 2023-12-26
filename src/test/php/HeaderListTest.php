@@ -148,16 +148,6 @@ class HeaderListTest extends TestCase
      * @since  2.0.0
      * @test
      */
-    public function appendingInvalidHeaderStructureThrowsIllegalArgumentException(): void
-    {
-        expect(function() { $this->headerList->append(400); })
-            ->throws(\InvalidArgumentException::class);
-    }
-
-    /**
-     * @since  2.0.0
-     * @test
-     */
     public function appendAddsHeadersFromString(): void
     {
         $this->assertBinford(

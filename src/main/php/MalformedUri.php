@@ -7,18 +7,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer;
+
+use Exception;
+use Throwable;
+
 /**
  * Exception to be thrown when an URI can not be parsed from a string.
  */
-class MalformedUri extends \Exception
+class MalformedUri extends Exception
 {
-    /**
-     * constructor
-     *
-     * @param  string      $message
-     * @param  \Throwable  $previous
-     */
-    public function __construct(string $message, \Throwable $previous = null)
+    public function __construct(string $message, Throwable $previous = null)
     {
         parent::__construct($message, 0, $previous);
     }

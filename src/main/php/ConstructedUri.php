@@ -16,11 +16,6 @@ namespace stubbles\peer;
  */
 class ConstructedUri extends Uri
 {
-    /**
-     * constructor
-     *
-     * @param  \stubbles\peer\ParsedUri  $uri
-     */
     protected function __construct(ParsedUri $uri)
     {
         $this->parsedUri = $uri;

@@ -7,6 +7,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer;
+
+use Throwable;
+
 /**
  * Exception to be thrown when the protocol of a connection is violated.
  *
@@ -14,13 +17,7 @@ namespace stubbles\peer;
  */
 class ProtocolViolation extends ConnectionFailure
 {
-    /**
-     * constructor
-     *
-     * @param  string      $message
-     * @param  \Throwable  $previous
-     */
-    public function __construct(string $message, \Throwable $previous = null)
+    public function __construct(string $message, Throwable $previous = null)
     {
         parent::__construct($message, $previous, 3);
     }

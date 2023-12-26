@@ -264,26 +264,6 @@ class IpAddressTest extends TestCase
     }
 
     /**
-     * @return  array<mixed[]>
-     */
-    public static function invalidValues(): array
-    {
-        return [['foo'], [-1.5], [true], [false]];
-    }
-
-    /**
-     * @param  mixed  $invalidValue
-     * @test
-     * @dataProvider  invalidValues
-     */
-    public function constructWithInvalidValueThrowsIllegalArgumentException($invalidValue): void
-    {
-        expect(function() use ($invalidValue) {
-                new IpAddress($invalidValue);
-        })->throws(\InvalidArgumentException::class);
-    }
-
-    /**
      * @test
      */
     public function createWithLong(): void

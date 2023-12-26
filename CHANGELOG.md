@@ -1,5 +1,13 @@
 # Changelog
 
+## 10.0.0
+
+### BC breaks
+
+* raised minimum required PHP version to 8.2
+* `stubbles\peer\http\HttpUri::exists()` now accepts strings or instances of `stubbles\peer\http\HttpUri`, previously it accepted all types and returned false for non-URIs.
+* removed `stubbles\peer\ParsedUri::hasPath()`, deprecated since 8.0.0
+
 ## 9.0.2 (2020-01-04)
 
 * fixed type error in `stubbles\peer\QueryString` with weird query strings

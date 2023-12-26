@@ -580,22 +580,6 @@ class HttpUriTest extends TestCase
      * @test
      * @since  4.0.0
      */
-    public function castFromOtherThrowsIllegalArgumentException(): void
-    {
-        expect(function() {
-                HttpUri::castFrom(new \stdClass());
-        })
-        ->throws(\InvalidArgumentException::class)
-        ->withMessage(
-                'Uri must be a string containing a HTTP URI or an instance of '
-                . HttpUri::class . ', but was stdClass'
-        );
-    }
-
-    /**
-     * @test
-     * @since  4.0.0
-     */
     public function createFromPartsWithInvalidSchemeThrowsMalformedUri(): void
     {
         expect(function() {
@@ -662,11 +646,7 @@ class HttpUriTest extends TestCase
      */
     public static function invalidValues(): array
     {
-        return [[null],
-                [303],
-                [true],
-                [false],
-                [''],
+        return [
                 ['invalid'],
                 ['ftp://example.net']
         ];

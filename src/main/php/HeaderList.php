@@ -7,6 +7,12 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer;
+
+use ArrayIterator;
+use InvalidArgumentException;
+use Iterator;
+use Traversable;
+
 /**
  * Container for list of headers.
  *
@@ -16,28 +22,13 @@ namespace stubbles\peer;
 class HeaderList implements \IteratorAggregate, \Countable
 {
     /**
-     * list of headers
-     *
-     * @var  array<string,scalar>
-     */
-    private $headers = [];
-
-    /**
-     * constructor
-     *
      * @param  array<string,scalar>  $headers
      * @since  2.0.0
      */
-    public function __construct(array $headers = [])
-    {
-        $this->headers = $headers;
-    }
+    public function __construct(private array $headers = [])  { }
 
     /**
      * creates headerlist from given string
-     *
-     * @param   string  $headers  string to parse for headers
-     * @return  \stubbles\peer\HeaderList
      */
     public static function fromString(string $headers): self
     {
@@ -47,7 +38,6 @@ class HeaderList implements \IteratorAggregate, \Countable
     /**
      * parses given header string and returns a list of headers
      *
-     * @param   string  $headers
      * @return  array<string,scalar>
      */
     private static function parse(string $headers): array
@@ -73,24 +63,16 @@ class HeaderList implements \IteratorAggregate, \Countable
      * If the header to append contain an already set header the existing header
      * value will be overwritten by the new one.
      *
-     * @param   string|array<string,scalar>|\stubbles\peer\HeaderList  $headers
-     * @return  \stubbles\peer\HeaderList
-     * @throws  \InvalidArgumentException
-     * @since   2.0.0
+     * @since  2.0.0
      */
-    public function append($headers): self
+    public function append(string|array|self $headers): self
     {
         if (is_string($headers)) {
             $append = self::parse($headers);
         } elseif (is_array($headers)) {
             $append = $headers;
-        } elseif ($headers instanceof self) {
-            $append = $headers->headers;
         } else {
-            throw new \InvalidArgumentException(
-                    'Given headers must be a string, a list of headers'
-                    . ' or another instance of ' . __CLASS__
-            );
+            $append = $headers->headers;
         }
 
         $this->headers = array_merge($this->headers, $append);
@@ -100,17 +82,14 @@ class HeaderList implements \IteratorAggregate, \Countable
     /**
      * creates header with value for key
      *
-     * @param   string  $key    name of header
      * @param   scalar  $value  value of header
-     * @return  \stubbles\peer\HeaderList
-     * @throws  \InvalidArgumentException
+     * @throws  InvalidArgumentException
      */
     public function put(string $key, $value): self
     {
         if (!is_scalar($value)) {
-            throw new \InvalidArgumentException(
-                    'Argument 2 passed to ' . __METHOD__
-                    . ' must be an instance of a scalar value.'
+            throw new InvalidArgumentException(
+                sprintf('Argument 2 passed to %s must be an instance of a scalar value.', __METHOD__)
             );
         }
 
@@ -120,13 +99,10 @@ class HeaderList implements \IteratorAggregate, \Countable
 
     /**
      * removes header with given key
-     *
-     * @param   string  $key  name of header
-     * @return  \stubbles\peer\HeaderList
      */
     public function remove(string $key): self
     {
-        if (isset($this->headers[$key]) == true) {
+        if (isset($this->headers[$key])) {
             unset($this->headers[$key]);
         }
 
@@ -135,9 +111,6 @@ class HeaderList implements \IteratorAggregate, \Countable
 
     /**
      * creates header for user agent
-     *
-     * @param   string  $userAgent  name of user agent
-     * @return  \stubbles\peer\HeaderList
      */
     public function putUserAgent(string $userAgent): self
     {
@@ -147,9 +120,6 @@ class HeaderList implements \IteratorAggregate, \Countable
 
     /**
      * creates header for referer
-     *
-     * @param   string  $referer  referer uri
-     * @return  \stubbles\peer\HeaderList
      */
     public function putReferer(string $referer): self
     {
@@ -160,8 +130,7 @@ class HeaderList implements \IteratorAggregate, \Countable
     /**
      * creates header for cookie
      *
-     * @param   array<string,string>  $cookieValues  cookie values
-     * @return  \stubbles\peer\HeaderList
+     * @param  array<string,string>  $cookieValues  cookie values
      */
     public function putCookie(array $cookieValues): self
     {
@@ -176,10 +145,6 @@ class HeaderList implements \IteratorAggregate, \Countable
 
     /**
      * creates header for authorization
-     *
-     * @param   string  $user      login name
-     * @param   string  $password  login password
-     * @return  \stubbles\peer\HeaderList
      */
     public function putAuthorization(string $user, string $password): self
     {
@@ -190,8 +155,7 @@ class HeaderList implements \IteratorAggregate, \Countable
     /**
      * adds a date header
      *
-     * @param   int  $timestamp  timestamp to use as date, defaults to current timestamp
-     * @return  \stubbles\peer\HeaderList
+     * @param  int  $timestamp  timestamp to use as date, defaults to current timestamp
      */
     public function putDate(int $timestamp = null): self
     {
@@ -207,8 +171,6 @@ class HeaderList implements \IteratorAggregate, \Countable
 
     /**
      * creates X-Binford header
-     *
-     * @return  \stubbles\peer\HeaderList
      */
     public function enablePower(): self
     {
@@ -218,8 +180,6 @@ class HeaderList implements \IteratorAggregate, \Countable
 
     /**
      * removes all headers
-     *
-     * @return  \stubbles\peer\HeaderList
      */
     public function clear(): self
     {
@@ -230,20 +190,17 @@ class HeaderList implements \IteratorAggregate, \Countable
     /**
      * returns value of header with given key
      *
-     * @param   string  $key      name of header
-     * @param   mixed   $default  value to return if given header not set
-     * @return  mixed
+     * @template T
+     * @param   T  $default  value to return if given header not set
+     * @return  T
      */
-    public function get(string $key, $default = null)
+    public function get(string $key, mixed $default = null): mixed
     {
         return $this->headers[$key] ?? $default;
     }
 
     /**
      * returns true if an header with given key exists
-     *
-     * @param   string  $key  name of header
-     * @return  bool
      */
     public function containsKey(string $key): bool
     {
@@ -253,18 +210,17 @@ class HeaderList implements \IteratorAggregate, \Countable
     /**
      * returns an iterator object
      *
-     * @return  \Iterator<string,scalar>
+     * @return  Iterator<string,scalar>
      */
-    public function getIterator(): \Iterator
+    public function getIterator(): Traversable
     {
-        return new \ArrayIterator($this->headers);
+        return new ArrayIterator($this->headers);
     }
 
     /**
      * returns amount of headers
      *
-     * @return  int
-     * @since   7.0.0
+     * @since  7.0.0
      */
     public function count(): int
     {
@@ -275,7 +231,6 @@ class HeaderList implements \IteratorAggregate, \Countable
      * returns a string representation of the class
      *
      * @XmlIgnore
-     * @return  string
      */
     public function __toString(): string
     {

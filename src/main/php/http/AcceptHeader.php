@@ -7,6 +7,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer\http;
+
+use InvalidArgumentException;
+
 /**
  * Class to work with all kinds of Accept* headers.
  *
@@ -19,13 +22,10 @@ class AcceptHeader implements \Countable
      *
      * @var  array<string, float>
      */
-    private $acceptables = [];
+    private array $acceptables = [];
 
     /**
      * method to create an instance from a string header value
-     *
-     * @param   string  $headerValue
-     * @return  \stubbles\peer\http\AcceptHeader
      */
     public static function parse(string $headerValue): self
     {
@@ -54,8 +54,6 @@ class AcceptHeader implements \Countable
 
     /**
      * amount of acceptables
-     *
-     * @return  int
      */
     public function count(): int
     {
@@ -65,16 +63,13 @@ class AcceptHeader implements \Countable
     /**
      * add an acceptable to the list
      *
-     * @param   string  $acceptable
-     * @param   float   $priority    defaults to 1.0
-     * @return  \stubbles\peer\http\AcceptHeader
-     * @throws  \InvalidArgumentException
+     * @throws  InvalidArgumentException
      */
     public function addAcceptable(string $acceptable, float $priority = 1.0): self
     {
         if (0 > $priority || 1.0 < $priority) {
-            throw new \InvalidArgumentException(
-                    'Invalid priority, must be between 0 and 1.0'
+            throw new InvalidArgumentException(
+                'Invalid priority, must be between 0 and 1.0'
             );
         }
 
@@ -88,9 +83,6 @@ class AcceptHeader implements \Countable
      * If returned priority is 0 the requested acceptable is not in the list. In
      * case no acceptables were added before every requested acceptable has a
      * priority of 1.0.
-     *
-     * @param   string  $mimeType
-     * @return  float
      */
     public function priorityFor(string $mimeType): float
     {
@@ -116,7 +108,6 @@ class AcceptHeader implements \Countable
      * mime types matches any in the list.
      *
      * @param   string[]  $mimeTypes
-     * @return  string|null
      */
     public function findMatchWithGreatestPriority(array $mimeTypes): ?string
     {
@@ -145,8 +136,7 @@ class AcceptHeader implements \Countable
     /**
      * helper method to find the acceptable with the greatest priority from a given list of acceptables
      *
-     * @param   array<string,float>  $acceptables
-     * @return  string|null
+     * @param  array<string,float>  $acceptables
      */
     private function selectAcceptableWithGreatestPriority(array $acceptables): ?string
     {
@@ -158,8 +148,6 @@ class AcceptHeader implements \Countable
      * returns the acceptable with the greatest priority
      *
      * If two acceptables have the same priority the last one added wins.
-     *
-     * @return  string|null
      */
     public function findAcceptableWithGreatestPriority(): ?string
     {
@@ -169,8 +157,7 @@ class AcceptHeader implements \Countable
     /**
      * checks whether there are shares acceptables in header and given list
      *
-     * @param   string[]  $acceptables
-     * @return  bool
+     * @param  string[]  $acceptables
      */
     public function hasSharedAcceptables(array $acceptables): bool
     {
@@ -190,8 +177,6 @@ class AcceptHeader implements \Countable
 
     /**
      * returns current list as string
-     *
-     * @return  string
      */
     public function asString(): string
     {
@@ -211,7 +196,6 @@ class AcceptHeader implements \Countable
      * returns a string representation of the class
      *
      * @XmlIgnore
-     * @return  string
      */
     public function __toString(): string
     {

@@ -15,66 +15,20 @@ use stubbles\peer\Stream;
  */
 class HttpResponse
 {
-    /**
-     * the socket we read the response from
-     *
-     * @var  \stubbles\peer\Stream
-     */
-    protected $socket;
-    /**
-     * status line of response
-     *
-     * @var  string
-     */
-    protected $statusLine;
-    /**
-     * http version of response
-     *
-     * @var  \stubbles\peer\http\HttpVersion
-     */
-    protected $version;
-    /**
-     * status code of response
-     *
-     * @var  int
-     */
-    protected $statusCode;
-    /**
-     * status code reason phrase of response
-     *
-     * @var  string
-     */
-    protected $reasonPhrase;
-    /**
-     * contains headers of response
-     *
-     * @var  \stubbles\peer\HeaderList
-     */
-    protected $headers;
-    /**
-     * contains body of response
-     *
-     * @var  string
-     */
-    protected $body;
+    protected ?string $statusLine = null;
+    protected ?HttpVersion $version;
+    protected ?int $statusCode;
+    protected ?string $reasonPhrase;
+    protected HeaderList $headers;
+    protected ?string $body = null;
 
-    /**
-     * constructor
-     *
-     * @param  \stubbles\peer\Stream  $socket  stream to read response from
-     */
-    public function __construct(Stream $socket)
+    public function __construct(protected Stream $socket)
     {
-        $this->socket  = $socket;
         $this->headers = new HeaderList();
     }
 
     /**
-     * static constructor
-     *
-     * @param   \stubbles\peer\Stream  $socket  stream to read response from
-     * @return  \stubbles\peer\http\HttpResponse
-     * @since   2.0.0
+     * @since  2.0.0
      */
     public static function create(Stream $socket): self
     {
@@ -85,8 +39,7 @@ class HttpResponse
      * returns status line of response
      *
      * @api
-     * @return  string
-     * @since   4.0.0
+     * @since  4.0.0
      */
     public function statusLine(): string
     {
@@ -97,8 +50,7 @@ class HttpResponse
      * returns http version of response
      *
      * @api
-     * @return  \stubbles\peer\http\HttpVersion
-     * @since   4.0.0
+     * @since  4.0.0
      */
     public function httpVersion(): HttpVersion
     {
@@ -109,8 +61,7 @@ class HttpResponse
      * returns status code of response
      *
      * @api
-     * @return  int
-     * @since   4.0.0
+     * @since  4.0.0
      */
     public function statusCode(): int
     {
@@ -121,8 +72,7 @@ class HttpResponse
      * return status code class of response
      *
      * @api
-     * @return  string
-     * @since   4.0.0
+     * @since  4.0.0
      */
     public function statusCodeClass(): string
     {
@@ -133,8 +83,7 @@ class HttpResponse
      * returns reason phrase of response
      *
      * @api
-     * @return  string
-     * @since   5.0.0
+     * @since  5.0.0
      */
     public function reasonPhrase(): string
     {
@@ -145,7 +94,6 @@ class HttpResponse
      * returns list of headers from response
      *
      * @api
-     * @return  \stubbles\peer\HeaderList
      */
     public function headers(): HeaderList
     {
@@ -156,18 +104,12 @@ class HttpResponse
      * returns body of response
      *
      * @api
-     * @return  string
      */
     public function body(): string
     {
         return $this->readHeader()->readBody()->body;
     }
 
-    /**
-     * reads response headers
-     *
-     * @return  \stubbles\peer\http\HttpResponse
-     */
     private function readHeader(): self
     {
         if (null !== $this->statusLine) {
@@ -189,9 +131,6 @@ class HttpResponse
     }
 
     /**
-     * parses first line of response
-     *
-     * @param   string  $statusLine  first line of response
      * @throws  ProtocolViolation  when status line can not be parsed
      */
     private function parseStatusLine(string $statusLine): void
@@ -212,19 +151,12 @@ class HttpResponse
 
     /**
      * checks whether server only returned a status code which signals there's more to come
-     *
-     * @return  bool
      */
     private function requireContinue(): bool
     {
         return 100 === $this->statusCode || 102 === $this->statusCode;
     }
 
-    /**
-     * reads the response body
-     *
-     * @return  \stubbles\peer\http\HttpResponse
-     */
     private function readBody(): self
     {
         if (null !== $this->body) {
@@ -245,8 +177,6 @@ class HttpResponse
      *
      * The method implements the pseudo code given in RFC 2616 section 19.4.6:
      * Introduction of Transfer-Encoding. Chunk extensions are ignored.
-     *
-     * @return  string
      */
     private function readChunked(): string
     {
@@ -267,12 +197,6 @@ class HttpResponse
         return $body;
     }
 
-    /**
-     * helper method for default reading of response body
-     *
-     * @param   int     $readLength  expected length of response body
-     * @return  string
-     */
     private function readDefault(int $readLength): string
     {
         $body = $buffer = '';

@@ -7,6 +7,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer;
+
+use InvalidArgumentException;
+
 /**
  * Class for operations on socket/stream connections.
  *
@@ -21,28 +24,18 @@ class Stream
      * @var  resource
      */
     private $resource;
-    /**
-     * @var  bool
-     */
-    private $usesTls;
-    /**
-     * timeout
-     *
-     * @var  float
-     */
-    private $timeout;
+    private float $timeout;
 
     /**
      * constructor
      *
      * @param   resource  $resource  actual socket resource
-     * @param   bool      $usesTls   optional  indicator whether stream uses transport layer security
-     * @throws  \InvalidArgumentException
+     * @throws  InvalidArgumentException
      */
-    public function __construct($resource, bool $usesTls = false)
+    public function __construct($resource, private bool $usesTls = false)
     {
         if (!is_resource($resource) || get_resource_type($resource) !== 'stream') {
-            throw new \InvalidArgumentException('Given resource is not a socket stream');
+            throw new InvalidArgumentException('Given resource is not a socket stream');
         }
 
         $this->resource = $resource;
@@ -62,23 +55,13 @@ class Stream
     }
 
     /**
-     * indicates whether stream was opened using transport layer security
-     *
-     * @return  bool
-     * @since   8.0.0
+     * @since  8.0.0
      */
     public function usesTls(): bool
     {
         return $this->usesTls;
     }
 
-    /**
-     * set timeout for connections
-     *
-     * @param   int  $seconds       timeout for connection in seconds
-     * @param   int  $microseconds  optional  timeout for connection in microseconds
-     * @return  $this
-     */
     public function setTimeout(int $seconds, int $microseconds = 0): self
     {
         $this->timeout = (float) ($seconds . '.' . $microseconds);
@@ -88,8 +71,6 @@ class Stream
 
     /**
      * returns current timeout setting
-     *
-     * @return  float
      */
     public function timeout(): float
     {
@@ -99,10 +80,8 @@ class Stream
     /**
      * read from socket
      *
-     * @param   int  $length  optional  length of data to read
-     * @return  string  data read from socket
-     * @throws  \stubbles\peer\ConnectionFailure
-     * @throws  \stubbles\peer\Timeout
+     * @throws  ConnectionFailure
+     * @throws  Timeout
      */
     public function read(int $length = null): string
     {
@@ -117,36 +96,28 @@ class Stream
 
             if (stream_get_meta_data($this->resource)['timed_out']) {
                 throw new Timeout(
-                        'Reading of ' . $length . ' bytes failed: timeout of '
-                        . $this->timeout . ' seconds exceeded'
+                    sprintf(
+                        'Reading of %d bytes failed: timeout of %d seconds exceeded.',
+                        $length,
+                        $this->timeout
+                    )
                 );
             }
 
-            throw new ConnectionFailure(
-                    'Reading of ' . $length . ' bytes failed.'
-            );
+            throw new ConnectionFailure(sprintf('Reading of %d bytes failed.', $length));
         }
 
         return $data;
     }
 
-    /**
-     * read a whole line from socket
-     *
-     * @return  string  data read from socket
-     */
     public function readLine(): string
     {
         return rtrim($this->read());
     }
 
     /**
-     * read binary data from socket
-     *
-     * @param   int  $length  length of data to read
-     * @return  string  data read from socket
-     * @throws  \stubbles\peer\ConnectionFailure
-     * @throws  \stubbles\peer\Timeout
+     * @throws  ConnectionFailure
+     * @throws  Timeout
      */
     public function readBinary(int $length = 1024): string
     {
@@ -154,26 +125,23 @@ class Stream
         if (false === $data) {
             if (stream_get_meta_data($this->resource)['timed_out']) {
                 throw new Timeout(
-                        'Reading of ' . $length . ' bytes failed: timeout of '
-                        . $this->timeout . ' seconds exceeded'
+                    sprintf(
+                        'Reading of %d bytes failed: timeout of %d seconds exceeded.',
+                        $length,
+                        $this->timeout
+                    )
                 );
             }
 
-            throw new ConnectionFailure(
-                    'Reading of ' . $length . ' bytes failed.'
-            );
+            throw new ConnectionFailure(sprintf('Reading of %d bytes failed.', $length));
         }
 
         return $data;
     }
 
     /**
-     * write data to socket
-     *
-     * @param   string  $data  data to write
-     * @return  int  amount of bytes written to socket
-     * @throws  \stubbles\peer\ConnectionFailure
-     * @throws  \stubbles\peer\Timeout
+     * @throws  ConnectionFailure
+     * @throws  Timeout
      */
     public function write(string $data): int
     {
@@ -181,24 +149,20 @@ class Stream
         if (false === $length) {
             if (stream_get_meta_data($this->resource)['timed_out']) {
                 throw new Timeout(
-                        'Writing of ' . strlen($data) . ' bytes failed:'
-                        . ' timeout of ' . $this->timeout . ' seconds exceeded'
+                    sprintf(
+                        'Writing of %d bytes failed: timeout of %d seconds exceeded.',
+                        strlen($data),
+                        $this->timeout
+                    )
                 );
             }
 
-            throw new ConnectionFailure(
-                    'Writing of ' . strlen($data) . ' bytes failed.'
-            );
+            throw new ConnectionFailure(sprintf('Writing of %d bytes failed.', strlen($data)));
         }
 
         return $length;
     }
 
-    /**
-     * check if we reached end of data
-     *
-     * @return  bool
-     */
     public function eof(): bool
     {
         return feof($this->resource);

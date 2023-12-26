@@ -25,22 +25,12 @@ use function bovigo\assert\predicate\isSameAs;
 class HttpVersionTest extends TestCase
 {
     /**
-     * @return  array<mixed[]>
-     */
-    public static function emptyVersions(): array
-    {
-        return [[''], [null]];
-    }
-
-    /**
-     * @param  mixed  $empty
      * @test
-     * @dataProvider  emptyVersions
      */
-    public function parseFromStringThrowsIllegalArgumentExceptionWhenGivenVersionIsEmpty($empty): void
+    public function parseFromEmptyStringThrowsIllegalArgumentException(): void
     {
-        expect(function() use ($empty) {
-                HttpVersion::fromString($empty);
+        expect(function() {
+                HttpVersion::fromString('');
         })
         ->throws(\InvalidArgumentException::class)
         ->withMessage('Given HTTP version is empty');
@@ -147,13 +137,11 @@ class HttpVersionTest extends TestCase
     }
 
     /**
-     * @param  mixed  $empty
      * @test
-     * @dataProvider  emptyVersions
      */
-    public function castFromEmptyWithoutDefaultThrowsIllegalArgumentException($empty): void
+    public function castFromEmptyWithoutDefaultThrowsIllegalArgumentException(): void
     {
-        expect(function() use ($empty) { HttpVersion::castFrom($empty); })
+        expect(function() { HttpVersion::castFrom(''); })
             ->throws(\InvalidArgumentException::class)
             ->withMessage('Given HTTP version is empty');
     }
@@ -176,16 +164,11 @@ class HttpVersionTest extends TestCase
     }
 
     /**
-     * @param  mixed  $empty
      * @test
-     * @dataProvider  emptyVersions
      */
-    public function doesNotEqualEmptyVersion($empty): void
+    public function doesNotEqualEmptyVersion(): void
     {
-        assertFalse(
-                HttpVersion::fromString(HttpVersion::HTTP_1_1)
-                        ->equals($empty)
-        );
+        assertFalse(HttpVersion::fromString(HttpVersion::HTTP_1_1)->equals(''));
     }
 
     /**

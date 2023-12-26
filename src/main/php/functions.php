@@ -13,10 +13,7 @@ namespace stubbles\peer {
     /**
      * creates a http connection to specified uri
      *
-     * @param   string                         $uri
-     * @param   \stubbles\peer\HeaderList  $headers
-     * @return  \stubbles\peer\http\HttpConnection
-     * @since   3.1.0
+     * @since  3.1.0
      * @api
      */
     function http(string $uri, HeaderList $headers = null): HttpConnection
@@ -27,9 +24,8 @@ namespace stubbles\peer {
     /**
      * creates a list of headers from given map
      *
-     * @param   array<string,scalar>  $headers
-     * @return  \stubbles\peer\HeaderList
-     * @since   3.1.0
+     * @param  array<string,scalar>  $headers
+     * @since  3.1.0
      * @api
      */
     function headers(array $headers = []): HeaderList
@@ -40,9 +36,8 @@ namespace stubbles\peer {
     /**
      * creates a list of headers from given header string
      *
-     * @param   string  $headers
-     * @return  \stubbles\peer\HeaderList
-     * @since   3.1.0
+     * @param  string  $headers
+     * @since  3.1.0
      * @api
      */
     function parseHeaders(string $headers): HeaderList
@@ -53,11 +48,8 @@ namespace stubbles\peer {
     /**
      * creates a new socket
      *
-     * @param   string  $host    host to open socket to
-     * @param   int     $port    port to use for opening the socket
-     * @param   string  $prefix  prefix for host, e.g. ssl://
-     * @return  \stubbles\peer\Socket
-     * @since   3.1.0
+     * @param  string  $prefix  prefix for host, e.g. ssl://
+     * @since  3.1.0
      * @api
      */
     function createSocket(string $host, int $port = 80, string $prefix = null): Socket
@@ -68,9 +60,7 @@ namespace stubbles\peer {
     /**
      * checks if given value is a valid mail address
      *
-     * @param   string|null  $value
-     * @return  bool
-     * @since   7.1.0
+     * @since  7.1.0
      */
     function isMailAddress(?string $value): bool
     {
@@ -97,11 +87,12 @@ namespace stubbles\peer {
  */
 namespace stubbles\peer\http {
 
+    use stubbles\peer\MalformedUri;
+
     /**
      * returns an empty accept header representation
      *
-     * @return  \stubbles\peer\http\AcceptHeader
-     * @since   4.0.0
+     * @since  4.0.0
      * @api
      */
     function emptyAcceptHeader(): AcceptHeader
@@ -111,15 +102,17 @@ namespace stubbles\peer\http {
 
     if (class_exists('stubbles\values\Parse')) {
         \stubbles\values\Parse::addRecognition(
-                function($string)
+                function($string): ?HttpUri
                 {
                     if (substr($string, 0, 4) === Http::SCHEME) {
                         try {
                             return HttpUri::fromString($string);
-                        } catch (\stubbles\peer\MalformedUri $murle) { }
+                        } catch (MalformedUri $murle) {
+                            // not a valid uri, fall through to return null
+                         }
                     }
 
-                    return;
+                    return null;
 
                 },
                 HttpUri::class

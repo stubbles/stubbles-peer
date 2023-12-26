@@ -16,10 +16,8 @@ abstract class Uri
 {
     /**
      * internal representation after parse_url()
-     *
-     * @var  \stubbles\peer\ParsedUri
      */
-    protected $parsedUri;
+    protected ParsedUri $parsedUri;
 
     /**
      * parses an uri out of a string

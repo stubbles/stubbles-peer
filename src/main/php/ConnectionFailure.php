@@ -7,19 +7,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer;
+
+use Exception;
+use Throwable;
+
 /**
  * Exception to be thrown when an error on a network connection occurs.
  */
-class ConnectionFailure extends \Exception
+class ConnectionFailure extends Exception
 {
-    /**
-     * constructor
-     *
-     * @param  string      $message
-     * @param  \Throwable  $previous
-     * @param  int         $code
-     */
-    public function __construct(string $message, \Throwable $previous = null, int $code = 1)
+    public function __construct(string $message, Throwable $previous = null, int $code = 1)
     {
         parent::__construct($message, $code, $previous);
     }

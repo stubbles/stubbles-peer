@@ -7,6 +7,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 namespace stubbles\peer;
+
+use InvalidArgumentException;
+
 /**
  * Represents a socket to which a connection can be established.
  *
@@ -14,58 +17,28 @@ namespace stubbles\peer;
  */
 class Socket
 {
-    /**
-     * host to open socket to
-     *
-     * @var  string
-     */
-    private $host;
-    /**
-     * port to use for opening the socket
-     *
-     * @var  int
-     */
-    private $port;
-    /**
-     * prefix for host, e.g. ssl://
-     *
-     * @var  string|null
-     */
-    private $prefix;
-    /**
-     * @var  callable
-     */
+    /** @var  callable */
     private $fsockopen = '\fsockopen';
 
     /**
-     * constructor
-     *
-     * @param   string  $host    host to open socket to
-     * @param   int     $port    port to use for opening the socket
      * @param   string  $prefix  prefix for host, e.g. ssl://
-     * @throws  \InvalidArgumentException
+     * @throws  InvalidArgumentException
      */
-    public function __construct(string $host, int $port = 80, string $prefix = null)
+    public function __construct(private string $host, private int $port = 80, private ?string $prefix = null)
     {
         if (empty($host)) {
-            throw new \InvalidArgumentException('Host can not be empty');
+            throw new InvalidArgumentException('Host can not be empty');
         }
 
         if (0 > $port) {
-            throw new \InvalidArgumentException('Port can not be negative');
+            throw new InvalidArgumentException('Port can not be negative');
         }
-
-        $this->host   = $host;
-        $this->port   = $port;
-        $this->prefix = $prefix;
     }
 
     /**
      * sets function to open socket with
      *
-     * @param   callable  $fsockopen
-     * @return  Socket
-     * @since   8.1.0
+     * @since  8.1.0
      */
     public function openWith(callable $fsockopen): self
     {
@@ -74,11 +47,7 @@ class Socket
     }
 
     /**
-     * opens a connection to host
-     *
-     * @param   float  $connectTimeout  optional timeout for establishing the connection, defaults to 1 second
-     * @return  \stubbles\peer\Stream
-     * @throws  \stubbles\peer\ConnectionFailure
+     * @throws  ConnectionFailure
      */
     public function connect(float $connectTimeout = 1.0): Stream
     {
@@ -94,10 +63,16 @@ class Socket
         );
         if (false === $resource) {
             throw new ConnectionFailure(
-                    'Connect to ' . $this->prefix . $this->host . ':'. $this->port
-                    . ' within ' . $connectTimeout . ' second'
-                    . (1 == $connectTimeout ? '' : 's') . ' failed: '
-                    . $errstr . ' (' . $errno . ').'
+                sprintf(
+                    'Connect to %s%s:%d within %d second%s failed: %s (%d)',
+                    $this->prefix,
+                    $this->host,
+                    $this->port,
+                    $connectTimeout,
+                    1 == $connectTimeout ? '' : 's',
+                    $errstr,
+                    $errno
+                )
             );
         }
 
@@ -105,10 +80,7 @@ class Socket
     }
 
     /**
-     * checks if socket uses a secure connection
-     *
-     * @return  bool
-     * @since   4.0.0
+     * @since  4.0.0
      */
     public function usesSsl(): bool
     {

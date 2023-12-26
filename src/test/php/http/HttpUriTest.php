@@ -17,7 +17,6 @@ use stubbles\peer\MalformedUri;
 use function bovigo\assert\{
     assertThat,
     assertFalse,
-    assertNull,
     assertTrue,
     expect,
     fail,

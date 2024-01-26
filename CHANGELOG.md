@@ -1,5 +1,9 @@
 # Changelog
 
+## 10.0.1 (2024-01-26)
+
+* fixed return type hint of `stubbles\peer\http\HttpUri::withPath()`
+
 ## 10.0.0 (2023-12-26)
 
 ### BC breaks

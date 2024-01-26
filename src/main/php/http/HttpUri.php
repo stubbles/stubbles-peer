@@ -21,37 +21,39 @@ use stubbles\peer\Uri;
 abstract class HttpUri extends Uri
 {
     /**
-     * @since   4.0.0
+     * @since  4.0.0
      */
     public static function fromParts(
-            string $scheme,
-            string $host,
-            int $port = null,
-            string $path = '/',
-            string $queryString = null
+        string $scheme,
+        string $host,
+        int $port = null,
+        string $path = '/',
+        string $queryString = null
     ): self {
         if (null !== $queryString && substr($queryString, 0, 1) !== '?') {
             $queryString = '?' . $queryString;
         }
 
         return self::fromString(
-                $scheme
-                . '://'
-                . $host
-                . (null === $port ? '' : ':' . ((string) $port))
-                . $path
-                . (string) $queryString
+            $scheme
+            . '://'
+            . $host
+            . (null === $port ? '' : ':' . ((string) $port))
+            . $path
+            . (string) $queryString
         );
     }
 
     /**
      * parses an uri out of a string
      *
-     * @param   string  $rfc  optional  RFC to base validation on, defaults to Http::RFC_7230
-     * @throws  \stubbles\peer\MalformedUri
+     * @param   string  $rfc  RFC to base validation on, defaults to Http::RFC_7230
+     * @throws  MalformedUri
      */
-    public static function fromString(string $uriString, string $rfc = Http::RFC_7230): self
-    {
+    public static function fromString(
+        string $uriString,
+        string $rfc = Http::RFC_7230
+    ): self {
         if (strlen($uriString) === 0) {
             throw new MalformedUri('Empty string is not a valid HTTP URI');
         }
@@ -87,13 +89,16 @@ abstract class HttpUri extends Uri
      *
      * @throws  MalformedUri
      */
-    private function isValidForRfc(string $rfc): bool
+    protected function isValidForRfc(string $rfc): bool
     {
         if ($this->parsedUri->hasUser() && Http::RFC_7230 === $rfc) {
             throw new MalformedUri(
-                    'The URI ' . $this->parsedUri->asString()
-                    . ' is not a valid HTTP URI according to ' . Http::RFC_7230
-                    . ': contains userinfo, but this is disallowed'
+                sprintf(
+                    'The URI %s is not a valid HTTP URI according to %s:'
+                    . 'contains userinfo, but this is disallowed',
+                    $this->parsedUri->asString(),
+                    Http::RFC_7230
+                )
             );
         }
 
@@ -106,8 +111,10 @@ abstract class HttpUri extends Uri
      * @param  callable  $checkWith  function to check dns record with
      * @since  7.1.0
      */
-    public static function exists(string|self $httpUri, ?callable $checkWith = null): bool
-    {
+    public static function exists(
+        string|self $httpUri,
+        ?callable $checkWith = null
+    ): bool {
         if ($httpUri instanceof self) {
             return $httpUri->hasDnsRecord($checkWith);
         }
@@ -126,7 +133,6 @@ abstract class HttpUri extends Uri
     /**
      * checks whether given http uri is syntactically valid
      *
-     * @param  mixed  $httpUri
      * @since  7.1.0
      */
     public static function isValid(mixed $httpUri): bool
@@ -173,10 +179,12 @@ abstract class HttpUri extends Uri
     public function hasDnsRecord(?callable $checkWith = null): bool
     {
         $checkdnsrr = $checkWith ?? 'checkdnsrr';
-        if ($this->parsedUri->isLocalHost()
-          || $checkdnsrr($this->parsedUri->hostname(), 'A')
-          || $checkdnsrr($this->parsedUri->hostname(), 'AAAA')
-          || $checkdnsrr($this->parsedUri->hostname(), 'CNAME')) {
+        if (
+            $this->parsedUri->isLocalHost()
+            || $checkdnsrr($this->parsedUri->hostname(), 'A')
+            || $checkdnsrr($this->parsedUri->hostname(), 'AAAA')
+            || $checkdnsrr($this->parsedUri->hostname(), 'CNAME')
+        ) {
             return true;
         }
 
@@ -232,10 +240,10 @@ abstract class HttpUri extends Uri
      *
      * @since  5.5.0
      */
-    public function withPath(string $path): Uri
+    public function withPath(string $path): self
     {
         return new ConstructedHttpUri(
-                $this->parsedUri->transpose(['path' => $path])
+            $this->parsedUri->transpose(['path' => $path])
         );
     }
 
@@ -265,7 +273,9 @@ abstract class HttpUri extends Uri
     {
         if ($this->isHttp()) {
             if (null !== $port && !$this->parsedUri->portEquals($port)) {
-                return new ConstructedHttpUri($this->parsedUri->transpose(['port' => $port]));
+                return new ConstructedHttpUri(
+                    $this->parsedUri->transpose(['port' => $port])
+                );
             }
 
             return $this;
@@ -289,7 +299,9 @@ abstract class HttpUri extends Uri
     {
         if ($this->isHttps()) {
             if (null !== $port && !$this->parsedUri->portEquals($port)) {
-                return new ConstructedHttpUri($this->parsedUri->transpose(['port' => $port]));
+                return new ConstructedHttpUri(
+                    $this->parsedUri->transpose(['port' => $port])
+                );
             }
 
             return $this;
@@ -314,7 +326,7 @@ abstract class HttpUri extends Uri
      *                            ->get();
      * </code>
      */
-    public function connect(HeaderList $headers = null): HttpConnection
+    public function connect(?HeaderList $headers = null): HttpConnection
     {
         return new HttpConnection($this, $headers);
     }

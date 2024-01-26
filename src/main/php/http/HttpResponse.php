@@ -138,8 +138,11 @@ class HttpResponse
         $matches = [];
         if (preg_match("=^(HTTP/\d+\.\d+) (\d{3}) ([^\r]*)=", $statusLine, $matches) == false) {
             throw new ProtocolViolation(
-                    'Received status line "' . addcslashes($statusLine, "\0..\37!\177..\377")
-                    . '" does not match expected format "=^(HTTP/\d+\.\d+) (\d{3}) ([^\r]*)="'
+                sprintf(
+                    'Received status line "%s" does not match expected'
+                    . ' format "=^(HTTP/\d+\.\d+) (\d{3}) ([^\r]*)="',
+                    addcslashes($statusLine, "\0..\37!\177..\377")
+                )
             );
         }
 
@@ -166,7 +169,9 @@ class HttpResponse
         if ($this->headers->get('Transfer-Encoding') === 'chunked') {
             $this->body = $this->readChunked();
         } else {
-            $this->body = $this->readDefault((int) $this->headers->get('Content-Length', 4096));
+            $this->body = $this->readDefault(
+                (int) $this->headers->get('Content-Length', 4096)
+            );
         }
 
         return $this;

@@ -83,7 +83,7 @@ class Stream
      * @throws  ConnectionFailure
      * @throws  Timeout
      */
-    public function read(int $length = null): string
+    public function read(?int $length = null): string
     {
         // can not call fgets with null when not specified
         $data = null === $length ? fgets($this->resource) : fgets($this->resource, $length);

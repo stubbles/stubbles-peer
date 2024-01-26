@@ -107,7 +107,7 @@ class AcceptHeader implements \Countable
      * one with the greatest priority. If return value is null none of the given
      * mime types matches any in the list.
      *
-     * @param   string[]  $mimeTypes
+     * @param  string[]  $mimeTypes
      */
     public function findMatchWithGreatestPriority(array $mimeTypes): ?string
     {

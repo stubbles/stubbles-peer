@@ -87,7 +87,10 @@ class IpAddress
             $this->type = self::V6;
         } else {
             throw new InvalidArgumentException(
-                sprintf('Given ip address %s does not denote a valid IP address', (string) $ip)
+                sprintf(
+                    'Given ip address %s does not denote a valid IP address',
+                    (string) $ip
+                )
             );
         }
     }
@@ -180,9 +183,13 @@ class IpAddress
      */
     private function completeCidrIp(string $cidrIpShort): int
     {
-        $completeCidrIp = ip2long($cidrIpShort . str_repeat('.0', 3 - substr_count($cidrIpShort, '.')));
+        $completeCidrIp = ip2long(
+            $cidrIpShort . str_repeat('.0', 3 - substr_count($cidrIpShort, '.'))
+        );
         if (false === $completeCidrIp) {
-            throw new LogicException('Failure while calculating complete cidr ip from short version.');
+            throw new LogicException(
+                'Failure while calculating complete cidr ip from short version.'
+            );
         }
 
         return $completeCidrIp;
@@ -232,8 +239,11 @@ class IpAddress
      *
      * @param  callable  $openWith  optional  open port with this function
      */
-    public function openSocket(int $port, int $timeout = 5, callable $openWith = null): Stream
-    {
+    public function openSocket(
+        int $port,
+        int $timeout = 5,
+        ?callable $openWith = null
+    ): Stream {
         $socket = new Socket($this->ip, $port, null);
         if (null !== $openWith) {
             $socket->openWith($openWith);
@@ -257,8 +267,11 @@ class IpAddress
      *
      * @param  callable  $openWith  optional  open port with this function
      */
-    public function openSecureSocket(int $port, int $timeout = 5, callable $openWith = null): Stream
-    {
+    public function openSecureSocket(
+        int $port,
+        int $timeout = 5,
+        ?callable $openWith = null
+    ): Stream {
         $socket = new Socket($this->ip, $port, 'ssl://');
         if (null !== $openWith) {
             $socket->openWith($openWith);

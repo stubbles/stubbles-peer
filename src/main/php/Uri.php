@@ -14,6 +14,7 @@ namespace stubbles\peer;
  */
 abstract class Uri
 {
+    private const ALLOWED_URI_SYNTAX = '!^([a-z][a-z0-9\+]*)://([^@]+@)?([^/?#]*)(/([^#?]*))?(.*)$!';
     /**
      * internal representation after parse_url()
      */
@@ -22,11 +23,9 @@ abstract class Uri
     /**
      * parses an uri out of a string
      *
-     * @param   string  $uriString  string to create instance from
-     * @return  \stubbles\peer\Uri
-     * @throws  \stubbles\peer\MalformedUri
+     * @throws  MalformedUri
      */
-    public static function fromString(string $uriString)
+    public static function fromString(string $uriString): self
     {
         if (strlen($uriString) === 0) {
             throw new MalformedUri('Empty string is not a valid URI');
@@ -47,16 +46,18 @@ abstract class Uri
      */
     protected function isSyntacticallyValid(): bool
     {
-        if (preg_match('!^([a-z][a-z0-9\+]*)://([^@]+@)?([^/?#]*)(/([^#?]*))?(.*)$!', $this->parsedUri->asString()) == 0) {
+        if (preg_match(self::ALLOWED_URI_SYNTAX, $this->parsedUri->asString()) == 0) {
             return false;
         }
 
         if (null != $user = $this->parsedUri->user()) {
-            if (preg_match('~([@:/])~', $user) != 0) {
-                return false;
-            }
-
-            if (!empty($this->parsedUri->password()) && preg_match('~([@:/])~', $this->parsedUri->password()) != 0) {
+            if (
+                preg_match('~([@:/])~', $user) != 0
+                || (
+                    !empty($this->parsedUri->password())
+                    && preg_match('~([@:/])~', $this->parsedUri->password()) != 0
+                )
+            ) {
                 return false;
             }
         }
@@ -66,7 +67,10 @@ abstract class Uri
             return true;
         }
 
-        if (null !== $hostname && preg_match('!^([a-zA-Z0-9\.-]+|\[[^\]]+\])(:([0-9]+))?$!', $hostname) != 0) {
+        if (
+            null !== $hostname
+            && preg_match('!^([a-zA-Z0-9\.-]+|\[[^\]]+\])(:([0-9]+))?$!', $hostname) != 0
+        ) {
             return true;
         }
 
@@ -76,19 +80,20 @@ abstract class Uri
     /**
      * checks whether host of uri is listed in dns
      *
-     * @param   callable  $checkWith  optional  function to check dns record with
-     * @return  bool
+     * @param  callable  $checkWith  function to check dns record with
      */
-    public function hasDnsRecord(callable $checkWith = null): bool
+    public function hasDnsRecord(?callable $checkWith = null): bool
     {
         if (!$this->parsedUri->hasHostname()) {
             return false;
         }
 
         $checkdnsrr = null === $checkWith ? 'checkdnsrr': $checkWith;
-        if ($this->parsedUri->isLocalHost()
-          || $checkdnsrr($this->parsedUri->hostname(), 'ANY')
-          || $checkdnsrr($this->parsedUri->hostname(), 'MX')) {
+        if (
+            $this->parsedUri->isLocalHost()
+            || $checkdnsrr($this->parsedUri->hostname(), 'ANY')
+            || $checkdnsrr($this->parsedUri->hostname(), 'MX')
+        ) {
             return true;
         }
 
@@ -97,8 +102,6 @@ abstract class Uri
 
     /**
      * returns the uri as string as originally given
-     *
-     * @return  string
      */
     public function asString(): string
     {
@@ -110,7 +113,6 @@ abstract class Uri
      * returns a string representation of the uri
      *
      * @XmlIgnore
-     * @return  string
      */
     public function __toString(): string
     {
@@ -119,8 +121,6 @@ abstract class Uri
 
     /**
      * Returns uri as string but without port even if originally given.
-     *
-     * @return  string
      */
     public function asStringWithoutPort(): string
     {
@@ -129,8 +129,6 @@ abstract class Uri
 
     /**
      * Returns uri as string containing the port if it is not the default port.
-     *
-     * @return  string
      */
     public function asStringWithNonDefaultPort(): string
     {
@@ -143,8 +141,6 @@ abstract class Uri
 
     /**
      * returns the scheme of the uri
-     *
-     * @return  string
      */
     public function scheme(): string
     {
@@ -153,11 +149,8 @@ abstract class Uri
 
     /**
      * returns the user
-     *
-     * @param   string  $defaultUser  user to return if no user is set
-     * @return  string|null
      */
-    public function user(string $defaultUser = null): ?string
+    public function user(?string $defaultUser = null): ?string
     {
         return $this->parsedUri->user($defaultUser);
     }
@@ -165,11 +158,9 @@ abstract class Uri
     /**
      * returns the password
      *
-     * @param   string  $defaultPassword  password to return if no password is set
-     * @return  string|null
      * @deprecated  since 8.0.0, passing a password via URI is inherintly insecure
      */
-    public function password(string $defaultPassword = null): ?string
+    public function password(?string $defaultPassword = null): ?string
     {
         if (!$this->parsedUri->hasUser()) {
             return null;
@@ -184,8 +175,6 @@ abstract class Uri
 
     /**
      * returns hostname of the uri
-     *
-     * @return  string|null
      */
     public function hostname(): ?string
     {
@@ -201,8 +190,6 @@ abstract class Uri
      * constructed explicitly contains the default port for the protocol the
      * return value of this method will be wrong, as it would return `false`
      * when in fact the default port was specified.
-     *
-     * @return  bool
      */
     public function hasDefaultPort(): bool
     {
@@ -211,11 +198,8 @@ abstract class Uri
 
     /**
      * returns port of the uri
-     *
-     * @param   int  $defaultPort  port to be used if no port is defined
-     * @return  int|null
      */
-    public function port(int $defaultPort = null): ?int
+    public function port(?int $defaultPort = null): ?int
     {
         if ($this->parsedUri->hasPort()) {
             return $this->parsedUri->port();
@@ -227,8 +211,6 @@ abstract class Uri
     /**
      * returns a new uri instance with new path
      *
-     * @param   string  $path  new path
-     * @return  \stubbles\peer\Uri
      * @since   5.5.0
      */
     public function withPath(string $path): self
@@ -238,8 +220,6 @@ abstract class Uri
 
     /**
      * returns path of the uri
-     *
-     * @return  string
      */
     public function path(): string
     {
@@ -248,8 +228,6 @@ abstract class Uri
 
     /**
      * checks whether uri has a query
-     *
-     * @return  bool
      */
     public function hasQueryString(): bool
     {
@@ -259,8 +237,7 @@ abstract class Uri
     /**
      * returns query string
      *
-     * @return  string
-     * @since   2.1.2
+     * @since  2.1.2
      */
     public function queryString(): string
     {
@@ -270,9 +247,8 @@ abstract class Uri
     /**
      * adds given map of params
      *
-     * @param   array<string,scalar>  $params  map of parameters to add
-     * @return  \stubbles\peer\Uri
-     * @since   5.1.2
+     * @param  array<string,scalar>  $params  map of parameters to add
+     * @since  5.1.2
      */
     public function addParams(array $params): self
     {
@@ -286,11 +262,10 @@ abstract class Uri
     /**
      * add a parameter to the uri
      *
-     * @param   string  $name   name of parameter
-     * @param   mixed   $value  value of parameter
-     * @return  \stubbles\peer\Uri
+     * @param  string  $name   name of parameter
+     * @param  mixed   $value  value of parameter
      */
-    public function addParam(string $name, $value): self
+    public function addParam(string $name, mixed $value): self
     {
         $this->parsedUri->queryString()->addParam($name, $value);
         return $this;
@@ -299,9 +274,7 @@ abstract class Uri
     /**
      * remove a param from uri
      *
-     * @param   string  $name  name of parameter
-     * @return  \stubbles\peer\Uri
-     * @since   1.1.2
+     * @since  1.1.2
      */
     public function removeParam(string $name): self
     {
@@ -312,9 +285,7 @@ abstract class Uri
     /**
      * checks whether a certain param is set
      *
-     * @param   string  $name
-     * @return  bool
-     * @since   1.1.2
+     * @since  1.1.2
      */
     public function hasParam(string $name): bool
     {
@@ -323,20 +294,14 @@ abstract class Uri
 
     /**
      * returns the value of a param
-     *
-     * @param   string  $name          name of the param
-     * @param   mixed   $defaultValue  default value to return if param is not set
-     * @return  mixed
      */
-    public function param(string $name, $defaultValue = null)
+    public function param(string $name, mixed $defaultValue = null): mixed
     {
         return $this->parsedUri->queryString()->param($name, $defaultValue);
     }
 
     /**
      * returns fragment of the uri
-     *
-     * @return  string|null
      */
     public function fragment(): ?string
     {

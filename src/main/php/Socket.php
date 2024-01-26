@@ -24,8 +24,11 @@ class Socket
      * @param   string  $prefix  prefix for host, e.g. ssl://
      * @throws  InvalidArgumentException
      */
-    public function __construct(private string $host, private int $port = 80, private ?string $prefix = null)
-    {
+    public function __construct(
+        private string $host,
+        private int $port = 80,
+        private ?string $prefix = null
+    ) {
         if (empty($host)) {
             throw new InvalidArgumentException('Host can not be empty');
         }
@@ -55,11 +58,11 @@ class Socket
         $errstr = '';
         $fsockopen = $this->fsockopen;
         $resource = $fsockopen(
-                $this->prefix . $this->host,
-                $this->port,
-                $errno,
-                $errstr,
-                $connectTimeout
+            $this->prefix . $this->host,
+            $this->port,
+            $errno,
+            $errstr,
+            $connectTimeout
         );
         if (false === $resource) {
             throw new ConnectionFailure(

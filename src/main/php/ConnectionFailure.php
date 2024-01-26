@@ -16,8 +16,11 @@ use Throwable;
  */
 class ConnectionFailure extends Exception
 {
-    public function __construct(string $message, Throwable $previous = null, int $code = 1)
-    {
+    public function __construct(
+        string $message,
+        ?Throwable $previous = null,
+        int $code = 1
+    ) {
         parent::__construct($message, $code, $previous);
     }
 }

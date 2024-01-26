@@ -45,10 +45,10 @@ class HeaderList implements \IteratorAggregate, \Countable
         $header  = [];
         $matches = [];
         preg_match_all(
-                '=^(.[^: ]+): ([^\r\n]*)=m',
-                $headers,
-                $matches,
-                PREG_SET_ORDER
+            '=^(.[^: ]+): ([^\r\n]*)=m',
+            $headers,
+            $matches,
+            PREG_SET_ORDER
         );
         foreach ($matches as $line) {
             $header[(string) $line[1]] = $line[2];
@@ -85,11 +85,14 @@ class HeaderList implements \IteratorAggregate, \Countable
      * @param   scalar  $value  value of header
      * @throws  InvalidArgumentException
      */
-    public function put(string $key, $value): self
+    public function put(string $key, mixed $value): self
     {
         if (!is_scalar($value)) {
             throw new InvalidArgumentException(
-                sprintf('Argument 2 passed to %s must be an instance of a scalar value.', __METHOD__)
+                sprintf(
+                    'Argument 2 passed to %s must be an instance of a scalar value.',
+                    __METHOD__
+                )
             );
         }
 
@@ -157,7 +160,7 @@ class HeaderList implements \IteratorAggregate, \Countable
      *
      * @param  int  $timestamp  timestamp to use as date, defaults to current timestamp
      */
-    public function putDate(int $timestamp = null): self
+    public function putDate(?int $timestamp = null): self
     {
         if (null === $timestamp) {
             $date = gmdate('D, d M Y H:i:s');
@@ -189,10 +192,6 @@ class HeaderList implements \IteratorAggregate, \Countable
 
     /**
      * returns value of header with given key
-     *
-     * @template T
-     * @param   T  $default  value to return if given header not set
-     * @return  T
      */
     public function get(string $key, mixed $default = null): mixed
     {

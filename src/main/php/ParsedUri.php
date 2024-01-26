@@ -24,9 +24,9 @@ class ParsedUri
      * @var  array<string,string>
      */
     const LOCALHOSTNAMES = [
-            'localhost' => 'localhost',
-            '127.0.0.1' => '127.0.0.1',
-            '[::1]'     => '[::1]'
+        'localhost' => 'localhost',
+        '127.0.0.1' => '127.0.0.1',
+        '[::1]'     => '[::1]'
     ];
     private string $scheme;
     private ?string $host = null;
@@ -49,11 +49,21 @@ class ParsedUri
     {
         $parsedUri = !is_array($uri) ? parse_url($uri): $uri;
         if (!is_array($parsedUri)) {
-            throw new MalformedUri('Given URI ' . (is_string($uri) ? $uri : '') . ' is not a valid URI');
+            throw new MalformedUri(
+                sprintf(
+                    'Given URI %s is not a valid URI',
+                    (is_string($uri) ? $uri : '')
+                )
+            );
         }
 
         if (!isset($parsedUri['scheme'])) {
-            throw new MalformedUri('Given URI ' . (is_string($uri) ? $uri : '') . ' is missing a scheme.');
+            throw new MalformedUri(
+                sprintf(
+                    'Given URI %s is missing a scheme.',
+                    (is_string($uri) ? $uri : '')
+                )
+            );
         }
 
         $this->scheme = (string) $parsedUri['scheme'];
@@ -128,7 +138,7 @@ class ParsedUri
                     ],
                     $changedUri
                 ),
-                fn($val): bool => null !== $val
+                fn(mixed $val): bool => null !== $val
             ),
             $this->queryString
         );
@@ -225,7 +235,7 @@ class ParsedUri
     /**
      * returns the user of the uri
      */
-    public function user(string $defaultUser = null): ?string
+    public function user(?string $defaultUser = null): ?string
     {
         return $this->user ?? $defaultUser;
     }
@@ -287,7 +297,7 @@ class ParsedUri
      *
      * @since   4.0.0
      */
-    public function portEquals(int $port = null): bool
+    public function portEquals(?int $port = null): bool
     {
         return $port === $this->port();
     }

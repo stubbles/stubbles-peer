@@ -29,8 +29,8 @@ class HttpRequest
     }
 
     public function get(
-            int $timeout = 30,
-            string|HttpVersion $version = HttpVersion::HTTP_1_1
+        int $timeout = 30,
+        string|HttpVersion $version = HttpVersion::HTTP_1_1
     ): HttpResponse {
         $socket = $this->httpUri->openSocket($timeout);
         $this->processHeader($socket, Http::GET, $version);
@@ -38,8 +38,8 @@ class HttpRequest
     }
 
     public function head(
-            int $timeout = 30,
-            string|HttpVersion $version = HttpVersion::HTTP_1_1
+        int $timeout = 30,
+        string|HttpVersion $version = HttpVersion::HTTP_1_1
     ): HttpResponse {
         $socket = $this->httpUri->openSocket($timeout);
         $this->headers->put('Connection', 'close');
@@ -58,9 +58,9 @@ class HttpRequest
      * @param  string|array<string,string>  $body  post request body
      */
     public function post(
-            string|array $body,
-            int $timeout = 30,
-            string|HttpVersion $version = HttpVersion::HTTP_1_1
+        string|array $body,
+        int $timeout = 30,
+        string|HttpVersion $version = HttpVersion::HTTP_1_1
     ): HttpResponse {
         if (is_array($body)) {
             $body = $this->transformPostValues($body);
@@ -78,9 +78,9 @@ class HttpRequest
      * @since  2.0.0
      */
     public function put(
-            string $body,
-            int $timeout = 30,
-            string|HttpVersion $version = HttpVersion::HTTP_1_1
+        string $body,
+        int $timeout = 30,
+        string|HttpVersion $version = HttpVersion::HTTP_1_1
     ): HttpResponse {
         $this->headers->put('Content-Length', strlen($body));
         $socket = $this->httpUri->openSocket($timeout);
@@ -93,8 +93,8 @@ class HttpRequest
      * @since  2.0.0
      */
     public function delete(
-            int $timeout = 30,
-            string|HttpVersion $version = HttpVersion::HTTP_1_1
+        int $timeout = 30,
+        string|HttpVersion $version = HttpVersion::HTTP_1_1
     ): HttpResponse {
         $socket = $this->httpUri->openSocket($timeout);
         $this->processHeader($socket, Http::DELETE, $version);
@@ -119,13 +119,20 @@ class HttpRequest
     /**
      * @throws  InvalidArgumentException
      */
-    private function processHeader(Stream $socket, string $method, string|HttpVersion $version): void
-    {
+    private function processHeader(
+        Stream $socket,
+        string $method,
+        string|HttpVersion $version
+    ): void {
         $version = HttpVersion::castFrom($version);
         if (!$version->equals(HttpVersion::HTTP_1_0) && !$version->equals(HttpVersion::HTTP_1_1)) {
             throw new InvalidArgumentException(
-                    'Invalid HTTP version ' . $version . ', please use either '
-                    . HttpVersion::HTTP_1_0 . ' or ' . HttpVersion::HTTP_1_1
+                sprintf(
+                    'Invalid HTTP version %s, please use either %s or %s.',
+                    $version,
+                    HttpVersion::HTTP_1_0,
+                    HttpVersion::HTTP_1_1
+                )
             );
         }
 

@@ -102,20 +102,20 @@ namespace stubbles\peer\http {
 
     if (class_exists('stubbles\values\Parse')) {
         \stubbles\values\Parse::addRecognition(
-                function($string): ?HttpUri
-                {
-                    if (substr($string, 0, 4) === Http::SCHEME) {
-                        try {
-                            return HttpUri::fromString($string);
-                        } catch (MalformedUri $murle) {
-                            // not a valid uri, fall through to return null
-                         }
+            function(string $string): ?HttpUri
+            {
+                if (substr($string, 0, 4) === Http::SCHEME) {
+                    try {
+                        return HttpUri::fromString($string);
+                    } catch (MalformedUri $murle) {
+                        // not a valid uri, fall through to return null
                     }
+                }
 
-                    return null;
+                return null;
 
-                },
-                HttpUri::class
+            },
+            HttpUri::class
         );
     }
 

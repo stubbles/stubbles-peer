@@ -172,11 +172,6 @@ class QueryString
         return \array_key_exists($name, $this->parameters);
     }
 
-    /**
-     * @template T
-     * @param   T   $defaultValue  default value to return if param is not set
-     * @return  T
-     */
     public function param(string $name, mixed $defaultValue = null): mixed
     {
         if (array_key_exists($name, $this->parameters)) {

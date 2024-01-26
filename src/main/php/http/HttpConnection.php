@@ -16,7 +16,7 @@ class HttpConnection
     private HeaderList $headers;
     private int $timeout = 30;
 
-    public function __construct(private HttpUri $httpUri, HeaderList $headers = null)
+    public function __construct(private HttpUri $httpUri, ?HeaderList $headers = null)
     {
         $this->headers = $headers ?? new HeaderList();
     }
@@ -83,7 +83,7 @@ class HttpConnection
      * @api
      * @param  scalar  $value  value of header
      */
-    public function usingHeader(string $key, $value): self
+    public function usingHeader(string $key, mixed $value): self
     {
         $this->headers->put($key, $value);
         return $this;

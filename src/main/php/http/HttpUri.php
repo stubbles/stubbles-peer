@@ -103,10 +103,10 @@ abstract class HttpUri extends Uri
     /**
      * checks whether given http uri exists, i.e. has a DNS entry
      *
-     * @param  callable  $checkWith  optional  function to check dns record with
+     * @param  callable  $checkWith  function to check dns record with
      * @since  7.1.0
      */
-    public static function exists(string|self $httpUri, callable $checkWith = null): bool
+    public static function exists(string|self $httpUri, ?callable $checkWith = null): bool
     {
         if ($httpUri instanceof self) {
             return $httpUri->hasDnsRecord($checkWith);
@@ -168,9 +168,9 @@ abstract class HttpUri extends Uri
     /**
      * checks whether host of uri is listed in dns
      *
-     * @param  callable  $checkWith  optional  function to check dns record with
+     * @param  callable  $checkWith  function to check dns record with
      */
-    public function hasDnsRecord(callable $checkWith = null): bool
+    public function hasDnsRecord(?callable $checkWith = null): bool
     {
         $checkdnsrr = $checkWith ?? 'checkdnsrr';
         if ($this->parsedUri->isLocalHost()

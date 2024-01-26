@@ -58,16 +58,16 @@
         },
         {
             "name": "bovigo/callmap",
-            "version": "v8.0.2",
+            "version": "v8.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bovigo/callmap.git",
-                "reference": "647cc02935f6d9ea18f39546391ee7aeda25f8b1"
+                "reference": "e5e3a69317033bd6ca34b26e3b9a10ef533941e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bovigo/callmap/zipball/647cc02935f6d9ea18f39546391ee7aeda25f8b1",
-                "reference": "647cc02935f6d9ea18f39546391ee7aeda25f8b1",
+                "url": "https://api.github.com/repos/bovigo/callmap/zipball/e5e3a69317033bd6ca34b26e3b9a10ef533941e2",
+                "reference": "e5e3a69317033bd6ca34b26e3b9a10ef533941e2",
                 "shasum": ""
             },
             "require": {
@@ -105,9 +105,9 @@
             "description": "Allows to stub and mock method calls by applying a callmap.",
             "support": {
                 "issues": "https://github.com/bovigo/callmap/issues",
-                "source": "https://github.com/bovigo/callmap/tree/v8.0.2"
+                "source": "https://github.com/bovigo/callmap/tree/v8.0.6"
             },
-            "time": "2023-12-26T15:06:30+00:00"
+            "time": "2024-01-17T13:53:10+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -221,25 +221,27 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.18.0",
+            "version": "v5.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "1bcbb2179f97633e98bbbc87044ee2611c7d7999"
+                "reference": "4a21235f7e56e713259a6f76bf4b5ea08502b9dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/1bcbb2179f97633e98bbbc87044ee2611c7d7999",
-                "reference": "1bcbb2179f97633e98bbbc87044ee2611c7d7999",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4a21235f7e56e713259a6f76bf4b5ea08502b9dc",
+                "reference": "4a21235f7e56e713259a6f76bf4b5ea08502b9dc",
                 "shasum": ""
             },
             "require": {
+                "ext-ctype": "*",
+                "ext-json": "*",
                 "ext-tokenizer": "*",
-                "php": ">=7.0"
+                "php": ">=7.4"
             },
             "require-dev": {
                 "ircmaxell/php-yacc": "^0.0.7",
-                "phpunit/phpunit": "^6.5 || ^7.0 || ^8.0 || ^9.0"
+                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
             },
             "bin": [
                 "bin/php-parse"
@@ -247,7 +249,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.9-dev"
+                    "dev-master": "5.0-dev"
                 }
             },
             "autoload": {
@@ -271,9 +273,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.18.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.0.0"
             },
-            "time": "2023-12-10T21:03:43+00:00"
+            "time": "2024-01-07T17:17:35+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -709,16 +711,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.3",
+            "version": "10.5.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6fce887c71076a73f32fd3e0774a6833fc5c7f19"
+                "reference": "0bd663704f0165c9e76fe4f06ffa6a1ca727fdbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6fce887c71076a73f32fd3e0774a6833fc5c7f19",
-                "reference": "6fce887c71076a73f32fd3e0774a6833fc5c7f19",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0bd663704f0165c9e76fe4f06ffa6a1ca727fdbe",
+                "reference": "0bd663704f0165c9e76fe4f06ffa6a1ca727fdbe",
                 "shasum": ""
             },
             "require": {
@@ -790,7 +792,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.3"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.9"
             },
             "funding": [
                 {
@@ -806,7 +808,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-13T07:25:23+00:00"
+            "time": "2024-01-22T14:35:40+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -1725,16 +1727,16 @@
         },
         {
             "name": "stubbles/values",
-            "version": "v11.0.0",
+            "version": "v11.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stubbles/stubbles-values.git",
-                "reference": "4d371844cb01a95f8e163ce48d380df1cd37c27f"
+                "reference": "1d95e730a607b7b5b6000337983809baa8225be1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/4d371844cb01a95f8e163ce48d380df1cd37c27f",
-                "reference": "4d371844cb01a95f8e163ce48d380df1cd37c27f",
+                "url": "https://api.github.com/repos/stubbles/stubbles-values/zipball/1d95e730a607b7b5b6000337983809baa8225be1",
+                "reference": "1d95e730a607b7b5b6000337983809baa8225be1",
                 "shasum": ""
             },
             "require": {
@@ -1769,9 +1771,9 @@
             "homepage": "http://stubbles.net/",
             "support": {
                 "issues": "https://github.com/stubbles/stubbles-values/issues",
-                "source": "https://github.com/stubbles/stubbles-values/tree/v11.0.0"
+                "source": "https://github.com/stubbles/stubbles-values/tree/v11.0.1"
             },
-            "time": "2023-12-25T19:36:45+00:00"
+            "time": "2024-01-16T16:16:48+00:00"
         },
         {
             "name": "theseer/tokenizer",

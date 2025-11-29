@@ -14,7 +14,7 @@ namespace stubbles\peer;
  */
 abstract class Uri
 {
-    private const ALLOWED_URI_SYNTAX = '!^([a-z][a-z0-9\+]*)://([^@]+@)?([^/?#]*)(/([^#?]*))?(.*)$!';
+    private const string ALLOWED_URI_SYNTAX = '!^([a-z][a-z0-9\+]*)://([^@]+@)?([^/?#]*)(/([^#?]*))?(.*)$!';
     /**
      * internal representation after parse_url()
      */

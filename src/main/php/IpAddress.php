@@ -19,9 +19,9 @@ use LogicException;
 class IpAddress
 {
     /** @internal */
-    public const V4 = 'IPv4';
+    public const string V4 = 'IPv4';
     /** @internal */
-    public const V6 = 'IPv6';
+    public const string V6 = 'IPv6';
     private string $ip;
     private string $type;
 

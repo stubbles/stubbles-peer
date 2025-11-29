@@ -23,7 +23,7 @@ class ParsedUri
      *
      * @var  array<string,string>
      */
-    const LOCALHOSTNAMES = [
+    private const array LOCALHOSTNAMES = [
         'localhost' => 'localhost',
         '127.0.0.1' => '127.0.0.1',
         '[::1]'     => '[::1]'

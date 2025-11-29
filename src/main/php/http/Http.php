@@ -20,96 +20,96 @@ class Http
     /**
      * default uri scheme
      */
-    const SCHEME                    = 'http';
+    public const string SCHEME = 'http';
     /**
      * uri scheme for ssl
      */
-    const SCHEME_SSL                = 'https';
+    public const string SCHEME_SSL = 'https';
     /**
      * default non-ssl port
      */
-    const PORT                      = 80;
+    public const int PORT = 80;
     /**
      * default ssl port
      */
-    const PORT_SSL                  = 443;
+    public const int PORT_SSL = 443;
     /**
      * request method type: GET
      */
-    const GET                       = 'GET';
+    public const string GET = 'GET';
     /**
      * request method type: POST
      */
-    const POST                      = 'POST';
+    public const string POST = 'POST';
     /**
      * request method type: HEAD
      */
-    const HEAD                      = 'HEAD';
+    public const string HEAD = 'HEAD';
     /**
      * request method type: PUT
      */
-    const PUT                       = 'PUT';
+    public const string PUT = 'PUT';
     /**
      * request method type: DELETE
      */
-    const DELETE                    = 'DELETE';
+    public const string DELETE = 'DELETE';
     /**
      * request method type: OPTIONS
      *
      * @since  4.0.0
      */
-    const OPTIONS                   = 'OPTIONS';
+    public const string OPTIONS = 'OPTIONS';
 
     /**
      * end-of-line marker
      */
-    const END_OF_LINE               = "\r\n";
+    public const string END_OF_LINE = "\r\n";
 
     /**
      * response status class: informational (100-199)
      */
-    const STATUS_CLASS_INFO         = 'Informational';
+    public const string STATUS_CLASS_INFO = 'Informational';
     /**
      * response status class: successful request (200-299)
      */
-    const STATUS_CLASS_SUCCESS      = 'Success';
+    public const string STATUS_CLASS_SUCCESS = 'Success';
     /**
      * response status class: redirection (300-399)
      */
-    const STATUS_CLASS_REDIRECT     = 'Redirection';
+    public const string STATUS_CLASS_REDIRECT = 'Redirection';
     /**
      * response status class: errors by client (400-499)
      */
-    const STATUS_CLASS_ERROR_CLIENT = 'Client Error';
+    public const string STATUS_CLASS_ERROR_CLIENT = 'Client Error';
     /**
      * response status class: errors on server (500-599)
      */
-    const STATUS_CLASS_ERROR_SERVER = 'Server Error';
+    public const string STATUS_CLASS_ERROR_SERVER = 'Server Error';
     /**
      * response status class: unknown status code
      */
-    const STATUS_CLASS_UNKNOWN      = 'Unknown';
+    public const string STATUS_CLASS_UNKNOWN = 'Unknown';
     /**
      * reference to RFC 2616 which defined HTTP/1.1 first
      *
      * @link   http://tools.ietf.org/html/rfc2616
      * @since  4.0.0
      */
-    const RFC_2616                  = 'RFC 2616';
+    public const string RFC_2616  = 'RFC 2616';
     /**
      * reference to RFC 7230, a revised version of HTTP/1.1
      *
      * @link    http://tools.ietf.org/html/rfc7230
      * @since  4.0.0
      */
-    const RFC_7230                  = 'RFC 7230';
+    public const string RFC_7230 = 'RFC 7230';
 
     /**
      * map of status code classes
      *
      * @var array<int,string>
      */
-    private static array $statusClass     = [
+    private const array STATUS_CLASS = [
         0 => Http::STATUS_CLASS_UNKNOWN,
         1 => Http::STATUS_CLASS_INFO,
         2 => Http::STATUS_CLASS_SUCCESS,
@@ -122,7 +122,7 @@ class Http
      *
      * @var  array<int,string>
      */
-    private static array $reasonPhrases   = [
+    private const array REASON_PHRASES = [
         100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing',
@@ -190,7 +190,7 @@ class Http
     public static function statusClassFor(int $statusCode): string
     {
         $class = substr((string) $statusCode, 0, 1);
-        return self::$statusClass[$class] ?? self::STATUS_CLASS_UNKNOWN;
+        return self::STATUS_CLASS[$class] ?? self::STATUS_CLASS_UNKNOWN;
     }
 
     /**
@@ -202,7 +202,7 @@ class Http
      */
     public static function statusCodes(): array
     {
-        return self::$reasonPhrases;
+        return self::REASON_PHRASES;
     }
 
     /**
@@ -214,8 +214,8 @@ class Http
      */
     public static function reasonPhraseFor(int $statusCode): string
     {
-        if (isset(self::$reasonPhrases[$statusCode])) {
-            return self::$reasonPhrases[$statusCode];
+        if (isset(self::REASON_PHRASES[$statusCode])) {
+            return self::REASON_PHRASES[$statusCode];
         }
 
         throw new InvalidArgumentException(

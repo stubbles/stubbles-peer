@@ -16,7 +16,7 @@ namespace stubbles\peer {
      * @since  3.1.0
      * @api
      */
-    function http(string $uri, HeaderList $headers = null): HttpConnection
+    function http(string $uri, ?HeaderList $headers = null): HttpConnection
     {
         return HttpUri::fromString($uri)->connect($headers);
     }
@@ -52,7 +52,7 @@ namespace stubbles\peer {
      * @since  3.1.0
      * @api
      */
-    function createSocket(string $host, int $port = 80, string $prefix = null): Socket
+    function createSocket(string $host, int $port = 80, ?string $prefix = null): Socket
     {
         return new Socket($host, $port, $prefix);
     }

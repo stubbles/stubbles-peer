@@ -26,9 +26,9 @@ abstract class HttpUri extends Uri
     public static function fromParts(
         string $scheme,
         string $host,
-        int $port = null,
+        ?int $port = null,
         string $path = '/',
-        string $queryString = null
+        ?string $queryString = null
     ): self {
         if (null !== $queryString && substr($queryString, 0, 1) !== '?') {
             $queryString = '?' . $queryString;
@@ -221,7 +221,7 @@ abstract class HttpUri extends Uri
     /**
      * returns port of the uri
      */
-    public function port(int $defaultPort = null): int
+    public function port(?int $defaultPort = null): int
     {
         $port = parent::port();
         if (null !== $port) {
@@ -269,7 +269,7 @@ abstract class HttpUri extends Uri
      * @param  int  $port  optional  new port to use, defaults to 80
      * @since  2.0.0
      */
-    public function toHttp(int $port = null): self
+    public function toHttp(?int $port = null): self
     {
         if ($this->isHttp()) {
             if (null !== $port && !$this->parsedUri->portEquals($port)) {
@@ -295,7 +295,7 @@ abstract class HttpUri extends Uri
      * @param  int  $port  optional  new port to use, defaults to 443
      * @since  2.0.0
      */
-    public function toHttps(int $port = null): self
+    public function toHttps(?int $port = null): self
     {
         if ($this->isHttps()) {
             if (null !== $port && !$this->parsedUri->portEquals($port)) {
@@ -348,7 +348,7 @@ abstract class HttpUri extends Uri
     /**
      * @since  2.0.0
      */
-    public function openSocket(int $timeout = 5, callable $openWith = null): Stream
+    public function openSocket(int $timeout = 5, ?callable $openWith = null): Stream
     {
         $socket = $this->createSocket();
         if (null !== $openWith) {

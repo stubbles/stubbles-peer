@@ -17,7 +17,7 @@ use Throwable;
  */
 class ProtocolViolation extends ConnectionFailure
 {
-    public function __construct(string $message, Throwable $previous = null)
+    public function __construct(string $message, ?Throwable $previous = null)
     {
         parent::__construct($message, $previous, 3);
     }

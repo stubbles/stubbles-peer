@@ -28,7 +28,7 @@ class QueryString
      *
      * @throws  InvalidArgumentException
      */
-    public function __construct(string $queryString = null)
+    public function __construct(?string $queryString = null)
     {
         if (!empty($queryString)) {
             foreach (explode('&', $queryString) as $param) {

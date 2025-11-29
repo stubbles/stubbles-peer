@@ -35,7 +35,7 @@ class HttpRequestTest extends TestCase
         $this->memory = '';
     }
 
-    private function createHttpRequest(string $queryString = null): HttpRequest
+    private function createHttpRequest(?string $queryString = null): HttpRequest
     {
         $socket = NewInstance::stub(Stream::class)->returns([
                 'write' => function(string $line): int { $this->memory .= $line; return strlen($line); }

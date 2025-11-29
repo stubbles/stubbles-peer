@@ -45,7 +45,7 @@ class ParsedUri
      * @param   string|array<string,int|string>  $uri  uri to parse
      * @throws  MalformedUri
      */
-    public function __construct(string|array $uri, QueryString $queryString = null)
+    public function __construct(string|array $uri, ?QueryString $queryString = null)
     {
         $parsedUri = !is_array($uri) ? parse_url($uri): $uri;
         if (!is_array($parsedUri)) {
@@ -211,7 +211,7 @@ class ParsedUri
      *
      * @since   4.0.0
      */
-    public function schemeEquals(string $scheme = null): bool
+    public function schemeEquals(?string $scheme = null): bool
     {
         return $scheme === $this->scheme();
     }

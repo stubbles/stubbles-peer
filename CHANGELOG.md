@@ -1,5 +1,15 @@
 # Changelog
 
+## 11.0.0 (2025-11-29)
+
+### BC breaks
+
+* raised minimum required PHP version to 8.3
+
+### Other changes
+
+* ensured compatibility with PHP 8.5
+
 ## 10.0.1 (2024-01-26)
 
 * fixed return type hint of `stubbles\peer\http\HttpUri::withPath()`
